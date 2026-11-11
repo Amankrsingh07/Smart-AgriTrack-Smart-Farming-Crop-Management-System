@@ -91,3 +91,4 @@ The current tests cover recommendation scoring, decimal sale calculations, inven
 - Irrigation screen translations are available in English and Hindi; other selected languages fall back to English for that screen.
 =======
 # Smart-Agritrack-And-Crop-Manegement
+# Smart-AgriTrack-Smart-Farming-Crop-Management-System
