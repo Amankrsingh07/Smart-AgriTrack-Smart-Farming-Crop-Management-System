@@ -1,0 +1,18 @@
+{
+  "meta": {"dataset":"Indicative available soil water capacity by texture","units":"mm water per m soil depth","source":"FAO Soil and Water, Chapter 2, Table 8 (adapted from Salter and Williams 1967)","sourceUrl":"https://www.fao.org/4/v9926e/v9926e04.htm","verificationStatus":"PUBLISHED_TYPICAL_CLASS_VALUES; field-specific measurement recommended","notes":"Values are typical and vary with soil structure and management. They are not a substitute for a local soil test; absent calibrated root depth and field capacity data, the app does not convert a sensor moisture percentage into stored water."},
+  "fao56TypicalValues": {
+    "source": "FAO Irrigation and Drainage Paper 56, Chapter 8, Table 19",
+    "sourceUrl": "https://www.fao.org/4/X0490E/x0490e0c.htm",
+    "verificationStatus": "FAO56_PUBLISHED_RANGES; defaults are arithmetic midpoints of published ranges, not field measurements",
+    "referenceUnits": "m3/m3",
+    "storedUnits": "percent volumetric water content (% v/v)",
+    "notes": "Typical defaults use the midpoint of each FAO-56 range. Clay loam is not a Table 19 class and is left unavailable rather than mapped to a different texture. Farmer overrides are recommended when local measurements exist."
+  },
+  "soils": [
+    {"soil":"Sandy Soil","availableWaterCapacityMmPerM":150,"fieldCapacityPercent":12,"wiltingPointPercent":4.5,"fieldCapacityRange":[7,17],"wiltingPointRange":[2,7],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Sand: FC 0.07–0.17, WP 0.02–0.07 m³/m³"},
+    {"soil":"Sandy Loam","availableWaterCapacityMmPerM":180,"fieldCapacityPercent":23,"wiltingPointPercent":11,"fieldCapacityRange":[18,28],"wiltingPointRange":[6,16],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Sandy loam: FC 0.18–0.28, WP 0.06–0.16 m³/m³"},
+    {"soil":"Loamy Soil","availableWaterCapacityMmPerM":180,"fieldCapacityPercent":25,"wiltingPointPercent":12,"fieldCapacityRange":[20,30],"wiltingPointRange":[7,17],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Loam: FC 0.20–0.30, WP 0.07–0.17 m³/m³"},
+    {"soil":"Clay Loam","availableWaterCapacityMmPerM":180,"verificationStatus":"UNAVAILABLE_FAO56_TEXTURE_CLASS","reference":"No matching Clay Loam row in FAO-56 Table 19; enter field-specific FC/WP overrides to calculate."},
+    {"soil":"Clay Soil","availableWaterCapacityMmPerM":180,"fieldCapacityPercent":36,"wiltingPointPercent":22,"fieldCapacityRange":[32,40],"wiltingPointRange":[20,24],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Clay: FC 0.32–0.40, WP 0.20–0.24 m³/m³"}
+  ]
+}

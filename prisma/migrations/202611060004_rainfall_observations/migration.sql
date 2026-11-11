@@ -1,0 +1,26 @@
+-- Create a farmer-owned rainfall observation ledger. No existing irrigation or crop records are updated.
+CREATE TABLE `RainfallObservation` (
+  `id` VARCHAR(191) NOT NULL,
+  `clientTransactionId` VARCHAR(191) NULL,
+  `userId` VARCHAR(191) NOT NULL,
+  `cropCycleId` VARCHAR(191) NOT NULL,
+  `rainfallDate` DATE NOT NULL,
+  `moistureMeasuredDate` DATE NULL,
+  `soilFieldCapacityPercent` DECIMAL(5,2) NULL,
+  `soilCurrentMoisturePercent` DECIMAL(5,2) NULL,
+  `soilRootZoneDepthM` DECIMAL(5,2) NULL,
+  `grossRainfallMm` DECIMAL(8,2) NOT NULL,
+  `runoffLossMm` DECIMAL(8,2) NULL,
+  `drainageLossMm` DECIMAL(8,2) NULL,
+  `effectiveRainfallMm` DECIMAL(8,2) NULL,
+  `source` VARCHAR(32) NOT NULL,
+  `calculationStatus` VARCHAR(48) NOT NULL,
+  `notes` VARCHAR(500) NULL,
+  `recordedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  UNIQUE INDEX `RainfallObservation_clientTransactionId_key` (`clientTransactionId`),
+  INDEX `RainfallObservation_userId_rainfallDate_idx` (`userId`, `rainfallDate`),
+  INDEX `RainfallObservation_cropCycleId_rainfallDate_idx` (`cropCycleId`, `rainfallDate`),
+  PRIMARY KEY (`id`),
+  CONSTRAINT `RainfallObservation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `RainfallObservation_cropCycleId_fkey` FOREIGN KEY (`cropCycleId`) REFERENCES `CropCycle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

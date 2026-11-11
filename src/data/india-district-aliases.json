@@ -1,0 +1,15 @@
+[
+  {
+    "stateCode": "10",
+    "state": "Bihar",
+    "aliases": ["Chapra", "Chhapra", "Chapara"],
+    "canonicalDistrict": "Saran",
+    "verificationStatus": "VERIFIED_OFFICIAL_DISTRICT_HEADQUARTERS_ALIAS",
+    "source": "Saran District Administration; Bihar Tourism",
+    "sourceUrls": [
+      "https://saran.nic.in/history/",
+      "https://tourism.bihar.gov.in/en/destinations/saran"
+    ],
+    "note": "Chapra/Chhapra is the headquarters/locality name associated with Saran district. ETo remains the Saran district-centroid normal and is labelled as such."
+  }
+]

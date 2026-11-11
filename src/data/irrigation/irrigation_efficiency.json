@@ -1,0 +1,8 @@
+{
+  "meta": {"dataset":"Irrigation application efficiency references","units":"percent","verificationStatus":"LITERATURE_RANGES; system-specific performance varies","notes":"Ranges are not collapsed to a made-up point estimate. Gross irrigation requirement is withheld unless a single verified efficiency value is supplied for the installed system."},
+  "methods": [
+    {"method":"Drip Irrigation","efficiencyPercent":{"min":80,"max":90},"source":"ICAR, Drip Fertigation for Higher Crop Production, Table 1 (reported overall efficiency)","sourceUrl":"https://epubs.icar.org.in/index.php/IndFarm/article/download/72783/30772/184021","verificationStatus":"PUBLISHED_RANGE"},
+    {"method":"Sprinkler Irrigation","efficiencyPercent":{"min":50,"max":70},"source":"ICAR, Drip Fertigation for Higher Crop Production, Table 1 (reported overall efficiency)","sourceUrl":"https://epubs.icar.org.in/index.php/IndFarm/article/download/72783/30772/184021","verificationStatus":"PUBLISHED_RANGE"},
+    {"method":"Surface/Flood Irrigation","efficiencyPercent":{"min":30,"max":35},"source":"ICAR, Drip Fertigation for Higher Crop Production, Table 1 (reported overall efficiency)","sourceUrl":"https://epubs.icar.org.in/index.php/IndFarm/article/download/72783/30772/184021","verificationStatus":"PUBLISHED_RANGE"}
+  ]
+}

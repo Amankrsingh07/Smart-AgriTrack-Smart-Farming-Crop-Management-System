@@ -1,0 +1,191 @@
+{
+  "meta": {
+    "source": "Ministry of Panchayati Raj, Local Government Directory (LGD)",
+    "sourceUrl": "https://lgdirectory.gov.in/",
+    "sourceDate": "2026-09-23",
+    "importedAt": "2026-11-01",
+    "license": "Government Open Data License - India"
+  },
+  "records": [
+    {
+      "lgdCode": "35",
+      "name": "Andaman And Nicobar Islands",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "28",
+      "name": "Andhra Pradesh",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "12",
+      "name": "Arunachal Pradesh",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "18",
+      "name": "Assam",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "10",
+      "name": "Bihar",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "4",
+      "name": "Chandigarh",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "22",
+      "name": "Chhattisgarh",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "7",
+      "name": "Delhi",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "30",
+      "name": "Goa",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "24",
+      "name": "Gujarat",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "6",
+      "name": "Haryana",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "2",
+      "name": "Himachal Pradesh",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "1",
+      "name": "Jammu And Kashmir",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "20",
+      "name": "Jharkhand",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "29",
+      "name": "Karnataka",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "32",
+      "name": "Kerala",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "37",
+      "name": "Ladakh",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "31",
+      "name": "Lakshadweep",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "23",
+      "name": "Madhya Pradesh",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "27",
+      "name": "Maharashtra",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "14",
+      "name": "Manipur",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "17",
+      "name": "Meghalaya",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "15",
+      "name": "Mizoram",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "13",
+      "name": "Nagaland",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "21",
+      "name": "Odisha",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "34",
+      "name": "Puducherry",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "3",
+      "name": "Punjab",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "8",
+      "name": "Rajasthan",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "11",
+      "name": "Sikkim",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "33",
+      "name": "Tamil Nadu",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "36",
+      "name": "Telangana",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "38",
+      "name": "The Dadra And Nagar Haveli And Daman And Diu",
+      "isUnionTerritory": true
+    },
+    {
+      "lgdCode": "16",
+      "name": "Tripura",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "5",
+      "name": "Uttarakhand",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "9",
+      "name": "Uttar Pradesh",
+      "isUnionTerritory": false
+    },
+    {
+      "lgdCode": "19",
+      "name": "West Bengal",
+      "isUnionTerritory": false
+    }
+  ]
+}

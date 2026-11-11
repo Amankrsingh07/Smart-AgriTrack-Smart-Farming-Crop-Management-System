@@ -1,0 +1,3 @@
+-- Intentionally empty: this migration directory was reserved, but no sync receipt
+-- model or table is part of the current Prisma schema. Keep the migration runner
+-- sequence valid without introducing schema or data changes.

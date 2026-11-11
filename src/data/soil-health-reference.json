@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "title": "Soil Health Card screening reference values",
+    "source": "Soil Health Card Portal, Government of India, Teacher's Manual for Soil",
+    "sourceUrl": "https://soilhealth.dac.gov.in/files/Manual/140723DraftTeacherManual_PDF.pdf",
+    "sourceDate": "2023",
+    "note": "General screening classes shown in the SHC teaching manual. A state laboratory's Soil Health Card rating and crop-specific recommendation take precedence."
+  },
+  "units": "kg/ha",
+  "nutrients": {
+    "nitrogen": { "lowBelow": 280, "mediumThrough": 560 },
+    "phosphorus": { "lowBelow": 10, "mediumThrough": 25, "highThrough": 50 },
+    "potassium": { "lowBelow": 120, "mediumThrough": 280, "highThrough": 600 }
+  },
+  "phBands": [
+    { "below": 4, "label": "Extremely acidic" },
+    { "from": 4, "below": 5, "label": "Strongly acidic" },
+    { "from": 5, "below": 6, "label": "Moderately acidic" },
+    { "from": 6, "below": 7, "label": "Slightly acidic" },
+    { "equals": 7, "label": "Neutral" },
+    { "above": 7, "through": 8, "label": "Moderately alkaline" },
+    { "above": 8.5, "label": "Strongly alkaline" }
+  ],
+  "demoInput": {
+    "state": "Bihar",
+    "district": "Patna",
+    "crop": "Wheat",
+    "growthStage": "Vegetative",
+    "soilType": "Loamy",
+    "nitrogenKgHa": 240,
+    "phosphorusKgHa": 18,
+    "potassiumKgHa": 150,
+    "soilPh": 6.4,
+    "synthetic": true,
+    "note": "Illustrative values created for the app demo; not an actual farmer's Soil Health Card."
+  }
+}

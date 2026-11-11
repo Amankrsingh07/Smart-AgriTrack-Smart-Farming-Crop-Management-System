@@ -1,0 +1,6 @@
+ALTER TABLE `CropWaterStage`
+  ADD COLUMN `dataStatus` ENUM('VERIFIED', 'ESTIMATED') NOT NULL DEFAULT 'VERIFIED',
+  ADD COLUMN `geographicScope` VARCHAR(160) NULL,
+  ADD COLUMN `irrigationMethod` VARCHAR(40) NULL,
+  ADD COLUMN `supportingSource` VARCHAR(255) NULL,
+  ADD COLUMN `supportingSourceUrl` TEXT NULL;

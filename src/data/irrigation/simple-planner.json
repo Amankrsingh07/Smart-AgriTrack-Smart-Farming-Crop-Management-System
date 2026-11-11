@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "dataset": "Simple offline irrigation planner reference map",
+    "offlineOnly": true,
+    "notes": "Maps farmer-friendly crop growth stages to configured reference stages. Missing crop-stage values remain unavailable. Irrigation amounts require farmer-entered field capacity, wilting point, current volumetric moisture, effective root-zone depth, and configured crop depletion fraction. Published efficiency ranges produce a gross-application range, not a point value.",
+    "sources": [
+      { "label": "FAO-56 crop coefficients, Table 12", "parameter": "Crop coefficient Kc", "verificationStatus": "FAO reference; crop-stage values retained only where configured", "url": "https://www.fao.org/4/X0490E/x0490e0b.htm" },
+      { "label": "FAO Irrigation Water Management crop factors, Chapter 3 Table 8", "parameter": "Millet Kc stages and grouped Barley/Oats/Wheat stages", "verificationStatus": "FAO reference; Barley/Wheat are grouped values, not crop-specific local calibration", "url": "https://www.fao.org/4/s2022e/s2022e07.htm" },
+      { "label": "FAO-56 depletion fractions and root depths, Table 22", "parameter": "Allowable depletion fraction p and crop root depth reference", "verificationStatus": "FAO reference; farmer-entered effective root depth is still required", "url": "https://www.fao.org/4/X0490E/x0490e0e.htm" },
+      { "label": "FAO Soil and Water, typical soil water capacity, Table 8", "parameter": "Texture-level available water capacity context", "verificationStatus": "Published typical classes; not substituted for measured field capacity or wilting point", "url": "https://www.fao.org/4/v9926e/v9926e04.htm" },
+      { "label": "FAO AQUASTAT reference evapotranspiration normals", "parameter": "Offline monthly district-centroid ETo normals", "verificationStatus": "Verified reference dataset; historical normal, not live weather", "url": "https://www.fao.org/aquastat/en/geospatial-information/climate-information/" },
+      { "label": "ICAR irrigation application efficiency ranges", "parameter": "Method efficiency ranges for gross application interval", "verificationStatus": "Published literature ranges; installed-system efficiency is not measured", "url": "https://epubs.icar.org.in/index.php/IndFarm/article/download/72783/30772/184021" }
+    ],
+    "formula": "ETc = ET0 × Kc; TAW = 1000 × (θFC − θWP) × root depth; Dr = 1000 × (θFC − θcurrent) × root depth; RAW = adjusted p × TAW; net refill is shown when Dr ≥ RAW; volume (litres) = depth (mm) × field area (m²); gross range divides by the published method efficiency bounds.",
+    "limitations": [
+      "Historical district ETo climate normals are not today's weather or field rainfall observations.",
+      "Only manual or weather-station rainfall dated after the matching soil-moisture reading can be credited. Forecast/model rainfall and climate normals are never deducted.",
+      "Effective rainfall requires measured runoff/non-infiltration loss and measured root-zone storage; rain already reflected in the soil-moisture reading is excluded.",
+      "Rice/paddy dose is withheld because ponding, seepage, and percolation are not represented.",
+      "Field capacity, wilting point, current moisture, and current root depth must be entered from calibrated measurements; no typical value is substituted.",
+      "FAO-56 p adjustment assumes tabulated values near ETc 5 mm/day and is only a planning reference."
+    ]
+  },
+  "stages": ["Establishment", "Vegetative", "Flowering", "Fruit / grain formation", "Maturity"],
+  "methods": ["Drip Irrigation", "Sprinkler Irrigation", "Surface/Flood Irrigation", "Furrow"]
+}

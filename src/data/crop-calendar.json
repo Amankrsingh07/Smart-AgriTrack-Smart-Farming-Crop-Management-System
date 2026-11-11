@@ -1,0 +1,509 @@
+{
+  "version": "2026.11.7",
+  "description": "Source-linked planning duration profiles. Dates are estimates for the named variety or stated source scope; they are not a district-specific package of practices.",
+  "crops": [
+    {
+      "crop": "Millet",
+      "aliases": [
+        "millet",
+        "millets"
+      ],
+      "seasons": [
+        "KHARIF"
+      ],
+      "typicalDays": 90,
+      "durationRange": [
+        65,
+        117
+      ],
+      "requiresVariety": true,
+      "varieties": [
+        {
+          "name": "Pearl millet (Bajra)",
+          "days": 80,
+          "durationRange": [
+            74,
+            85
+          ],
+          "source": "ICAR-IARI reports pearl millet cultivar maturity from 74–80 days for Pusa 605, 75–78 for Pusa 415, and 80–85 for Pusa Composite 612; 80 days is a representative planning value.",
+          "sourceUrl": "https://ztmbpd.iari.res.in/technologies/varietieshybrids/cereals/pearl-millet/"
+        },
+        {
+          "name": "Finger millet (Ragi)",
+          "days": 103,
+          "durationRange": [
+            100,
+            117
+          ]
+        },
+        {
+          "name": "Little millet",
+          "days": 100,
+          "durationRange": [
+            98,
+            102
+          ]
+        },
+        {
+          "name": "Kodo millet",
+          "days": 104,
+          "durationRange": [
+            104,
+            104
+          ]
+        },
+        {
+          "name": "Barnyard millet",
+          "days": 93,
+          "durationRange": [
+            90,
+            95
+          ]
+        },
+        {
+          "name": "Proso millet (Hagari Barugu 1)",
+          "days": 68,
+          "durationRange": [
+            65,
+            70
+          ]
+        },
+        {
+          "name": "Proso millet (GPUP 28)",
+          "days": 83,
+          "durationRange": [
+            80,
+            85
+          ]
+        },
+        {
+          "name": "Proso millet (ATL 2)",
+          "days": 69,
+          "durationRange": [
+            65,
+            73
+          ]
+        },
+        {
+          "name": "Foxtail millet (Mahanandi)",
+          "days": 83,
+          "durationRange": [
+            80,
+            85
+          ]
+        },
+        {
+          "name": "Foxtail millet (GPUF 3)",
+          "days": 88,
+          "durationRange": [
+            85,
+            90
+          ]
+        },
+        {
+          "name": "Brown top millet (Hagari Browntop-2)",
+          "days": 98,
+          "durationRange": [
+            95,
+            100
+          ]
+        }
+      ],
+      "source": "ICAR Annual Report 2023–24 lists source-reported millet variety maturity values for finger, little, kodo, barnyard, proso, foxtail and brown-top millets. A type-specific selection is required because millet species have different durations.",
+      "sourceUrl": "https://icar.gov.in/sites/default/files/2025-04/ICAR%20Annual%20Report%202023-24-english.pdf",
+      "scope": "Planning profile only. Select the millet type/variety before generating. Source-reported duration is not a district suitability or sowing-window recommendation; confirm locally."
+    },
+    {
+      "crop": "Wheat",
+      "aliases": [
+        "wheat",
+        "gehu"
+      ],
+      "seasons": [
+        "RABI"
+      ],
+      "typicalDays": 120,
+      "durationRange": [
+        111,
+        155
+      ],
+      "varieties": [
+        {
+          "name": "Karan Vandana (DBW 187)",
+          "days": 120
+        }
+      ],
+      "source": "ICAR-IIWBR/KVK Gorakhpur: Karan Vandana flowers at 77 days and matures at 120 days after sowing.",
+      "sourceUrl": "https://www.icar.gov.in/hi/node/4812",
+      "scope": "Karan Vandana example from Gorakhpur; confirm variety and local sowing window."
+    },
+    {
+      "crop": "Rice (Paddy)",
+      "aliases": [
+        "rice",
+        "paddy",
+        "dhan"
+      ],
+      "seasons": [
+        "KHARIF",
+        "ZAID"
+      ],
+      "typicalDays": 125,
+      "durationRange": [
+        115,
+        145
+      ],
+      "varieties": [
+        {
+          "name": "Pusa Basmati 1509",
+          "days": 115
+        },
+        {
+          "name": "Pusa Basmati 1121",
+          "days": 135
+        },
+        {
+          "name": "Jaya",
+          "days": 130
+        }
+      ],
+      "source": "ICAR variety descriptions report Pusa Basmati 1509 at 115 days, Pusa Basmati 1121 at 135 days, and Jaya at 130 days.",
+      "sourceUrl": "https://icar.gov.in/en/crop-science/basmati-rice-varieties",
+      "scope": "Variety duration varies; transplanting method and nursery period affect field dates."
+    },
+    {
+      "crop": "Maize",
+      "aliases": [
+        "maize",
+        "corn",
+        "makka"
+      ],
+      "seasons": [
+        "KHARIF",
+        "RABI",
+        "ZAID"
+      ],
+      "typicalDays": 98,
+      "durationRange": [
+        85,
+        110
+      ],
+      "varieties": [],
+      "source": "ICAR Kharif Agro-Advisory 2025 gives 85–110 days for named short-to-medium duration maize varieties.",
+      "sourceUrl": "https://www.icar.gov.in/sites/default/files/Circulars/ICAR%20En-Kharif%20Agro-Advisories%20for%20Farmers%202025.pdf",
+      "scope": "Range is variety-specific and not a state-wide sowing recommendation."
+    },
+    {
+      "crop": "Mustard",
+      "aliases": [
+        "mustard",
+        "sarson",
+        "rapeseed"
+      ],
+      "seasons": [
+        "RABI"
+      ],
+      "typicalDays": 142,
+      "durationRange": [
+        105,
+        142
+      ],
+      "varieties": [
+        {
+          "name": "Pusa Double Zero Mustard 31",
+          "days": 142
+        },
+        {
+          "name": "NRCHB 101",
+          "days": 108
+        }
+      ],
+      "source": "ICAR reports Pusa Double Zero Mustard 31 at 142 days; ICAR reports NRCHB 101 at 105–110 days.",
+      "sourceUrl": "https://www.icar.gov.in/en/crop-science/mustard-crop-diversification-profitability-and-good-health",
+      "scope": "Named varieties differ materially in duration and recommended geography."
+    },
+    {
+      "crop": "Potato",
+      "aliases": [
+        "potato",
+        "aloo"
+      ],
+      "seasons": [
+        "RABI"
+      ],
+      "typicalDays": 90,
+      "durationRange": [
+        70,
+        100
+      ],
+      "varieties": [
+        {
+          "name": "Kufri Pukhraj",
+          "days": 80
+        },
+        {
+          "name": "Kufri Surya",
+          "days": 95
+        },
+        {
+          "name": "Kufri Chipbharat-1",
+          "days": 100
+        }
+      ],
+      "source": "ICAR Rabi Agro-Advisory lists named potato varieties with maturity ranges from 70–100 days.",
+      "sourceUrl": "https://icar.gov.in/sites/default/files/2022-09/Rabi-Agro-Advisory-2021-22_0.pdf",
+      "scope": "Variety and temperature affect maturity; local advisory takes precedence."
+    },
+    {
+      "crop": "Sugarcane",
+      "aliases": [
+        "sugarcane",
+        "cane"
+      ],
+      "seasons": [
+        "KHARIF",
+        "RABI",
+        "ZAID"
+      ],
+      "typicalDays": 410,
+      "durationRange": [
+        365,
+        456
+      ],
+      "varieties": [],
+      "source": "ICAR Kharif Agro-Advisory 2025 describes a 12–15 month crop duration.",
+      "sourceUrl": "https://www.icar.gov.in/sites/default/files/Circulars/ICAR%20En-Kharif%20Agro-Advisories%20for%20Farmers%202025.pdf",
+      "scope": "Typical value is a planning midpoint of a 12–15 month range; do not use as a maturity diagnosis."
+    },
+    {
+      "crop": "Cotton",
+      "aliases": [
+        "cotton",
+        "kapas"
+      ],
+      "seasons": [
+        "KHARIF"
+      ],
+      "typicalDays": 150,
+      "durationRange": [
+        135,
+        165
+      ],
+      "varieties": [],
+      "source": "ICAR-CICR variety table reports named cotton varieties maturing in 150–165 days; ICAR also reports short-duration Surabhi at 135 days.",
+      "sourceUrl": "https://icar.gov.in/en/crop-science/fodder-production",
+      "scope": "Varieties and picking period vary by zone; use local package-of-practices dates."
+    },
+    {
+      "crop": "Tomato",
+      "aliases": [
+        "tomato"
+      ],
+      "seasons": [
+        "KHARIF",
+        "RABI",
+        "ZAID"
+      ],
+      "typicalDays": 175,
+      "durationRange": [
+        145,
+        190
+      ],
+      "varieties": [
+        {
+          "name": "Arka Abhed",
+          "days": 175
+        }
+      ],
+      "source": "ICAR reports first picking of Arka Abhed at about 70 days after transplanting and harvesting for approximately 105 days.",
+      "sourceUrl": "https://icar.gov.in/en/frost-fortune-arka-abhed-brings-new-promise-rabi-tomato-cultivation-manipur",
+      "scope": "This estimate is anchored to transplanting, not nursery sowing; repeat picking depends on conditions."
+    },
+    {
+      "crop": "Chickpea (Gram)",
+      "aliases": [
+        "chickpea",
+        "gram",
+        "chana"
+      ],
+      "seasons": [
+        "RABI"
+      ],
+      "typicalDays": 108,
+      "durationRange": [
+        106,
+        110
+      ],
+      "varieties": [
+        {
+          "name": "Pusa Chickpea 10216",
+          "days": 106
+        },
+        {
+          "name": "Pusa JG 16",
+          "days": 110
+        }
+      ],
+      "source": "ICAR reports maturity of Pusa Chickpea 10216 at 106 days and Pusa JG 16 at 110 days.",
+      "sourceUrl": "https://icar.gov.in/sites/default/files/2022-06/Crop-Cultivars-2nd-Edition.pdf",
+      "scope": "Variety examples are not a district suitability claim."
+    },
+    {
+      "crop": "Soybean",
+      "aliases": [
+        "soybean",
+        "soya"
+      ],
+      "seasons": [
+        "KHARIF"
+      ],
+      "typicalDays": 100,
+      "durationRange": [
+        96,
+        104
+      ],
+      "varieties": [
+        {
+          "name": "NRC 127",
+          "days": 104
+        },
+        {
+          "name": "NRC 142",
+          "days": 97
+        }
+      ],
+      "source": "ICAR reports NRC 127 at 104 days and NRC 142 at 96–97 days.",
+      "sourceUrl": "https://www.icar.gov.in/en/crop-science/mustard-crop-diversification-profitability-and-good-health",
+      "scope": "The cited variety profile notes recommendation regions; verify local suitability."
+    }
+  ],
+  "lifecycleRules": {
+    "basis": "DAS values for non-treatment monitoring checkpoints are calculated from the selected crop/variety duration profile. They are reminders to observe the field, not agronomic dose or treatment instructions. Verify timings against current state agricultural university or KVK guidance.",
+    "preSowing": [
+      {
+        "key": "land-preparation",
+        "name": "Land preparation review",
+        "type": "FIELD_PREPARATION",
+        "growthStage": "Before sowing",
+        "das": -7,
+        "description": "Review local field-preparation guidance for the crop, soil and available machinery.",
+        "recommendation": "No tillage operation is prescribed by this reminder."
+      },
+      {
+        "key": "seed-treatment-review",
+        "name": "Seed or planting material review",
+        "type": "SEED_TREATMENT",
+        "growthStage": "Before sowing",
+        "das": -1,
+        "description": "Check that certified seed or planting material and locally approved guidance are available.",
+        "recommendation": "No chemical or dose is generated."
+      }
+    ],
+    "sowing": {
+      "key": "sowing",
+      "name": "Sowing / field planting",
+      "type": "SOWING",
+      "growthStage": "Establishment",
+      "das": 0
+    },
+    "observationCheckpoints": [
+      {
+        "key": "establishment-check",
+        "name": "Crop establishment check",
+        "type": "GROWTH_STAGE",
+        "fraction": 0.08,
+        "maxDas": 10,
+        "growthStage": "Establishment",
+        "recommendation": "Check emergence or transplant establishment and record gaps or stress."
+      },
+      {
+        "key": "first-weed-check",
+        "name": "Weed monitoring check",
+        "type": "WEED_MONITORING",
+        "fraction": 0.2,
+        "growthStage": "Early vegetative",
+        "recommendation": "Inspect for weeds; use locally approved integrated weed management guidance."
+      },
+      {
+        "key": "irrigation-check-early",
+        "name": "Irrigation and soil-moisture review",
+        "type": "IRRIGATION_REVIEW",
+        "fraction": 0.2,
+        "growthStage": "Early vegetative",
+        "recommendation": "Review root-zone moisture and use the Smart Irrigation Planner. No water dose is inferred from this date."
+      },
+      {
+        "key": "vegetative-check",
+        "name": "Vegetative growth check",
+        "type": "GROWTH_STAGE",
+        "fraction": 0.3,
+        "growthStage": "Vegetative",
+        "recommendation": "Record the observed crop stage and field condition."
+      },
+      {
+        "key": "pest-check-early",
+        "name": "Pest and disease scouting",
+        "type": "PEST_MONITORING",
+        "fraction": 0.35,
+        "growthStage": "Vegetative",
+        "recommendation": "Scout and record symptoms; check local extension guidance before treatment."
+      },
+      {
+        "key": "irrigation-check-mid",
+        "name": "Irrigation and soil-moisture review",
+        "type": "IRRIGATION_REVIEW",
+        "fraction": 0.45,
+        "growthStage": "Mid-season",
+        "recommendation": "Check soil moisture and local conditions. No water dose is inferred from this date."
+      },
+      {
+        "key": "flowering-check",
+        "name": "Flowering-stage observation",
+        "type": "GROWTH_STAGE",
+        "fraction": 0.6,
+        "growthStage": "Flowering / reproductive",
+        "recommendation": "Confirm the observed stage; flowering timing varies by variety and conditions."
+      },
+      {
+        "key": "pest-check-reproductive",
+        "name": "Pest and disease scouting",
+        "type": "PEST_MONITORING",
+        "fraction": 0.62,
+        "growthStage": "Reproductive",
+        "recommendation": "Inspect crop and seek local KVK advice for unusual pest or disease pressure."
+      },
+      {
+        "key": "grain-fruit-check",
+        "name": "Grain, tuber or fruit development check",
+        "type": "GROWTH_STAGE",
+        "fraction": 0.75,
+        "growthStage": "Yield formation",
+        "recommendation": "Observe crop development and keep a field note."
+      },
+      {
+        "key": "irrigation-check-late",
+        "name": "Irrigation and soil-moisture review",
+        "type": "IRRIGATION_REVIEW",
+        "fraction": 0.78,
+        "growthStage": "Late season",
+        "recommendation": "Check crop stage and root-zone moisture before irrigation. No dose is inferred from this date."
+      },
+      {
+        "key": "maturity-check",
+        "name": "Estimated maturity check",
+        "type": "MATURITY",
+        "fraction": 0.92,
+        "growthStage": "Maturity",
+        "recommendation": "Confirm maturity using crop indicators and local guidance; an estimated date alone is not a harvest signal."
+      },
+      {
+        "key": "harvest-window",
+        "name": "Harvest preparation and maturity review",
+        "type": "HARVEST",
+        "fraction": 1.0,
+        "growthStage": "Harvest",
+        "recommendation": "Confirm maturity, weather and local harvest guidance before harvesting."
+      }
+    ]
+  }
+}
