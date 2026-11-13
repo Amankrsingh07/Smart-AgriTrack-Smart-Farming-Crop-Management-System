@@ -28,7 +28,7 @@ export default function AuthForms() {
     </form> : <form action={login} className="auth-card auth-single-card">
       <div className="form-heading"><span className="form-step">01</span><div><h3>{t("back")}</h3><p>{t("signInNote")}</p></div></div>
       <div className="field auth-field"><label htmlFor="login-email">{t("email")}</label><input id="login-email" name="email" type="email" autoComplete="email" placeholder="you@example.com" required /></div>
-      <div className="field auth-field"><label htmlFor="login-password">{t("password")}</label><input id="login-password" name="password" type="password" autoComplete="current-password" placeholder={t("enterPassword")} required /></div>
+      <div className="field auth-field"><label htmlFor="login-password">{t("loginPassword")}</label><input id="login-password" name="password" type="password" autoComplete="current-password" placeholder={t("enterPassword")} required /></div>
       <button className="btn auth-submit" type="submit">{t("signIn")} <span aria-hidden="true">→</span></button>
       <p className="auth-switch-copy">{t("newUser")} <button type="button" onClick={() => setMode("signup")}>{t("createLink")}</button></p>
     </form>}

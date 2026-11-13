@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/session";
-import { cropCalendarProfileNames, getCropCalendarProfileOptions } from "@/lib/crop-calendar";
+import { cropCalendarDatasetVersion, cropCalendarProfileNames, getCropCalendarProfileOptions } from "@/lib/crop-calendar";
 import CropCalendarDashboard, { type CalendarRecord, type CropCycleOption } from "./ui";
 import { generateCalendarForCycle } from "@/lib/crop-calendar-service";
 
@@ -13,7 +13,7 @@ export default async function CropCalendarPage() {
       where: { status: { in: ["PLANNED", "ACTIVE"] }, field: { farm: { userId: user.id } } },
       include: { crop: { include: { climateRequirement: true } }, field: { include: { farm: true } } }, orderBy: { createdAt: "desc" },
     });
-  const existing = await db.cropCalendar.findMany({ where: { userId: user.id }, select: { cropCycleId: true, sowingDate: true, estimatedHarvestDate: true, cropVariety: true } });
+  const existing = await db.cropCalendar.findMany({ where: { userId: user.id }, select: { cropCycleId: true, cropId: true, sowingDate: true, estimatedHarvestDate: true, cropVariety: true, datasetVersion: true, landArea: true, soilType: true, irrigationMethod: true } });
   const savedByCycle = new Map(existing.map(item => [item.cropCycleId, item]));
   // Refresh schedules on visit when Crop Management dates, variety, or field setup changed.
   await Promise.all(cycles.map(async cycle => {
@@ -22,7 +22,8 @@ export default async function CropCalendarPage() {
     const variety = cycle.cropVariety ?? saved?.cropVariety;
     if (getCropCalendarProfileOptions(cycle.crop.name).requiresVariety && !variety) return;
     const expectedChanged = cycle.expectedHarvestDate && saved?.estimatedHarvestDate && cycle.expectedHarvestDate.toISOString().slice(0, 10) !== saved.estimatedHarvestDate.toISOString().slice(0, 10);
-    if (!saved || saved.sowingDate.toISOString().slice(0, 10) !== cycle.sowingDate.toISOString().slice(0, 10) || expectedChanged || saved.cropVariety !== variety) {
+    const fieldChanged = saved && (Number(saved.landArea) !== Number(cycle.field.area) || saved.soilType !== (cycle.field.soilTexture ?? cycle.field.soilType) || saved.irrigationMethod !== cycle.field.irrigationMethod);
+    if (!saved || saved.cropId !== cycle.cropId || saved.datasetVersion !== cropCalendarDatasetVersion || saved.sowingDate.toISOString().slice(0, 10) !== cycle.sowingDate.toISOString().slice(0, 10) || expectedChanged || saved.cropVariety !== variety || fieldChanged) {
       try { await generateCalendarForCycle(user.id, { cropCycleId: cycle.id }); } catch { /* Missing reference/setup data is shown in the planner instead of blocking the page. */ }
     }
   }));
@@ -43,7 +44,7 @@ export default async function CropCalendarPage() {
   }));
   const records: CalendarRecord[] = calendars.map(calendar => ({
     id: calendar.id, cropCycleId: calendar.cropCycleId, crop: calendar.crop.name, farm: calendar.farm.name, field: calendar.cropCycle.field.name,
-    state: calendar.state, district: calendar.district, variety: calendar.cropVariety,
+    state: calendar.state, district: calendar.district, variety: calendar.cropVariety, observedGrowthStage: calendar.cropCycle.growthStage,
     sowingDate: calendar.sowingDate.toISOString().slice(0, 10), harvestDate: calendar.estimatedHarvestDate?.toISOString().slice(0, 10) ?? null,
     landArea: Number(calendar.landArea), areaUnit: calendar.areaUnit, soilType: calendar.soilType, irrigationMethod: calendar.irrigationMethod,
     activities: calendar.activities.map(activity => ({

@@ -1,0 +1,166 @@
+{
+  "version": "2026.11.11",
+  "description": "Offline approximate stage allocations. Crop-specific four-stage percentages are taken from FAO Water Management training manual Table 7 or FAO Annex II Table 4.11 where available. Milestone sub-stages are interpolations, not field observations.",
+  "sources": {
+    "faoTraining": "https://www.fao.org/4/S2022E/s2022e07.htm",
+    "faoAnnex": "https://www.fao.org/4/t0733e/T0733E05.htm"
+  },
+  "crops": [
+    {
+      "crop": "Millet",
+      "stagesPercent": [
+        16,
+        20,
+        20,
+        44
+      ],
+      "source": "FAO Annex II Table 4.11, Pearl millet row (60–100 day growth cycle).",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "Stage allocation reference for pearl millet; other millet types vary. Dates use the selected variety duration.",
+      "includesTillering": true
+    },
+    {
+      "crop": "Wheat",
+      "stagesPercent": [
+        10,
+        25,
+        25,
+        40
+      ],
+      "source": "FAO Annex II Table 4.11, Wheat row (100–190 day growth cycle).",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "General wheat estimate; cultivar, sowing date and temperature alter stage lengths.",
+      "includesTillering": true
+    },
+    {
+      "crop": "Barley",
+      "stagesPercent": [
+        10,
+        25,
+        25,
+        40
+      ],
+      "source": "FAO Annex II Table 4.11, Barley row (90–180 day growth cycle).",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "General barley estimate; cultivar, sowing date and temperature alter stage lengths.",
+      "includesTillering": true
+    },
+    {
+      "crop": "Rice (Paddy)",
+      "stagesPercent": [
+        10,
+        26,
+        26,
+        38
+      ],
+      "source": "FAO Annex II Table 4.11, rice (dryland and wetland) rows.",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "Broad rice estimate; variety, nursery period and transplanting method change dates.",
+      "includesTillering": true
+    },
+    {
+      "crop": "Maize",
+      "stagesPercent": [
+        16,
+        20,
+        20,
+        44
+      ],
+      "source": "FAO Annex II Table 4.11, lowland maize row.",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "Lowland maize planning allocation; grain and sweet maize durations differ.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Mustard",
+      "stagesPercent": [
+        12,
+        25,
+        38,
+        25
+      ],
+      "source": "Approximate oilseed planning split using FAO initial, development, mid-season and late-season stage definitions; mustard-specific durations are not separated in the cited tables.",
+      "sourceUrl": "https://www.fao.org/4/S2022E/s2022e07.htm",
+      "scope": "Lower-confidence stage estimate; verify with the selected variety and local KVK.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Potato",
+      "stagesPercent": [
+        15,
+        29,
+        29,
+        27
+      ],
+      "source": "FAO Annex II Table 4.11, white potato row.",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "White potato planning allocation; cultivar and temperature affect tuber development.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Sugarcane",
+      "stagesPercent": [
+        4,
+        37,
+        37,
+        22
+      ],
+      "source": "FAO Annex II Table 4.11, sugarcane row.",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "Broad long-duration sugarcane allocation; ratoon and planting systems change timing.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Cotton",
+      "stagesPercent": [
+        12,
+        34,
+        34,
+        22
+      ],
+      "source": "FAO Annex II Table 4.11, cotton row.",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "Broad cotton planning allocation; variety and picking pattern affect crop duration.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Tomato",
+      "stagesPercent": [
+        11,
+        29,
+        43,
+        17
+      ],
+      "source": "FAO Water Management training manual Table 7, tomato transplanted 140-day example (15, 40, 60, 25 days), converted to percentages.",
+      "sourceUrl": "https://www.fao.org/4/S2022E/s2022e07.htm",
+      "scope": "Transplant-based planning example; nursery days are outside this field timeline.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Chickpea (Gram)",
+      "stagesPercent": [
+        16,
+        26,
+        37,
+        21
+      ],
+      "source": "Approximate pulse proxy based on FAO Water Management training manual dry-bean stage allocations (15, 25, 35, 20 days at the 95-day example).",
+      "sourceUrl": "https://www.fao.org/4/S2022E/s2022e07.htm",
+      "scope": "Pulse proxy, not chickpea cultivar-specific. Verify stage dates locally.",
+      "includesTillering": false
+    },
+    {
+      "crop": "Soybean",
+      "stagesPercent": [
+        8,
+        27,
+        27,
+        38
+      ],
+      "source": "FAO Annex II Table 4.11, soybean row.",
+      "sourceUrl": "https://www.fao.org/4/t0733e/T0733E05.htm",
+      "scope": "Broad soybean estimate; cultivar, photoperiod and planting date affect timing.",
+      "includesTillering": false
+    }
+  ]
+}

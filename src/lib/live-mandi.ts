@@ -1,52 +1,174 @@
 export type MandiRow = {
-  State?: string;
-  District?: string;
-  Market?: string;
-  Commodity?: string;
-  Arrival_Date?: string;
-  Variety?: string;
-  Grade?: string;
-  Min_Price?: string | number;
-  Max_Price?: string | number;
-  Modal_Price?: string | number;
+  state?: string;
+  district?: string;
+  market?: string;
+  commodity?: string;
+  arrival_date?: string;
+  variety?: string;
+  grade?: string;
+  min_price?: string | number;
+  max_price?: string | number;
+  modal_price?: string | number;
 };
 
-const RESOURCE_ID = "9ef84268-d588-465a-a308-a864a43d0070";
-const ENDPOINT = `https://api.data.gov.in/resource/${RESOURCE_ID}`;
+export type LiveMandiFilters = {
+  state?: string;
+  district?: string;
+  commodity?: string;
+  arrivalDate?: string;
+};
 
-function field(record: Record<string, unknown>, lower: string, title: string) {
-  return record[lower] ?? record[title];
+export type LiveMandiResult = {
+  records: MandiRow[];
+  total: number;
+  count: number;
+  asOf?: string;
+  sourceUrl?: string;
+};
+
+const MCP_ENDPOINT = "https://www.voiceofvillage.com/api/mcp";
+
+type MandiPrice = Record<string, unknown>;
+type MandiData = {
+  available?: boolean;
+  message?: string;
+  district?: string;
+  state?: string;
+  prices?: MandiPrice[];
+};
+type Citation = { source?: string; as_of?: string; url?: string; license?: string };
+type McpPayload = {
+  error?: { message?: string } | string;
+  result?: {
+    isError?: boolean;
+    structuredContent?: { data?: MandiData; citations?: Citation[] };
+    content?: Array<{ type?: string; text?: string }>;
+  };
+};
+
+const notSelected = (value: string | undefined, sentinel: string) => {
+  const clean = value?.trim();
+  return clean && clean.toLowerCase() !== sentinel.toLowerCase() ? clean : undefined;
+};
+
+function parseToolResult(payload: McpPayload) {
+  const result = payload.result;
+  if (!result || payload.error || result.isError) {
+    throw new Error("VoiceOfVillage returned an API error. Check the API key and try again.");
+  }
+
+  const structured = result.structuredContent;
+  if (structured?.data) return { data: structured.data, citations: structured.citations ?? [] };
+
+  const text = result.content?.find(item => item.type === "text")?.text;
+  if (text) {
+    try {
+      const parsed = JSON.parse(text) as { data?: MandiData; citations?: Citation[] };
+      if (parsed.data) return { data: parsed.data, citations: parsed.citations ?? [] };
+    } catch {
+      // A non-JSON tool error is handled below as a malformed response.
+    }
+  }
+  throw new Error("VoiceOfVillage response did not include mandi data.");
 }
 
-export async function fetchLiveMandi(filters: { state?: string; district?: string; commodity?: string; offset?: number; limit?: number }) {
-  const apiKey = process.env.DATA_GOV_IN_API_KEY?.trim();
-  if (!apiKey) throw new Error("Live mandi mode needs DATA_GOV_IN_API_KEY in the server environment.");
+function dateOnly(value: string) {
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  const dmy = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value.trim());
+  return dmy ? `${dmy[3]}-${dmy[2]}-${dmy[1]}` : value.trim();
+}
 
-  const params = new URLSearchParams({ "api-key": apiKey, format: "json", limit: String(Math.min(1000, Math.max(1, filters.limit ?? 500))), offset: String(Math.max(0, filters.offset ?? 0)) });
-  // data.gov.in's resource exposes these fields with title-cased names. The
-  // filter parameter names are case-sensitive for this resource.
-  if (filters.state) params.set("filters[State]", filters.state);
-  if (filters.district) params.set("filters[District]", filters.district);
-  if (filters.commodity) params.set("filters[Commodity]", filters.commodity);
+function mapPrice(row: MandiPrice, state?: string, district?: string): MandiRow {
+  return {
+    state: (row.state ?? row.state_name ?? state) as string | undefined,
+    district: (row.district_name ?? row.district ?? district) as string | undefined,
+    market: row.market as string | undefined,
+    commodity: row.commodity as string | undefined,
+    arrival_date: row.arrival_date as string | undefined,
+    variety: row.variety as string | undefined,
+    grade: row.grade as string | undefined,
+    min_price: row.min_price as string | number | undefined,
+    max_price: row.max_price as string | number | undefined,
+    modal_price: row.modal_price as string | number | undefined,
+  };
+}
 
-  const response = await fetch(`${ENDPOINT}?${params}`, { cache: "no-store", signal: AbortSignal.timeout(12_000) });
-  if (!response.ok) throw new Error(`data.gov.in returned HTTP ${response.status}.`);
-  const payload = await response.json() as { records?: Array<Record<string, unknown>>; total?: string | number; total_count?: string | number; count?: string | number; message?: string; error?: string };
-  if (!Array.isArray(payload.records)) throw new Error(payload.message || payload.error || "data.gov.in returned an unexpected response.");
+export async function fetchLiveMandi(filters: LiveMandiFilters = {}): Promise<LiveMandiResult> {
+  const apiKey = process.env.VOV_API_KEY?.trim();
+  if (!apiKey) throw new Error("Online VoiceOfVillage prices need VOV_API_KEY in the server environment.");
 
-  const records: MandiRow[] = payload.records.map(record => ({
-    State: field(record, "state", "State") as string | undefined,
-    District: field(record, "district", "District") as string | undefined,
-    Market: field(record, "market", "Market") as string | undefined,
-    Commodity: field(record, "commodity", "Commodity") as string | undefined,
-    Arrival_Date: field(record, "arrival_date", "Arrival_Date") as string | undefined,
-    Variety: field(record, "variety", "Variety") as string | undefined,
-    Grade: field(record, "grade", "Grade") as string | undefined,
-    Min_Price: field(record, "min_price", "Min_Price") as string | number | undefined,
-    Max_Price: field(record, "max_price", "Max_Price") as string | number | undefined,
-    Modal_Price: field(record, "modal_price", "Modal_Price") as string | number | undefined,
-  }));
+  const state = notSelected(filters.state, "All India");
+  const district = notSelected(filters.district, "All Districts");
+  const commodity = notSelected(filters.commodity, "All Commodities");
+  if (!district) {
+    throw new Error("VoiceOfVillage online mandi prices require a district. Select a state and district, or use the offline All India snapshot.");
+  }
 
-  const total = Number(payload.total ?? payload.total_count ?? payload.count ?? records.length);
-  return { records, total: Number.isFinite(total) ? total : records.length };
+  const arguments_: Record<string, string | number | boolean | object> = {
+    district,
+    days: filters.arrivalDate ? 30 : 7,
+  };
+  if (state) arguments_.state = state;
+  if (commodity) arguments_.commodity = commodity;
+  const targetDate = filters.arrivalDate ? dateOnly(filters.arrivalDate) : undefined;
+
+  let response: Response;
+  try {
+    response = await fetch(MCP_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+        authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: { name: "get_mandi_prices", arguments: arguments_ },
+      }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch (error) {
+    console.error("VoiceOfVillage mandi network failure", { errorName: error instanceof Error ? error.name : "UnknownError" });
+    throw new Error("Could not reach VoiceOfVillage. Check the server's internet connection and try again.");
+  }
+
+  if (!response.ok) {
+    console.error("VoiceOfVillage mandi request failed", { status: response.status, retryAfter: response.headers.get("retry-after") });
+    const retryAfter = response.headers.get("retry-after");
+    throw new Error(response.status === 429
+      ? `VoiceOfVillage rate limit reached. Try again${retryAfter ? ` in ${retryAfter} seconds` : " later"}.`
+      : `VoiceOfVillage returned HTTP ${response.status}. Check the API key and resource access.`);
+  }
+
+  let payload: McpPayload;
+  try {
+    payload = await response.json() as McpPayload;
+  } catch {
+    console.error("VoiceOfVillage mandi response was not valid JSON");
+    throw new Error("VoiceOfVillage returned an invalid response.");
+  }
+
+  const { data, citations } = parseToolResult(payload);
+  if (data.available === false) {
+    throw new Error(data.message || "VoiceOfVillage has no mandi prices for that district.");
+  }
+  if (!Array.isArray(data.prices)) {
+    console.error("VoiceOfVillage mandi response missing prices", { payloadKeys: Object.keys(data) });
+    throw new Error("VoiceOfVillage response did not include a prices list.");
+  }
+
+  const rows = data.prices.map(row => mapPrice(row, state, data.district ?? district));
+  const records = targetDate ? rows.filter(row => row.arrival_date && dateOnly(row.arrival_date) === targetDate) : rows;
+  const citation = citations.find(item => item.source || item.as_of || item.url);
+  return {
+    records,
+    total: records.length,
+    count: records.length,
+    asOf: citation?.as_of,
+    sourceUrl: citation?.url,
+  };
 }

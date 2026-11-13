@@ -100,20 +100,20 @@ export default function SoilHealthForm({ cropNames, initialHistory }: { cropName
     {report && <SoilReport report={report}/>}
 
     <section className="panel soil-health-report" aria-live="polite">
-      <p className="crop-advice-kicker">OFFLINE ICAR FERTILIZER CALCULATOR</p>
-      <h2>Urea · DAP · MOP plan</h2>
+      <p className="crop-advice-kicker">{t("offlineTitle")}</p>
+      <h2>{t("productPlan")}</h2>
       {!selectedRecipe ? <>
-        <p className="muted">{values.crop && values.state ? `No bundled ICAR dose is available for ${values.crop} in ${values.state}. You can still calculate offline using the exact N, P₂O₅ and K₂O rates from this field’s Soil Health Card or KVK recommendation.` : "Select any state and crop, then enter the rates from the field’s Soil Health Card or KVK recommendation."} This mode calculates product quantities; it does not invent a crop dose.</p>
+        <p className="muted">{values.crop && values.state ? t("noBundledDose", { crop: values.crop, state: values.state }) : t("selectStateCropRates")} {t("quantityOnly")}</p>
         <div className="soil-health-grid">
-          <label className="field"><span>Recommended Nitrogen (N)</span><input type="number" min="0" step="0.01" value={manualRates.n} onChange={event => setManual("n", event.target.value)} placeholder="kg/ha"/><small className="muted">From your crop recommendation · kg N/ha</small></label>
-          <label className="field"><span>Recommended Phosphorus (P₂O₅)</span><input type="number" min="0" step="0.01" value={manualRates.p2o5} onChange={event => setManual("p2o5", event.target.value)} placeholder="kg/ha"/><small className="muted">Enter P₂O₅, not elemental P · kg/ha</small></label>
-          <label className="field"><span>Recommended Potassium (K₂O)</span><input type="number" min="0" step="0.01" value={manualRates.k2o} onChange={event => setManual("k2o", event.target.value)} placeholder="kg/ha"/><small className="muted">Enter K₂O, not elemental K · kg/ha</small></label>
-          <label className="field"><span>Basal N share (%)</span><input type="number" min="0" max="100" step="1" value={manualRates.basalN} onChange={event => setManual("basalN", event.target.value)} placeholder="e.g. 50"/></label>
-          <label className="field"><span>Basal P₂O₅ share (%)</span><input type="number" min="0" max="100" step="1" value={manualRates.basalP} onChange={event => setManual("basalP", event.target.value)} placeholder="e.g. 100"/></label>
-          <label className="field"><span>Basal K₂O share (%)</span><input type="number" min="0" max="100" step="1" value={manualRates.basalK} onChange={event => setManual("basalK", event.target.value)} placeholder="e.g. 100"/></label>
-          <label className="field"><span>Remaining fertilizer timing</span><input value={manualRates.topdressLabel} onChange={event => setManual("topdressLabel", event.target.value)} placeholder="e.g. First irrigation"/><small className="muted">Remaining nutrient share is scheduled here.</small></label>
+          <label className="field"><span>{t("recommendedN")}</span><input type="number" min="0" step="0.01" value={manualRates.n} onChange={event => setManual("n", event.target.value)} placeholder={t("kgHa")}/><small className="muted">{t("cropRateN")}</small></label>
+          <label className="field"><span>{t("recommendedP2O5")}</span><input type="number" min="0" step="0.01" value={manualRates.p2o5} onChange={event => setManual("p2o5", event.target.value)} placeholder={t("kgHa")}/><small className="muted">{t("enterP2O5")}</small></label>
+          <label className="field"><span>{t("recommendedK2O")}</span><input type="number" min="0" step="0.01" value={manualRates.k2o} onChange={event => setManual("k2o", event.target.value)} placeholder={t("kgHa")}/><small className="muted">{t("enterK2O")}</small></label>
+          <label className="field"><span>{t("basalN")}</span><input type="number" min="0" max="100" step="1" value={manualRates.basalN} onChange={event => setManual("basalN", event.target.value)} placeholder={t("example50")}/></label>
+          <label className="field"><span>{t("basalP2O5")}</span><input type="number" min="0" max="100" step="1" value={manualRates.basalP} onChange={event => setManual("basalP", event.target.value)} placeholder={t("example100")}/></label>
+          <label className="field"><span>{t("basalK2O")}</span><input type="number" min="0" max="100" step="1" value={manualRates.basalK} onChange={event => setManual("basalK", event.target.value)} placeholder={t("example100")}/></label>
+          <label className="field"><span>{t("remainingTiming")}</span><input value={manualRates.topdressLabel} onChange={event => setManual("topdressLabel", event.target.value)} placeholder={t("firstIrrigation")}/><small className="muted">{t("remainingShareScheduled")}</small></label>
         </div>
-        {!doseCalculated && <p className="muted">Enter the recommended nutrient rates above, then calculate to see product quantities.</p>}
+        {!doseCalculated && <p className="muted">{t("enterRatesCalculate")}</p>}
         {doseCalculated && manualInputsValid && !manualPlan && <p role="alert" className="error-message">DAP alone supplies more nitrogen than the entered total N target. Confirm the SHC values or use a crop recommendation with another phosphorus fertilizer.</p>}
         {doseCalculated && manualPlan && <>
           <h3>Offline calculation for {values.crop} · {values.district}, {values.state}</h3>
@@ -129,7 +129,7 @@ export default function SoilHealthForm({ cropNames, initialHistory }: { cropName
         <p className="muted">Calculated from standard fertilizer grades in the bundled dataset. Quantities are rounded for display only; follow local soil-test advice and fertilizer label. Application schedule is the ICAR source schedule.</p>
         <a href={selectedRecipe.source.url} target="_blank" rel="noreferrer">Source: {selectedRecipe.source.title} (included for reference; calculation works offline)</a>
       </>}
-      <button type="button" className="btn" disabled={!Number.isFinite(Number(areaHa)) || Number(areaHa) <= 0 || (!selectedRecipe && !manualInputsValid)} onClick={() => setDoseCalculated(true)}>{selectedRecipe ? "Calculate ICAR dose" : "Calculate product quantities"}</button>
+      <button type="button" className="btn" disabled={!Number.isFinite(Number(areaHa)) || Number(areaHa) <= 0 || (!selectedRecipe && !manualInputsValid)} onClick={() => setDoseCalculated(true)}>{selectedRecipe ? t("calculateIcarDose") : t("calculateQuantities")}</button>
     </section>
 
     <section className="panel soil-health-reference">

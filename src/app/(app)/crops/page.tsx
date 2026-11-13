@@ -49,7 +49,6 @@ export default async function Crops({ searchParams }: { searchParams: Promise<{ 
         {(!missingField && !missingCrops) ? <>
           <Field label={t("field")}><select name="fieldId" required>{fields.map(f => <option key={f.id} value={f.id}>{f.farm.name} — {f.name}</option>)}</select></Field>
           <CropPicker crops={cropPickerOptions} />
-          <Field label={locale === "hi" ? "किस्म (वैकल्पिक)" : "Variety (optional)"}><input name="cropVariety" maxLength={120} placeholder={locale === "hi" ? "यदि ज्ञात हो" : "If known"} /></Field>
           <Field label={t("season")}><select name="season"><option value="KHARIF">{t("kharif")}</option><option value="RABI">{t("rabi")}</option><option value="ZAID">{t("zaid")}</option></select></Field>
           <Field label={t("status")}><select name="status"><option value="PLANNED">{t("planned")}</option><option value="ACTIVE">{t("active")}</option></select></Field>
           <Field label={t("sowing")}><input type="date" name="sowingDate" /></Field>
@@ -80,7 +79,6 @@ export default async function Crops({ searchParams }: { searchParams: Promise<{ 
               <input type="hidden" name="id" value={c.id} />
               <Field label={t("field")}><select name="fieldId" defaultValue={c.fieldId} required>{fields.map(f => <option key={f.id} value={f.id}>{f.farm.name} — {f.name}</option>)}</select></Field>
               <Field label={t("crop")}><select name="cropId" defaultValue={c.cropId} required>{crops.map(crop => <option key={crop.id} value={crop.id}>{displayLabel(crop.name, locale)}{crop.illustrative ? ` · ${t("demoProfile")}` : ""}</option>)}</select></Field>
-              <Field label={locale === "hi" ? "किस्म (वैकल्पिक)" : "Variety (optional)"}><input name="cropVariety" maxLength={120} defaultValue={c.cropVariety ?? ""} /></Field>
               <Field label={t("season")}><select name="season" defaultValue={c.season}><option value="KHARIF">{t("kharif")}</option><option value="RABI">{t("rabi")}</option><option value="ZAID">{t("zaid")}</option></select></Field>
               <Field label={t("status")}><select name="status" defaultValue={c.status}><option value="PLANNED">{t("planned")}</option><option value="ACTIVE">{t("active")}</option>{c.status === "HARVESTED" && <option value="HARVESTED">{t("harvestCompleted")}</option>}<option value="COMPLETED">{t("completed")}</option></select></Field>
               <Field label={t("sowing")}><input type="date" name="sowingDate" defaultValue={c.sowingDate?.toISOString().slice(0, 10) ?? ""} /></Field>

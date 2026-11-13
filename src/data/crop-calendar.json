@@ -138,6 +138,25 @@
       "scope": "Karan Vandana example from Gorakhpur; confirm variety and local sowing window."
     },
     {
+      "crop": "Barley",
+      "aliases": [
+        "barley",
+        "jau"
+      ],
+      "seasons": [
+        "RABI"
+      ],
+      "typicalDays": 135,
+      "durationRange": [
+        120,
+        150
+      ],
+      "varieties": [],
+      "source": "FAO Irrigation Water Management training manual Table 6 gives 120–150 days for Barley/Oats/Wheat; 135 days is the midpoint planning estimate.",
+      "sourceUrl": "https://www.fao.org/4/S2022E/s2022e07.htm",
+      "scope": "Grouped FAO duration reference, not barley-cultivar-specific. Confirm local variety and sowing window with KVK or the state agricultural university."
+    },
+    {
       "crop": "Rice (Paddy)",
       "aliases": [
         "rice",

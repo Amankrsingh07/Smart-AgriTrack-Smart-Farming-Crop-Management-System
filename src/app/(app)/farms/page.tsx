@@ -43,7 +43,6 @@ export default async function Farms({ searchParams }: { searchParams: Promise<{ 
             <Field label={t("unit")}><select name="areaUnit"><option value="acre">{t("acre")}</option><option value="hectare">{t("hectare")}</option></select></Field>
           </div>
           <Field label={t("soilType")}><select name="soilType" required><option value="">{t("selectSoil")}</option>{["Alluvial", "Black", "Red", "Laterite", "Sandy", "Clay", "Loamy", "Other"].map(x => <option key={x} value={x}>{displayLabel(x, locale)}</option>)}</select></Field>
-          <Field label={t("soilTexture")}><select name="soilTexture"><option value="">{t("chooseKnown")}</option>{["Sandy", "Loamy", "Clayey"].map(x => <option key={x} value={x}>{displayLabel(x, locale)}</option>)}</select></Field>
           <Field label={t("source")}><select name="irrigationSource" required><option value="">{t("selectSource")}</option>{["Borewell", "Canal", "River", "Pond", "Rainwater Harvesting"].map(x => <option key={x}>{x}</option>)}</select></Field>
           <Field label={t("method")}><select name="irrigationMethod" required><option value="">{t("selectMethod")}</option>{["Drip", "Sprinkler", "Furrow", "Flood"].map(x => <option key={x}>{x}</option>)}</select></Field>
           <Field label={t("waterAvailability")}><select name="waterAvailability"><option value="LOW">{t("low")}</option><option value="MEDIUM">{t("medium")}</option><option value="HIGH">{t("high")}</option></select></Field>
@@ -58,8 +57,8 @@ export default async function Farms({ searchParams }: { searchParams: Promise<{ 
         <h3 style={{ margin: "0 0 5px" }}>{f.name}</h3>
         <p className="muted" style={{ margin: "0 0 12px" }}>{[f.village, f.district, f.state].filter(Boolean).join(", ")}</p>
         {f.fields.length === 0 ? <span className="muted">{t("noFields")}</span> : <div style={{ overflowX: "auto" }}>
-          <table className="table"><thead><tr><th>{t("field")}</th><th>{t("area")}</th><th>{t("soil")}</th><th>{t("texture")}</th><th>{t("source")}</th><th>{t("method")}</th><th>{t("water")}</th></tr></thead>
-            <tbody>{f.fields.map(x => <tr key={x.id}><td>{x.name}</td><td>{x.area.toString()} {displayLabel(x.areaUnit === "acre" ? "Acre" : "Hectare", locale)}</td><td>{displayLabel(x.soilType, locale)}</td><td>{x.soilTexture ? displayLabel(x.soilTexture, locale) : t("notSet")}</td><td>{x.irrigationSource ? displayLabel(x.irrigationSource, locale) : t("notSet")}</td><td>{displayLabel(x.irrigationMethod, locale)}</td><td>{displayLabel(x.waterAvailability.toLowerCase(), locale)}</td></tr>)}</tbody>
+          <table className="table"><thead><tr><th>{t("field")}</th><th>{t("area")}</th><th>{t("soil")}</th><th>{t("source")}</th><th>{t("method")}</th><th>{t("water")}</th></tr></thead>
+            <tbody>{f.fields.map(x => <tr key={x.id}><td>{x.name}</td><td>{x.area.toString()} {displayLabel(x.areaUnit === "acre" ? "Acre" : "Hectare", locale)}</td><td>{displayLabel(x.soilType, locale)}</td><td>{x.irrigationSource ? displayLabel(x.irrigationSource, locale) : t("notSet")}</td><td>{displayLabel(x.irrigationMethod, locale)}</td><td>{displayLabel(x.waterAvailability.toLowerCase(), locale)}</td></tr>)}</tbody>
           </table>
         </div>}
         <details style={{ marginTop: 12 }}>

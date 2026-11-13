@@ -1,8 +1,10 @@
 import dataset from "@/data/crop-calendar.json";
+import growthStageDataset from "@/data/crop-growth-stages.json";
 import { calculateIcarFertilizer, getIcarRecipes } from "@/lib/icar-fertilizer";
 
-export const cropCalendarDatasetVersion = dataset.version;
+export const cropCalendarDatasetVersion = `${dataset.version}+${growthStageDataset.version}`;
 export const cropCalendarProfileNames = dataset.crops.map(profile => profile.crop);
+export const cropGrowthStageDatasetVersion = growthStageDataset.version;
 export type CropCalendarProfile = (typeof dataset.crops)[number] & { requiresVariety?: boolean };
 export type GeneratedCalendarActivity = {
   activityKey: string;
@@ -15,6 +17,8 @@ export type GeneratedCalendarActivity = {
   source: string | null;
   sourceUrl: string | null;
 };
+
+export type CropGrowthWindow = { key: string; name: string; startDay: number; endDay: number; description: string; recommendation: string };
 
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
 
@@ -30,6 +34,39 @@ export function getCropCalendarProfileOptions(cropName: string) {
     requiresVariety: profile?.requiresVariety ?? false,
     varietyOptions: profile?.varieties.map(item => item.name) ?? [],
   };
+}
+
+export function getCropGrowthStageProfile(cropName: string) {
+  const cropProfile = findCropCalendarProfile(cropName);
+  if (!cropProfile) return undefined;
+  return growthStageDataset.crops.find(item => normalize(item.crop) === normalize(cropProfile.crop));
+}
+
+export function calculateCropGrowthWindows(cropName: string, durationDays: number): CropGrowthWindow[] {
+  const profile = getCropGrowthStageProfile(cropName);
+  if (!profile || !Number.isInteger(durationDays) || durationDays < 8) return [];
+  const [initialPct, developmentPct, midPct] = profile.stagesPercent;
+  const initial = Math.max(1, Math.round(durationDays * initialPct / 100));
+  const development = Math.max(1, Math.round(durationDays * developmentPct / 100));
+  const mid = Math.max(1, Math.round(durationDays * midPct / 100));
+  const initialEnd = initial;
+  const developmentEnd = initialEnd + development;
+  const midEnd = developmentEnd + mid;
+  const germinationEnd = Math.max(2, Math.round(initial * 0.35));
+  const splitDevelopment = Math.max(1, Math.round(development * 0.55));
+  const floweringEnd = Math.min(midEnd, developmentEnd + Math.max(1, Math.round(mid * 0.3)));
+  const stages: Array<Omit<CropGrowthWindow, "description" | "recommendation"> & { description: string; recommendation: string }> = [
+    { key: "sowing", name: "Sowing", startDay: 0, endDay: 0, description: "Seed or planting material is placed in the field. This is the start date recorded in Crop Management.", recommendation: "Confirm seed, spacing and sowing method with the crop-specific local advisory." },
+    { key: "germination", name: "Germination", startDay: 1, endDay: Math.min(initialEnd, germinationEnd), description: "Seeds are expected to imbibe and emerge during this early establishment period.", recommendation: "Check field moisture and emergence. Record gaps; do not infer irrigation quantity from the calendar." },
+    { key: "seedling", name: "Seedling", startDay: Math.min(initialEnd, germinationEnd) + 1, endDay: initialEnd, description: "Young plants establish their first leaves and root system during the remainder of the initial stage.", recommendation: "Inspect plant stand, weeds and visible pest or disease symptoms; use local guidance for any intervention." },
+    { key: "vegetative", name: "Vegetative growth", startDay: initialEnd + 1, endDay: profile.includesTillering ? initialEnd + splitDevelopment : developmentEnd, description: "The crop develops leaves, stems and canopy. Stage duration is estimated from the selected crop profile.", recommendation: "Inspect weeds and crop vigor. Review irrigation using measured field conditions and the existing Smart Irrigation Planner." },
+    ...(profile.includesTillering ? [{ key: "tillering", name: "Tillering", startDay: initialEnd + splitDevelopment + 1, endDay: developmentEnd, description: "Cereal tillers may develop during this part of vegetative growth; the timing varies by variety and field conditions.", recommendation: "Observe tiller or shoot development and continue weed, moisture and pest scouting." }] : []),
+    { key: "flowering", name: "Flowering", startDay: developmentEnd + 1, endDay: floweringEnd, description: "Flowering is expected within the crop mid-season period. Calendar timing is an estimate, not an observation.", recommendation: "Inspect flowering and weather stress. Maintain field monitoring and follow locally approved nutrient guidance." },
+    { key: "grain-fruit", name: "Grain / fruit formation", startDay: floweringEnd + 1, endDay: midEnd, description: "Grain, pod, tuber or fruit development is expected during the remaining mid-season period.", recommendation: "Monitor crop development, moisture and pests. Check nutrient needs against soil testing and local recommendations; no dose is generated here." },
+    { key: "maturity", name: "Maturity", startDay: midEnd + 1, endDay: Math.max(midEnd + 1, durationDays - 1), description: "The crop enters the estimated late-season or ripening period before harvest.", recommendation: "Check crop-specific maturity signs and prepare labor, storage and market plans. Confirm timing with local extension guidance." },
+    { key: "harvesting", name: "Harvesting", startDay: durationDays, endDay: durationDays, description: "The source-profile harvest date is a planning estimate for the last day of a typical growing period.", recommendation: "Harvest only after checking field maturity, weather, equipment and local guidance." },
+  ];
+  return stages.filter(stage => stage.startDay <= durationDays).map(stage => ({ ...stage, endDay: Math.min(durationDays, stage.endDay) }));
 }
 
 export function selectCropDuration(profile: CropCalendarProfile, variety?: string | null, farmerDurationDays?: number | null) {
@@ -87,9 +124,24 @@ export function generateCropCalendarActivities(input: {
     source: ruleSource, sourceUrl: ruleSourceUrl,
   });
   const sowing = dataset.lifecycleRules.sowing;
-  add({ activityKey: sowing.key, activityName: sowing.name, activityType: sowing.type, growthStage: sowing.growthStage,
+  add({ activityKey: sowing.key, activityName: sowing.name, activityType: sowing.type, growthStage: "Sowing",
     day: sowing.das, description: `Crop Management sowing date. The ${duration.days}-day maturity estimate is a planning reference, not a suitability decision.`,
     recommendation: "Confirm sowing window and variety with the state agricultural university or KVK for this district.", source: ruleSource, sourceUrl: ruleSourceUrl });
+  const stageProfile = getCropGrowthStageProfile(input.cropName);
+  const growthWindows = calculateCropGrowthWindows(input.cropName, duration.days);
+  for (const stage of growthWindows.filter(item => item.key !== "sowing")) add({
+    activityKey: `phase-${stage.key}`, activityName: `${stage.name} stage`, activityType: "GROWTH_STAGE", growthStage: stage.name,
+    day: stage.startDay, description: `${estimated} ${stage.description} Expected stage window: day ${stage.startDay} to ${stage.endDay} after sowing.`,
+    recommendation: stage.recommendation, source: stageProfile?.source ?? ruleSource, sourceUrl: stageProfile?.sourceUrl ?? ruleSourceUrl,
+  });
+  if (duration.range) {
+    add({ activityKey: "harvest-window-start", activityName: "Expected harvest window opens", activityType: "HARVEST", growthStage: "Harvest window",
+      day: duration.range[0], description: `Lower end of the source-profile harvest range (${duration.range[0]} days after sowing). Actual maturity depends on variety and local conditions.`,
+      recommendation: "Inspect crop-specific maturity indicators before harvesting; this date is not a harvest instruction.", source: ruleSource, sourceUrl: ruleSourceUrl });
+    add({ activityKey: "harvest-window-end", activityName: "Expected harvest window closes", activityType: "HARVEST", growthStage: "Harvest window",
+      day: duration.range[1], description: `Upper end of the source-profile harvest range (${duration.range[1]} days after sowing). Confirm field maturity locally.`,
+      recommendation: "Use field observations and local extension guidance to confirm harvest timing.", source: ruleSource, sourceUrl: ruleSourceUrl });
+  }
   for (const rule of dataset.lifecycleRules.observationCheckpoints) {
     const das = "maxDas" in rule && rule.maxDas ? Math.min(rule.maxDas, Math.round(duration.days * rule.fraction)) : Math.round(duration.days * rule.fraction);
     add({ activityKey: rule.key, activityName: rule.name, activityType: rule.type, growthStage: rule.growthStage,

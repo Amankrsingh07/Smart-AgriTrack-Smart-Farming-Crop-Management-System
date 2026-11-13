@@ -6,6 +6,7 @@ import { getUser } from "@/lib/session";
 const schema = z.object({
   cropCycleId: z.string().min(1).max(191),
   cropVariety: z.string().trim().max(120).optional(),
+  sowingDate: z.string().date().optional(),
 });
 
 export async function POST(request: Request) {

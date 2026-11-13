@@ -5,7 +5,7 @@ import { reconcileCropCalendarActivities } from "@/lib/crop-calendar-reconciliat
 
 // Crop Management is the source of truth. Date and field details are never accepted
 // from the calendar form, so editing a generated calendar cannot fork crop records.
-export type CropCalendarInput = { cropCycleId: string; cropVariety?: string };
+export type CropCalendarInput = { cropCycleId: string; cropVariety?: string; sowingDate?: string };
 
 const dateKey = (date: Date) => date.toISOString().slice(0, 10);
 const dateAtUtc = (value: Date) => new Date(`${dateKey(value)}T00:00:00.000Z`);
@@ -15,13 +15,14 @@ const irrigationMarker = (cycleId: string, activityKey: string) => `calendar:${c
 export async function generateCalendarForCycle(userId: string, input: CropCalendarInput) {
   const cycle = await db.cropCycle.findFirst({
     where: { id: input.cropCycleId, field: { farm: { userId } } },
-    include: { crop: true, field: { include: { farm: true } }, cropCalendar: { include: { activities: true } } },
+    include: { crop: { include: { climateRequirement: true } }, field: { include: { farm: true } }, cropCalendar: { include: { activities: true } } },
   });
   if (!cycle) throw new Error("Crop cycle was not found in your account.");
-  if (!cycle.sowingDate) throw new Error("Add a sowing date in Crop Management before generating this calendar.");
+  const requestedSowingDate = input.sowingDate ? new Date(`${input.sowingDate}T00:00:00.000Z`) : cycle.sowingDate;
+  if (!requestedSowingDate || Number.isNaN(requestedSowingDate.getTime()) || (input.sowingDate && requestedSowingDate.toISOString().slice(0, 10) !== input.sowingDate)) throw new Error("Enter a valid sowing date before generating this calendar.");
 
   const oldCalendar = cycle.cropCalendar;
-  const sowingDate = dateAtUtc(cycle.sowingDate);
+  const sowingDate = dateAtUtc(requestedSowingDate);
   const variety = input.cropVariety?.trim().slice(0, 120) || cycle.cropVariety || oldCalendar?.cropVariety || null;
   const fieldArea = Number(cycle.field.area);
   const areaUnit = cycle.field.areaUnit.toLowerCase().startsWith("hect") ? "hectare" : "acre";
@@ -31,9 +32,14 @@ export async function generateCalendarForCycle(userId: string, input: CropCalend
   // An expected date differing from the previous generated date is a farmer-set
   // date. Use it to derive a duration; otherwise keep the existing crop duration.
   const expectedDateIsOverride = Boolean(cycle.expectedHarvestDate && (!oldCalendar?.estimatedHarvestDate || dateKey(cycle.expectedHarvestDate) !== dateKey(oldCalendar.estimatedHarvestDate)));
+  const storedDateMatchesCalendar = Boolean(oldCalendar?.estimatedHarvestDate && cycle.expectedHarvestDate && dateKey(oldCalendar.estimatedHarvestDate) === dateKey(cycle.expectedHarvestDate));
+  const storedDurationIsGenerated = Boolean(storedDateMatchesCalendar && cycle.cropDurationDays === elapsedDays(oldCalendar!.sowingDate, oldCalendar!.estimatedHarvestDate!));
+  const farmerDuration = cycle.cropDurationDays !== null && cycle.cropDurationDays !== cycle.crop.climateRequirement?.cropDurationDays && !storedDurationIsGenerated
+    ? cycle.cropDurationDays
+    : null;
   const customDuration = expectedDateIsOverride && cycle.expectedHarvestDate
     ? elapsedDays(sowingDate, cycle.expectedHarvestDate)
-    : cycle.cropDurationDays;
+    : farmerDuration;
   if (customDuration !== null && customDuration !== undefined && customDuration <= 0) throw new Error("Expected harvest date must be after the sowing date.");
   const generated = generateCropCalendarActivities({
     cropName: cycle.crop.name, state: cycle.field.farm.state, district: cycle.field.farm.district,
@@ -42,6 +48,7 @@ export async function generateCalendarForCycle(userId: string, input: CropCalend
   });
   const soilType = cycle.field.soilTexture ?? cycle.field.soilType ?? oldCalendar?.soilType ?? "Not recorded";
   const irrigationMethod = cycle.field.irrigationMethod ?? oldCalendar?.irrigationMethod ?? "Not recorded";
+  const calendarStatus = cycle.status;
 
   const calendar = await db.$transaction(async tx => {
     const saved = await tx.cropCalendar.upsert({
@@ -50,11 +57,13 @@ export async function generateCalendarForCycle(userId: string, input: CropCalend
         userId, farmId: cycle.field.farmId, cropCycleId: cycle.id, cropId: cycle.cropId, cropVariety: variety,
         state: cycle.field.farm.state, district: cycle.field.farm.district, sowingDate, landArea: new Prisma.Decimal(landArea),
         areaUnit, soilType, irrigationMethod, estimatedHarvestDate: generated.estimatedHarvestDate, datasetVersion: cropCalendarDatasetVersion,
+        status: calendarStatus,
       },
       update: {
         cropId: cycle.cropId, cropVariety: variety, state: cycle.field.farm.state, district: cycle.field.farm.district,
         sowingDate, landArea: new Prisma.Decimal(landArea), areaUnit, soilType, irrigationMethod,
         estimatedHarvestDate: expectedDateIsOverride ? cycle.expectedHarvestDate : generated.estimatedHarvestDate,
+        status: calendarStatus,
         datasetVersion: cropCalendarDatasetVersion,
       },
     });
@@ -94,6 +103,7 @@ export async function generateCalendarForCycle(userId: string, input: CropCalend
 
     await tx.cropCycle.update({ where: { id: cycle.id }, data: {
       cropVariety: variety,
+      sowingDate,
       expectedHarvestDate: expectedDateIsOverride ? cycle.expectedHarvestDate : generated.estimatedHarvestDate,
       cropDurationDays: customDuration ?? generated.duration.days,
     } });

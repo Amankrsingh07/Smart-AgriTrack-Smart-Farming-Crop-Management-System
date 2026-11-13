@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 const sections = [
-  { label: "farm", links: [["⌂", "overview", "/dashboard"], ["▦", "farms", "/farms"], ["♧", "crops", "/crops"], ["◉", "cropAdvice", "/recommendations"], ["⌁", "fertilizer", "/fertilizer-recommendation"]] },
+  { label: "farm", links: [["⌂", "overview", "/dashboard"], ["▦", "farms", "/farms"], ["♧", "crops", "/crops"], ["▦", "cropCalendar", "/crop-calendar"], ["◉", "cropAdvice", "/recommendations"], ["⌁", "fertilizer", "/fertilizer-recommendation"]] },
   { label: "records", links: [["◷", "expenses", "/expenses"], ["↟", "irrigation", "/irrigation"], ["▤", "harvest", "/production"], ["▣", "inventory", "/inventory"], ["₹", "market", "/market"]] },
   { label: "tools", links: [["▧", "reports", "/reports"], ["☁", "weather", "/weather"], ["✦", "assistant", "/assistant"]] },
 ] as const;

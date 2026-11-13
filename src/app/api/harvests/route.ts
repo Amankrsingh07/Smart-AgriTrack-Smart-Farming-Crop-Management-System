@@ -34,6 +34,7 @@ export async function PATCH(request: Request) {
   await db.$transaction(async tx => {
     await tx.production.create({ data: { cropCycleId: cycle.id, harvestDate, quantity: data.quantity, unit: data.unit, grade: data.quality || null, storageDetails: data.storageDetails || null, yieldPerAcre } });
     await tx.cropCycle.update({ where: { id: cycle.id }, data: { status: "HARVESTED", actualHarvestDate: harvestDate } });
+    await tx.cropCalendar.updateMany({ where: { cropCycleId: cycle.id }, data: { status: "HARVESTED" } });
   });
   return NextResponse.json({ success: true, yieldPerAcre });
 }

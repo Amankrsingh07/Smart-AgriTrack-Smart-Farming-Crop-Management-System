@@ -108,7 +108,7 @@ export async function updateCropCycle(formData: FormData) {
   const optionalDate = z.preprocess(value => value === "" ? null : value, z.union([z.null(), z.coerce.date()]));
   const durationDays = z.preprocess(value => value === "" ? null : value, z.union([z.null(), z.coerce.number().int().min(1).max(730)]));
   const parsed = z.object({
-    id: z.string().min(1), fieldId: z.string().min(1), cropId: z.string().min(1), cropVariety: z.string().trim().max(120),
+    id: z.string().min(1), fieldId: z.string().min(1), cropId: z.string().min(1), cropVariety: z.string().trim().max(120).optional(),
     season: z.enum(["KHARIF", "RABI", "ZAID"]),
     status: z.enum(["PLANNED", "ACTIVE", "HARVESTED", "COMPLETED"]),
     sowingDate: optionalDate, expectedHarvestDate: optionalDate, cropDurationDays: durationDays, growthStage: z.preprocess(value => value === "" ? undefined : value, z.enum(growthStages).optional()), notes: z.string().max(1000),
@@ -130,6 +130,8 @@ export async function updateCropCycle(formData: FormData) {
   const growthStage = data.growthStage ?? cycle.growthStage;
   const growthStageUpdatedAt = growthStage ? (growthStage === cycle.growthStage ? cycle.growthStageUpdatedAt : new Date()) : null;
   await db.cropCycle.update({ where: { id }, data: { ...data, growthStage, cropDurationDays: resolvedDuration, growthStageUpdatedAt, fieldId, cropId } });
+  // Keep the linked calendar lifecycle in step with Crop Management status.
+  await db.cropCalendar.updateMany({ where: { cropCycleId: id }, data: { status: data.status } });
   const existingCalendar = await db.cropCalendar.findUnique({ where: { cropCycleId: id }, select: { id: true } });
   if (existingCalendar) {
     try { await generateCalendarForCycle(user.id, { cropCycleId: id }); }

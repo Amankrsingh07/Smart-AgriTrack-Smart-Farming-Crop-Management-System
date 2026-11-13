@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { findCropCalendarProfile, generateCropCalendarActivities, selectCropDuration, toHectares } from "../src/lib/crop-calendar";
+import { calculateCropGrowthWindows, findCropCalendarProfile, generateCropCalendarActivities, getCropGrowthStageProfile, selectCropDuration, toHectares } from "../src/lib/crop-calendar";
 import { reconcileCropCalendarActivities } from "../src/lib/crop-calendar-reconciliation";
 
 test("crop calendar dates are derived from sowing date and configured crop duration", () => {
@@ -29,11 +29,24 @@ test("generation rejects a crop-season combination missing from the offline data
   }), /configured for RABI/);
 });
 
+test("Barley is available offline for Rabi with a source-linked growth profile", () => {
+  const profile = findCropCalendarProfile("Jau");
+  assert.ok(profile);
+  assert.equal(profile.crop, "Barley");
+  assert.deepEqual(profile.durationRange, [120, 150]);
+  assert.equal(getCropGrowthStageProfile("Barley")?.includesTillering, true);
+  const generated = generateCropCalendarActivities({ cropName: "Barley", state: "Bihar", district: "Patna", season: "RABI", sowingDate: new Date("2026-11-15T00:00:00.000Z"), areaHa: 1 });
+  assert.equal(generated.duration.days, 135);
+  assert.equal(generated.estimatedHarvestDate.toISOString().slice(0, 10), "2027-03-30");
+  assert.ok(generated.activities.some(item => item.activityKey === "phase-tillering"));
+  assert.ok(generated.activities.find(item => item.activityKey === "phase-tillering")?.sourceUrl?.startsWith("https://www.fao.org/"));
+});
+
 test("unsupported crop errors name the crop and list available offline profiles", () => {
   assert.throws(() => generateCropCalendarActivities({
-    cropName: "Barley", state: "Bihar", district: "Patna", season: "RABI",
+    cropName: "Oats", state: "Bihar", district: "Patna", season: "RABI",
     sowingDate: new Date("2026-11-15T00:00:00.000Z"), areaHa: 1,
-  }), /Barley.*Supported crops: .*Wheat.*Rice \(Paddy\).*Soybean.*No schedule was generated/);
+  }), /Oats.*Supported crops: .*Wheat.*Barley.*Rice \(Paddy\).*Soybean.*No schedule was generated/);
 });
 
 test("generic Millet requires a source-listed millet type instead of using one false generic duration", () => {
@@ -73,6 +86,30 @@ test("lifecycle checkpoints are calculated from the selected crop duration", () 
   assert.ok(millet.activities.some(item => item.activityType === "PEST_MONITORING"));
   assert.ok(millet.activities.some(item => item.activityType === "WEED_MONITORING"));
   assert.ok(millet.activities.every(item => item.activityType !== "FERTILIZER" || item.sourceUrl));
+});
+
+test("crop growth windows use crop-specific source profiles and include tillering only where configured", () => {
+  const wheat = calculateCropGrowthWindows("Wheat", 120);
+  const rice = calculateCropGrowthWindows("Rice (Paddy)", 125);
+  const maize = calculateCropGrowthWindows("Maize", 98);
+  assert.deepEqual(wheat.map(stage => stage.key), ["sowing", "germination", "seedling", "vegetative", "tillering", "flowering", "grain-fruit", "maturity", "harvesting"]);
+  assert.ok(rice.some(stage => stage.key === "tillering"));
+  assert.ok(!maize.some(stage => stage.key === "tillering"));
+  assert.equal(wheat.find(stage => stage.key === "vegetative")?.startDay, 13);
+  assert.equal(rice.find(stage => stage.key === "vegetative")?.startDay, 14);
+  assert.equal(wheat.at(-1)?.startDay, 120);
+  assert.ok(getCropGrowthStageProfile("Wheat")?.sourceUrl?.startsWith("https://www.fao.org/"));
+});
+
+test("generated calendars contain phase activities and the offline harvest window", () => {
+  const generated = generateCropCalendarActivities({
+    cropName: "Wheat", state: "Bihar", district: "Patna", season: "RABI",
+    sowingDate: new Date("2026-11-15T00:00:00.000Z"), areaHa: 1,
+  });
+  assert.equal(generated.activities.find(item => item.activityKey === "phase-germination")?.scheduledDate.toISOString().slice(0, 10), "2026-11-16");
+  assert.equal(generated.activities.find(item => item.activityKey === "phase-tillering")?.growthStage, "Tillering");
+  assert.equal(generated.activities.find(item => item.activityKey === "harvest-window-start")?.scheduledDate.toISOString().slice(0, 10), "2027-03-06");
+  assert.equal(generated.activities.find(item => item.activityKey === "harvest-window-end")?.scheduledDate.toISOString().slice(0, 10), "2027-04-19");
 });
 
 test("calendar reconciliation recalculates pending tasks and preserves completed records", () => {

@@ -6,10 +6,10 @@ import { AlertTriangle, CalendarDays, Check, ChevronLeft, ChevronRight, CloudRai
 
 export type CropCycleOption = { id: string; crop: string; variety: string | null; season: string; farm: string; field: string; state: string; district: string; sowingDate: string; landArea: number; areaUnit: "acre" | "hectare"; soilType: string; irrigationMethod: string; durationDays: number | null; hasCalendarProfile: boolean; requiresVariety: boolean; varietyOptions: string[] };
 export type CalendarActivity = { id: string; key: string; name: string; type: string; stage: string | null; date: string; actualDate: string | null; description: string; recommendation: string | null; status: string; isWeatherAdjusted: boolean; isManuallyModified: boolean; notes: string | null; source: string | null; sourceUrl: string | null };
-export type CalendarRecord = { id: string; cropCycleId: string; crop: string; farm: string; field: string; state: string; district: string; variety: string | null; sowingDate: string; harvestDate: string | null; landArea: number; areaUnit: string; soilType: string; irrigationMethod: string; activities: CalendarActivity[] };
+export type CalendarRecord = { id: string; cropCycleId: string; crop: string; farm: string; field: string; state: string; district: string; variety: string | null; sowingDate: string; harvestDate: string | null; observedGrowthStage: string | null; landArea: number; areaUnit: string; soilType: string; irrigationMethod: string; activities: CalendarActivity[] };
 type WeatherForecast = { current: { time: string; temperature_2m: number; precipitation: number; relative_humidity_2m: number }; daily: { time: string[]; temperature_2m_min: Array<number | null>; temperature_2m_max: Array<number | null>; precipitation_probability_max: Array<number | null>; precipitation_sum: Array<number | null> }; offlineOnly?: boolean; fallbackReason?: string };
 type ApiCalendarActivity = { id: string; activityKey: string; activityName: string; activityType: string; growthStage: string | null; scheduledDate: string; actualCompletionDate: string | null; description: string; recommendation: string | null; status: string; isWeatherAdjusted: boolean; isManuallyModified: boolean; notes: string | null; source: string | null; sourceUrl: string | null };
-type ApiCalendar = { id: string; cropCycleId: string; crop: { name: string }; farm: { name: string }; cropCycle: { field: { name: string } }; state: string; district: string; cropVariety: string | null; sowingDate: string; estimatedHarvestDate: string | null; landArea: number | string; areaUnit: string; soilType: string; irrigationMethod: string; activities?: ApiCalendarActivity[] };
+type ApiCalendar = { id: string; cropCycleId: string; crop: { name: string }; farm: { name: string }; cropCycle: { growthStage: string | null; field: { name: string } }; state: string; district: string; cropVariety: string | null; sowingDate: string; estimatedHarvestDate: string | null; landArea: number | string; areaUnit: string; soilType: string; irrigationMethod: string; activities?: ApiCalendarActivity[] };
 type ViewMode = "month" | "week" | "timeline" | "list";
 
 const todayKey = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
@@ -24,6 +24,7 @@ export default function CropCalendarDashboard({ cycles, calendars: initialCalend
   const chosenCycle = cycles.find(item => item.id === cycleId);
   const hasCalendarProfile = chosenCycle?.hasCalendarProfile ?? false;
   const [variety, setVariety] = useState(chosenCycle?.variety || "");
+  const [sowingDate, setSowingDate] = useState(chosenCycle?.sowingDate || "");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -44,6 +45,18 @@ export default function CropCalendarDashboard({ cycles, calendars: initialCalend
   const completed = allActivities.filter(item => item.status === "COMPLETED").length;
   const pending = allActivities.length - completed;
   const harvestDates = calendars.filter(item => item.harvestDate).map(item => ({ crop: item.crop, date: item.harvestDate! }));
+  const milestones = calendar ? growthMilestones(calendar.activities) : [];
+  const sowingDay = calendar ? dayDifference(calendar.sowingDate, now) : 0;
+  const harvestDay = calendar?.harvestDate ? dayDifference(calendar.sowingDate, calendar.harvestDate) : 0;
+  const progressPercent = harvestDay > 0 ? Math.max(0, Math.min(100, Math.round((sowingDay / harvestDay) * 100))) : 0;
+  const currentMilestoneIndex = milestones.reduce((latest, item, index) => item.date <= now && item.endDate >= now ? index : latest, -1);
+  const nextMilestone = milestones.find(item => item.date > now);
+  const currentMilestone = currentMilestoneIndex >= 0 ? milestones[currentMilestoneIndex] : null;
+  const beforeSowing = Boolean(calendar && now < calendar.sowingDate);
+  const afterHarvest = Boolean(calendar?.harvestDate && now > calendar.harvestDate);
+  const currentMilestoneEnd = currentMilestone?.endDate ?? null;
+  const harvestWindowStart = activities.find(item => item.key === "harvest-window-start")?.date;
+  const harvestWindowEnd = activities.find(item => item.key === "harvest-window-end")?.date;
 
   useEffect(() => {
     if (calendarSowingDate) setCursor(new Date(`${calendarSowingDate}T12:00:00`));
@@ -52,6 +65,7 @@ export default function CropCalendarDashboard({ cycles, calendars: initialCalend
   useEffect(() => {
     if (!chosenCycle) return;
     setVariety(chosenCycle.variety || "");
+    setSowingDate(chosenCycle.sowingDate || "");
   }, [cycleId, chosenCycle]);
   useEffect(() => {
     if (!calendarState || !calendarDistrict) { setWeather(null); return; }
@@ -67,7 +81,7 @@ export default function CropCalendarDashboard({ cycles, calendars: initialCalend
   async function generate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
     try {
-      const response = await fetch("/api/crop-calendar/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cropCycleId: cycleId, cropVariety: variety || undefined }) });
+      const response = await fetch("/api/crop-calendar/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cropCycleId: cycleId, cropVariety: variety || undefined, sowingDate }) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Calendar generation failed.");
       setMessage(`Generated ${result.generatedCount} activities. Estimated harvest: ${result.estimatedHarvestDate} (${result.durationBasis}, ${result.durationDays} days). ${result.fertilizerProfileMatched ? "A source-matched ICAR fertilizer schedule was included." : "No source-matched fertilizer recipe is configured for this crop and location."} ${result.scopeNote}`);
@@ -144,16 +158,26 @@ export default function CropCalendarDashboard({ cycles, calendars: initialCalend
       <div className="crop-calendar-section-title"><span className="crop-calendar-section-icon"><Leaf size={19}/></span><div><p className="eyebrow">{t("autoPlanning")}</p><h2>{t("buildPlan")}</h2><p>{t("chooseCycle")}</p></div></div>
       {cycles.length ? <form className="crop-calendar-form" onSubmit={generate}>
         <label className="field"><span>{t("cropField")}</span><select value={cycleId} onChange={event => setCycleId(event.target.value)} required>{cycles.map(item => <option key={item.id} value={item.id}>{item.crop}{item.hasCalendarProfile ? "" : ` · ${t("profileUnavailable")}`} · {item.farm} / {item.field} · {item.season}</option>)}</select></label>
-        <div className="crop-calendar-field-context"><span><strong>{t("cropManagementDates")}</strong><small>{t("sowing")}: {chosenCycle?.sowingDate ? dateLabel(chosenCycle.sowingDate) : t("notRecorded")}</small></span><span>{t("harvest")}: {chosenCycle?.sowingDate && chosenCycle.durationDays ? dateLabel(addDays(chosenCycle.sowingDate, chosenCycle.durationDays)) : t("setDates")}</span></div>
-        {chosenCycle?.requiresVariety && !chosenCycle.variety && <label className="field"><span>{t("milletType")} <small>{t("milletRequired")}</small></span><select value={variety} onChange={event => setVariety(event.target.value)} required><option value="">{t("selectMillet")}</option>{chosenCycle.varietyOptions.map(option => <option key={option} value={option}>{option}</option>)}</select></label>}
+        <label className="field"><span>{t("sowing")} date</span><input type="date" value={sowingDate} onChange={event => setSowingDate(event.target.value)} required/></label>
+        <div className="crop-calendar-field-context"><span><strong>{chosenCycle?.crop} · {chosenCycle?.farm} / {chosenCycle?.field}</strong><small>{t("cropManagementDates")}: saved crop cycle</small></span><span>{chosenCycle?.district}, {chosenCycle?.state}</span></div>
+        {chosenCycle && chosenCycle.varietyOptions.length > 0 && <label className="field"><span>{chosenCycle.requiresVariety ? t("milletType") : "Variety (optional)"} {chosenCycle.requiresVariety && <small>{t("milletRequired")}</small>}</span><select value={variety} onChange={event => setVariety(event.target.value)} required={chosenCycle.requiresVariety}><option value="">{chosenCycle.requiresVariety ? t("selectMillet") : "Use crop profile default"}</option>{variety && !chosenCycle.varietyOptions.includes(variety) && <option value={variety}>{variety} · saved</option>}{chosenCycle.varietyOptions.map(option => <option key={option} value={option}>{option}</option>)}</select></label>}
         {chosenCycle && <div className="crop-calendar-field-context"><span className="context-location"><strong>{chosenCycle.district}, {chosenCycle.state}</strong><small>Field conditions</small></span><span>{chosenCycle.soilType} soil</span><i/><span>{chosenCycle.irrigationMethod}</span></div>}
         {chosenCycle && !hasCalendarProfile && <p className="crop-calendar-profile-warning" role="alert"><AlertTriangle size={17}/><span><strong>{chosenCycle.crop} has no offline calendar profile yet.</strong><small>Choose a crop with a configured source-linked schedule. Available: {availableCrops.join(", ")}.</small></span></p>}
-        <button className="btn crop-calendar-submit" disabled={busy || !cycleId || !hasCalendarProfile}>{busy ? <><LoaderCircle className="spin" size={17}/> {t("generating")}</> : <><CalendarDays size={17}/> {t("generate")}</>}</button>
+        <button className="btn crop-calendar-submit" disabled={busy || !cycleId || !sowingDate || !hasCalendarProfile}>{busy ? <><LoaderCircle className="spin" size={17}/> {t("generating")}</> : <><CalendarDays size={17}/> {t("generate")}</>}</button>
       </form> : <div className="crop-calendar-no-cycle"><p>{t("noCycles")}</p><a className="btn" href="/crops">{t("addCycle")} <ChevronRight size={16}/></a></div>}
     </section>
     {!calendars.length ? <section className="crop-calendar-empty panel"><span><CalendarDays size={29}/></span><h2>{t("emptyTitle")}</h2><p>{t("emptyText")}</p></section> : <>
-      <section className="crop-calendar-toolbar panel"><label className="field"><span>{t("calendarView")}</span><select value={calendar?.id ?? ""} onChange={event => setSelectedId(event.target.value)}>{calendars.map(item => <option key={item.id} value={item.id}>{item.crop} · {item.farm} / {item.field} · {item.sowingDate}</option>)}</select></label><div className="crop-calendar-toolbar-actions"><a className="btn btn-secondary" href="/irrigation"><Droplets size={16}/> Irrigation Planner</a><a className="btn btn-secondary" href="/fertilizer-recommendation"><Leaf size={16}/> Fertilizer</a><button className="crop-calendar-delete" type="button" disabled={busy} onClick={removeCalendar}>Delete calendar</button></div></section>
+      <section className="crop-calendar-toolbar panel"><label className="field"><span>{t("calendarView")}</span><select value={calendar?.id ?? ""} onChange={event => setSelectedId(event.target.value)}>{calendars.map(item => <option key={item.id} value={item.id}>{item.crop} · {item.farm} / {item.field} · {item.sowingDate}</option>)}</select></label><div className="crop-calendar-toolbar-actions">{calendar && <a className="btn btn-secondary" href={`/crops#cycle-${encodeURIComponent(calendar.cropCycleId)}`}>Crop details / observed stage</a>}<a className="btn btn-secondary" href="/irrigation"><Droplets size={16}/> Irrigation Planner</a><a className="btn btn-secondary" href="/fertilizer-recommendation"><Leaf size={16}/> Fertilizer</a>{calendar && <a className="btn btn-secondary" href={`/market?commodity=${encodeURIComponent(calendar.crop)}&state=${encodeURIComponent(calendar.state)}&district=${encodeURIComponent(calendar.district)}`}>Mandi prices</a>}<button className="crop-calendar-delete" type="button" disabled={busy} onClick={removeCalendar}>Delete calendar</button></div></section>
       {calendar && <section className="crop-calendar-context panel"><div><span>Crop and field</span><strong>{calendar.crop} · {calendar.farm} / {calendar.field}</strong></div><div><span>Location</span><strong>{calendar.district}, {calendar.state}</strong></div><div><span>Sowing date</span><strong>{dateLabel(calendar.sowingDate)}</strong></div><div><span>Est. harvest</span><strong>{calendar.harvestDate ? dateLabel(calendar.harvestDate) : "Not available"}</strong></div><div><span>Land and soil</span><strong>{calendar.landArea} {calendar.areaUnit} · {calendar.soilType}</strong></div></section>}
+      {calendar && milestones.length > 0 && <section className="crop-growth-progress panel">
+        <div className="crop-growth-progress-heading"><div><p className="eyebrow">SMART CROP CALENDAR</p><h2>फसल की वृद्धि की प्रगति</h2><p>{calendar.crop} · बुवाई के {Math.max(0, sowingDay)} दिन (DAS)</p></div><strong>{progressPercent}%</strong></div>
+        <div className="crop-growth-progress-track" role="progressbar" aria-label="Estimated crop growth progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progressPercent}><span style={{ width: `${progressPercent}%` }}/></div>
+        <p className="crop-growth-next">{beforeSowing ? <>बुवाई {dateLabel(calendar.sowingDate)} को होगी। पहला चरण: <b>{milestones[0].stage}</b></> : afterHarvest ? <>अनुमानित फसल अवधि पूरी हुई। वास्तविक कटाई की स्थिति Crop Management में दर्ज करें।</> : currentMilestoneIndex < 0 ? <>अगला चरण: <b>{nextMilestone?.stage ?? milestones[0].stage}</b></> : <>अभी का चरण: <b>{milestones[currentMilestoneIndex].stage}</b> ({dateLabel(milestones[currentMilestoneIndex].date)}–{dateLabel(currentMilestoneEnd ?? milestones[currentMilestoneIndex].date)}){nextMilestone ? <> · अगला चरण: <b>{nextMilestone.stage}</b>, {dayDifference(now, nextMilestone.date)} दिन बाद ({dateLabel(nextMilestone.date)})</> : <> · आगे कोई चरण नहीं</>}</>}{calendar.harvestDate && <> · अनुमानित कटाई {dayDifference(now, calendar.harvestDate) <= 0 ? "अब/तारीख निकल चुकी है" : `${dayDifference(now, calendar.harvestDate)} दिन बाद`} ({harvestWindowStart && harvestWindowEnd ? `${dateLabel(harvestWindowStart)} से ${dateLabel(harvestWindowEnd)}` : dateLabel(calendar.harvestDate)})</>}</p>
+        {calendar.observedGrowthStage && <p className="crop-growth-observed"><strong>आपने खेत में देखा:</strong> {calendar.observedGrowthStage} · अनुमानित चरण से अलग हो सकता है।</p>}
+        <div className="crop-growth-milestones">{milestones.map((item, index) => { const state = item.activity.status === "COMPLETED" ? "complete" : item.endDate < now ? "elapsed" : index === currentMilestoneIndex ? "current" : "upcoming"; const stateLabel = state === "complete" ? "पूरा किया" : state === "elapsed" ? "अनुमानित रूप से बीत चुका" : state === "current" ? "अभी / आज" : "आगे होगा"; return <article className={`crop-growth-milestone ${state}`} key={item.activity.id}><span className="crop-growth-milestone-dot">{state === "complete" ? <Check size={13}/> : index + 1}</span><div><strong>{item.stage}</strong><small>{dateLabel(item.date)}–{dateLabel(item.endDate)} · {stateLabel}</small></div></article>; })}</div>
+        {currentMilestone && <div className="crop-growth-details"><h3>वर्तमान चरण का विवरण · {currentMilestone.stage}</h3><p>{currentMilestone.activity.description}</p><p>{currentMilestone.activity.recommendation}</p><div><span><Droplets size={15}/> सिंचाई निरीक्षण: खेत की नमी देखें; जरूरत पर Smart Irrigation Planner खोलें।</span><span><Leaf size={15}/> पोषक तत्व: मिट्टी परीक्षण और स्थानीय फसल सलाह का पालन करें; यहाँ कोई मात्रा नहीं दी जाती।</span><span>खरपतवार: खेत में खरपतवार और प्रतिस्पर्धा का निरीक्षण करें।</span><span>कीट / रोग: पौधों और पत्तियों की नियमित निगरानी करें; उपचार से पहले स्थानीय विशेषज्ञ से पुष्टि लें।</span></div></div>}
+        <small className="crop-growth-note">चरण की तारीखें offline crop duration से अनुमानित हैं। “अनुमानित रूप से बीत चुका” होने का मतलब यह पुष्टि नहीं है कि खेत में काम सचमुच पूरा हो गया। काम होने पर नीचे activity में Complete दबाएँ।</small>
+      </section>}
       {calendar?.harvestDate && <section className="panel crop-calendar-context"><div><span>{t("harvestCountdown")}</span><strong>{Math.max(0, Math.ceil((Date.parse(`${calendar.harvestDate}T00:00:00Z`) - Date.parse(`${now}T00:00:00Z`)) / 86400000))} {t("days")}</strong></div></section>}
       <WeatherPanel weather={weather} error={weatherError} activities={activities}/>
       <div className="crop-calendar-tabs crop-calendar-task-filters" role="group" aria-label="Task status">{(["all", "upcoming", "overdue", "completed"] as const).map(filter => <button type="button" key={filter} className={taskFilter === filter ? "active" : ""} onClick={() => setTaskFilter(filter)}>{filter === "all" ? t("activities") : filter === "upcoming" ? t("upcomingTasks") : filter === "overdue" ? t("overdueTasks") : t("completedTasks")}</button>)}</div>
@@ -169,6 +193,12 @@ export default function CropCalendarDashboard({ cycles, calendars: initialCalend
 }
 
 function Metric({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone: string }) { return <article className={`crop-calendar-metric tone-${tone}`}><span className="crop-calendar-metric-icon">{icon}</span><div><small>{label}</small><strong>{value}</strong></div></article>; }
+
+function dayDifference(from: string, to: string) { return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000); }
+function growthMilestones(activities: CalendarActivity[]) {
+  const phases = activities.filter(item => item.key === "sowing" || item.key.startsWith("phase-")).sort((a, b) => a.date.localeCompare(b.date));
+  return phases.map((activity, index) => ({ activity, date: activity.date, endDate: phases[index + 1] ? addDays(phases[index + 1].date, -1) : activity.date, stage: activity.stage || activity.name }));
+}
 
 function EmptyActivities() { const t = useTranslations("CropCalendar"); return <div className="crop-calendar-no-activities"><span><CalendarDays size={23}/></span><strong>{t("noActivities")}</strong><small>{t("refreshHint")}</small></div>; }
 
@@ -212,4 +242,4 @@ function weatherAlerts(weather: WeatherForecast) {
 
 function effectiveStatus(activity: CalendarActivity, today: string) { return activity.status === "PENDING" && activity.date < today ? "DELAYED" : activity.status; }
 function mapActivity(value: ApiCalendarActivity): CalendarActivity { return { id: value.id, key: value.activityKey, name: value.activityName, type: value.activityType, stage: value.growthStage, date: new Date(value.scheduledDate).toISOString().slice(0, 10), actualDate: value.actualCompletionDate, description: value.description, recommendation: value.recommendation, status: value.status, isWeatherAdjusted: value.isWeatherAdjusted, isManuallyModified: value.isManuallyModified, notes: value.notes, source: value.source, sourceUrl: value.sourceUrl }; }
-function mapCalendarFromApi(value: ApiCalendar): CalendarRecord { return { id: value.id, cropCycleId: value.cropCycleId, crop: value.crop.name, farm: value.farm.name, field: value.cropCycle.field.name, state: value.state, district: value.district, variety: value.cropVariety, sowingDate: new Date(value.sowingDate).toISOString().slice(0, 10), harvestDate: value.estimatedHarvestDate ? new Date(value.estimatedHarvestDate).toISOString().slice(0, 10) : null, landArea: Number(value.landArea), areaUnit: value.areaUnit, soilType: value.soilType, irrigationMethod: value.irrigationMethod, activities: (value.activities ?? []).map(mapActivity) }; }
+function mapCalendarFromApi(value: ApiCalendar): CalendarRecord { return { id: value.id, cropCycleId: value.cropCycleId, crop: value.crop.name, farm: value.farm.name, field: value.cropCycle.field.name, state: value.state, district: value.district, variety: value.cropVariety, sowingDate: new Date(value.sowingDate).toISOString().slice(0, 10), harvestDate: value.estimatedHarvestDate ? new Date(value.estimatedHarvestDate).toISOString().slice(0, 10) : null, observedGrowthStage: value.cropCycle.growthStage, landArea: Number(value.landArea), areaUnit: value.areaUnit, soilType: value.soilType, irrigationMethod: value.irrigationMethod, activities: (value.activities ?? []).map(mapActivity) }; }

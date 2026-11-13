@@ -5,7 +5,7 @@ import mandiSnapshot from "@/data/mandi-prices.json";
 import indiaLocations from "@/data/india-locations.json";
 import { addMarketQuote, deleteMarketQuote } from "../../actions";
 import MarketSearch from "./market-search";
-import { fetchLiveMandi, type MandiRow } from "@/lib/live-mandi";
+import { fetchLiveMandi } from "@/lib/live-mandi";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { indiaDateKey } from "@/lib/crop-cycle-status";
 
@@ -15,6 +15,7 @@ type SearchParams = {
   commodity?: string;
   state?: string;
   district?: string;
+  arrivalDate?: string;
   search?: string;
   page?: string;
   source?: string;
@@ -23,6 +24,10 @@ type SearchParams = {
 const PAGE_SIZE = 500;
 type LocalMandiRow = { State?: string; District?: string; Market?: string; Commodity?: string; Arrival_Date?: string; Variety?: string; Grade?: string; Min_Price?: string | number; Max_Price?: string | number; Modal_Price?: string | number };
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+const normalizeArrivalDate = (value: string) => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  return normalize(match ? `${match[3]}/${match[2]}/${match[1]}` : value);
+};
 const stateAliases: Record<string, string> = { andamanandnicobar: "andamanandnicobarislands", chattisgarh: "chhattisgarh", keralam: "kerala", nctofdelhi: "delhi", pondicherry: "puducherry" };
 const normalizeState = (value: string) => stateAliases[normalize(value)] ?? normalize(value);
 
@@ -46,6 +51,7 @@ function buildPageUrl(
     commodity: string;
     state: string;
     district: string;
+    arrivalDate: string;
     source: string;
   }
 ) {
@@ -65,6 +71,7 @@ function buildPageUrl(
   if (filters.district) {
     params.set("district", filters.district);
   }
+  if (filters.arrivalDate) params.set("arrivalDate", filters.arrivalDate);
   params.set("source", filters.source);
 
   return `/market?${params.toString()}`;
@@ -83,7 +90,9 @@ export default async function MarketPage({
   const commodity = query.commodity?.trim() ?? "";
   const state = query.state?.trim() ?? "";
   const district = query.district?.trim() ?? "";
+  const arrivalDate = query.arrivalDate?.trim() ?? "";
   const source = query.source === "online" ? "online" : "offline";
+  const pageSize = PAGE_SIZE;
 
   const currentPage = Math.max(
     1,
@@ -94,22 +103,40 @@ export default async function MarketPage({
   const filteredRows = query.search === "1" ? snapshotRows.filter(row =>
     (!state || normalizeState(row.State ?? "") === normalizeState(state)) &&
     (!district || normalize(row.District ?? "") === normalize(district)) &&
-    (!commodity || normalize(row.Commodity ?? "") === normalize(commodity))
+    (!commodity || normalize(row.Commodity ?? "") === normalize(commodity)) &&
+    (!arrivalDate || normalizeArrivalDate(row.Arrival_Date ?? "") === normalizeArrivalDate(arrivalDate))
   ) : [];
   let liveTotal = filteredRows.length;
-  let liveRows: MandiRow[] = filteredRows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  let liveRows: LocalMandiRow[] = filteredRows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   let liveError = "";
   let dataSourceNotice = `Offline snapshot · ${mandiSnapshot.meta.recordCount.toLocaleString("en-IN")} records dated ${mandiSnapshot.meta.dataDate}.`;
+  let dataSourceHref = mandiSnapshot.meta.sourceUrl;
+  let dataSourceLabel = "data.gov.in";
+  let upstreamSourceUrl = "";
   if (source === "online" && query.search === "1") {
     const rate = checkRateLimit(`market-live:${user.id}`, 20, 60_000);
     if (!rate.allowed) {
       liveError = "Too many live mandi requests. Please wait a minute and try again. Showing matching records from the offline snapshot instead.";
     } else {
       try {
-        const live = await fetchLiveMandi({ state: state || undefined, district: district || undefined, commodity: commodity || undefined, offset: (currentPage - 1) * PAGE_SIZE, limit: PAGE_SIZE });
-        liveRows = live.records;
+        const live = await fetchLiveMandi({ state: state || undefined, district: district || undefined, commodity: commodity || undefined, arrivalDate: arrivalDate || undefined });
+        liveRows = live.records.map(row => ({
+          State: row.state,
+          District: row.district,
+          Market: row.market,
+          Commodity: row.commodity,
+          Arrival_Date: row.arrival_date,
+          Variety: row.variety,
+          Grade: row.grade,
+          Min_Price: row.min_price,
+          Max_Price: row.max_price,
+          Modal_Price: row.modal_price,
+        }));
         liveTotal = live.total;
-        dataSourceNotice = `Online data.gov.in daily prices · ${live.total.toLocaleString("en-IN")} matching records. Arrival dates are reported by the source; prices are not real-time.`;
+        dataSourceNotice = `Online VoiceOfVillage prices · ${live.total.toLocaleString("en-IN")} records${live.asOf ? ` · source dated ${live.asOf}` : ""}. Arrival dates come from the published mandi reports.`;
+        dataSourceHref = "https://www.voiceofvillage.com/developers";
+        dataSourceLabel = "VoiceOfVillage API";
+        upstreamSourceUrl = live.sourceUrl || "";
       } catch (error) {
         liveError = `${error instanceof Error ? error.message : "Online mandi search failed."} Showing matching records from the offline snapshot instead.`;
       }
@@ -122,13 +149,14 @@ export default async function MarketPage({
 
   const totalPages = Math.max(
     1,
-    Math.ceil(liveTotal / PAGE_SIZE)
+    Math.ceil(liveTotal / pageSize)
   );
 
   const previousUrl = buildPageUrl(currentPage - 1, {
     commodity,
     state,
     district,
+    arrivalDate,
     source,
   });
 
@@ -136,6 +164,7 @@ export default async function MarketPage({
     commodity,
     state,
     district,
+    arrivalDate,
     source,
   });
 
@@ -173,10 +202,11 @@ export default async function MarketPage({
           stateValue={state}
           districtValue={district}
           commodityValue={commodity}
+          arrivalDateValue={arrivalDate}
           sourceValue={source}
         />
 
-        <p role="status" className="muted">{dataSourceNotice} Source: <a href={mandiSnapshot.meta.sourceUrl} target="_blank" rel="noreferrer">data.gov.in</a> · Government Open Data License - India.</p>
+        <p role="status" className="muted">{dataSourceNotice} Source: <a href={dataSourceHref} target="_blank" rel="noreferrer">{dataSourceLabel}</a>{upstreamSourceUrl && <> · Underlying data: <a href={upstreamSourceUrl} target="_blank" rel="noreferrer">AGMARKNET / data.gov.in</a></>} · Government Open Data License - India.</p>
 
         {liveError && (
           <p role="status" className="muted">
@@ -193,10 +223,9 @@ export default async function MarketPage({
         {liveRows.length > 0 && (
           <>
             <p className="muted" style={{ fontSize: 13 }}>
-              Showing {liveRows.length} records out of{" "}
-              {liveTotal.toLocaleString("en-IN")} available records.
-              Page {currentPage} of {totalPages}.
-              Page size: {PAGE_SIZE}.
+              {source === "online"
+                ? `Showing ${liveRows.length} records returned by VoiceOfVillage.`
+                : <>Showing {liveRows.length} records out of {liveTotal.toLocaleString("en-IN")} available records. Page {currentPage} of {totalPages}. Page size: {pageSize}.</>}
             </p>
 
             <div className="market-table-wrap">
@@ -238,7 +267,9 @@ export default async function MarketPage({
               </table>
             </div>
 
-            {/* Pagination */}
+            {/* The VoiceOfVillage mandi tool returns a district result set and
+                does not expose offset pagination. */}
+            {source === "offline" && <>
             <div
               style={{
                 display: "flex",
@@ -265,7 +296,7 @@ export default async function MarketPage({
                 )}
 
                 {currentPage < totalPages &&
-                liveRows.length === PAGE_SIZE ? (
+                liveRows.length === pageSize ? (
                   <a href={nextUrl} className="btn">
                     Next →
                   </a>
@@ -276,6 +307,7 @@ export default async function MarketPage({
                 )}
               </div>
             </div>
+            </>}
           </>
         )}
       </section>
