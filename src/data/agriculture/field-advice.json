@@ -1,0 +1,15 @@
+{
+  "reviewedOn": "2026-11-20",
+  "sources": {
+    "weather": { "title": "ICAR–IMD · KVK block-level weather advice", "url": "https://www.icar.gov.in/en/node/2332" },
+    "kvk": { "title": "KVK Mohol · Rain and safe storage, 7 June 2024", "url": "https://mpkv.ac.in/Uploads/Weather/Solapur%20English%2007.06.2024_20240607080310.pdf" },
+    "scouting": { "title": "ICAR · Kharif advice, 2025", "url": "https://www.icar.gov.in/sites/default/files/Circulars/ICAR%20En-Kharif%20Agro-Advisories%20for%20Farmers%202025.pdf" },
+    "rain": { "title": "ICAR Agrometeorology · Rain and harvest advisory", "url": "https://www.icar.gov.in/sites/default/files/2022-09/CWR-27-06-2022.pdf" },
+    "harvest": { "title": "TNAU Agritech · Harvest signs by crop", "url": "https://www.agritech.tnau.ac.in/agriculture/agri_cropharvesting.html" }
+  },
+  "harvestSigns": [
+    { "crop": "wheat", "names": ["wheat"], "url": "https://agritech.tnau.ac.in/agriculture/agri_cropproduction_wheat_aftercultivation.html" },
+    { "crop": "rice", "names": ["rice", "paddy"], "url": "https://www.agritech.tnau.ac.in/org_farm/orgfarm_prac_agri_paddy_harvest.html" },
+    { "crop": "maize", "names": ["maize", "corn"], "url": "https://agritech.tnau.ac.in/agriculture/agri_maize_irrigated_maize.html" }
+  ]
+}

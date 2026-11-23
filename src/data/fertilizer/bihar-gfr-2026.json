@@ -1,0 +1,41 @@
+{
+  "version": "2026-11-15.1",
+  "source": {
+    "id": "ICAR-IISS-GFR-2026",
+    "organization": "ICAR-Indian Institute of Soil Science",
+    "title": "District-wise general fertilizer recommendations for major crops in India",
+    "url": "https://icar-ciah.org/include/pdf/advisory/2026/jun_2026/GFR_district_wise_03062026.pdf",
+    "publicationDate": null,
+    "documentReleaseIdentifier": "03062026 in official distribution URL; exact publication date not printed",
+    "reviewedOn": "2026-11-15",
+    "sha256": "e3a469247da35c52ad9d83c677c5131a6c032c8d6fbb925d9acd40802d265aef",
+    "scope": "Annexure 1, Bihar district standard doses, printed pp.10–11. Background p.2: district aggregates derived from STCR framework/SHC data, not an executable field STCR model. No timing. Rice FYM credit note is not applied automatically.",
+    "organicCreditNote": "Bihar Rice note: 5 t FYM/ha permits source-stated nutrient credits. Material/application applicability must be confirmed; no credit is assumed in the full standard preview."
+  },
+  "records": [
+    {
+      "id": "icar-iiss-2026-bihar-saran-wheat",
+      "cropKey": "wheat",
+      "state": "Bihar",
+      "district": "Saran",
+      "zone": null,
+      "season": "RABI",
+      "productionType": "GENERAL_DISTRICT",
+      "irrigationCondition": null,
+      "sowingCondition": null,
+      "requiresProductionConfirmation": true,
+      "doseScope": "ICAR general district nutrient recommendation; not a soil-test adjustment or field-specific STCR calculation",
+      "nutrientsKgHa": { "n": 120, "p2o5": 40, "k2o": 45 },
+      "originalBasis": "N:P2O5:K2O",
+      "recommendationUnits": "kg/ha",
+      "sourceId": "ICAR-IISS-GFR-2026",
+      "sourcePage": 11,
+      "sourceRow": 32,
+      "conditions": "ICAR 2026 district-wise general rate for Saran wheat, Rabi. Source does not provide timing or field-specific soil adjustment. DAP/urea/MOP quantities, if calculated, are arithmetic estimates from standard product grades, not an ICAR product prescription.",
+      "phosphorusProduct": "DAP",
+      "verificationStatus": "VERIFIED_STANDARD_GENERAL_DISTRICT",
+      "datasetVersion": "2026-11-15.1",
+      "applicationTiming": []
+    }
+  ]
+}

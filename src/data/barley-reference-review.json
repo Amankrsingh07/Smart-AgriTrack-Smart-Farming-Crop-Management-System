@@ -1,0 +1,80 @@
+{
+  "version": "2026-11-14.2",
+  "reviewedOn": "2026-11-14",
+  "cropAliases": [
+    "Barley",
+    "Jau"
+  ],
+  "state": "Bihar",
+  "calculationEnabled": false,
+  "reviews": [
+    {
+      "id": "ICAR-CRIDA-OLSEN-SCOPE-REVIEW",
+      "organization": "ICAR-CRIDA",
+      "title": "Reshaping Agriculture and Nutrition Linkages for Food and Nutrition Security",
+      "documentReference": "Printed p.58, Phosphorus and Table 2",
+      "url": "https://www.icar-crida.res.in/assets/img/Books/ICAR%20Short%20Course%20Book%20with%20Cover%20page%20-Reshaping%20Agriculture%20and%20Nutrition%20Linkages.pdf",
+      "status": "NOT_APPLICABLE_TO_RECORDED_SAMPLE",
+      "unitsAsPublished": "ppm PO4 concentration; not kg/ha",
+      "applicability": "Describes Olsen use above pH 6.5; does not establish a Bihar Barley field calibration at pH 6.5.",
+      "code": "NO_COMPATIBLE_NONALKALINE_OLSEN_REFERENCE",
+      "missingRequirement": "For the recorded Olsen P result at pH 6.5, obtain laboratory-confirmed interpretation thresholds with matching method, kg/ha reporting basis and applicable soil/region calibration. A ppm table cannot be compared directly with kg/ha and pH >6.5 does not include 6.5. Existing alkaline-reference restriction remains unchanged.",
+      "action": "Ask the issuing laboratory or Bihar KVK for an applicable interpretation or further testing; retain the original reading and method."
+    },
+    {
+      "id": "ICAR-IIWBR-NEPZ-BARLEY-NOV-2026-REVIEW",
+      "organization": "ICAR-IIWBR",
+      "title": "Advisory for wheat and barley, 1–15 November 2026",
+      "publicationYear": 2026,
+      "documentReference": "Barley zone-wise sowing, seed rate and fertilizer-dose table; NEPZ includes Bihar",
+      "url": "https://iiwbr.org.in/wp-content/uploads/2026/10/Advisory-1-15-Nov-2026.pdf",
+      "status": "STANDARD_GUIDANCE_FOUND_NOT_CALCULATION_READY",
+      "unitsAsPublished": "kg NPK/ha; P and K elemental/oxide bases not explicit in table",
+      "applicability": "Irrigated, timely-sown NEPZ barley; distinct feed/hulless and malt packages. Not a soil-test-adjusted prescription.",
+      "timingAsPublished": "Half nitrogen and full phosphorus/potassium basal at sowing; remaining half nitrogen at first irrigation.",
+      "code": "BARLEY_STANDARD_ADVISORY_REQUIRES_BASIS_AND_CONTEXT",
+      "missingRequirement": "An authoritative Bihar-inclusive standard Barley advisory exists, but explicit P/P2O5 and K/K2O dose bases and the applicable feed/hulless/malt, irrigation and sowing package must be established before product quantities are calculated. Source timing alone cannot authorize a schedule without an applicable verified dose. This advisory contains no soil-test adjustment model.",
+      "action": "Obtain IIWBR/KVK clarification or a field-specific Soil Health Card stating nutrient bases, production conditions, dose and timing. Do not infer an irrigation date from the growth stage."
+    },
+    {
+      "id": "JISSS-2017-BARLEY-UP-STCR-REVIEW",
+      "organization": "Journal of the Indian Society of Soil Science, ICAR journal portal",
+      "title": "Soil Test Based Fertilizer Prescriptions under Integrated Plant Nutrient Management System for Barley in an Inceptisol of Eastern Plain Zone of Uttar Pradesh",
+      "publicationYear": 2017,
+      "documentReference": "Volume 65, issue 4",
+      "url": "https://epubs.icar.org.in/index.php/JISSS/article/view/76919",
+      "status": "REGION_MISMATCH",
+      "unitsAsPublished": "Study-specific nutrient requirements and soil-test model; not adopted as Bihar coefficients",
+      "applicability": "Eastern Plain Zone of Uttar Pradesh Inceptisol; Bihar applicability not established.",
+      "code": "BARLEY_STCR_REFERENCE_REGION_MISMATCH",
+      "missingRequirement": "The located Barley STCR study is calibrated for Uttar Pradesh, not Bihar. A documented Bihar-applicable model, coefficients, calibration ranges, extraction methods, nutrient bases, target-yield limits and organic-input credits are still required.",
+      "action": "Request an applicable calibrated Bihar model from the issuing laboratory, state agricultural university or KVK; do not transplant Uttar Pradesh coefficients."
+    },
+    {
+      "id": "ICAR-DWR-EB53-BARLEY-BASIS-REVIEW",
+      "organization": "ICAR Directorate of Wheat Research (IIWBR repository)",
+      "title": "Barley Cultivation in India, Pocket Guide, Extension Bulletin 53",
+      "documentReference": "Printed pp.3 (NEPZ including Bihar), 7 (production conditions, fertilizer table and legend)",
+      "url": "https://iiwbr.org.in/wp-content/uploads/2023/08/EB-53-Barley-Cultivation-in-India-Pocket-Guide.pdf",
+      "status": "SCOPE_AND_CONDITIONS_DOCUMENTED_BASES_UNRESOLVED",
+      "unitsAsPublished": "kg/ha; legend N=Nitrogen, P=Phosphrous, K=Potash; no explicit P2O5/K2O definition",
+      "applicability": "National guide includes Bihar in NEPZ; separates irrigated timely, malt, late and rainfed plains/hills conditions. No automatic extrapolation to hulless or dual-purpose packages.",
+      "code": "BARLEY_EB53_EXPLICIT_NUTRIENT_BASES_REQUIRED",
+      "missingRequirement": "EB-53 documents Bihar coverage and production conditions, but its P and K labels do not explicitly establish P2O5 and K2O bases. The malt package differs from the November 2026 advisory. Neither published tuple can be made executable by assuming bases or merging packages.",
+      "action": "Obtain an explicit-basis Bihar/NEPZ package or clarification issued by ICAR-IIWBR/KVK. Farmer production-condition selections do not establish scientific nutrient bases."
+    },
+    {
+      "id": "ICAR-DWR-EB44-MALT-NWPZ-REVIEW",
+      "organization": "ICAR Directorate of Wheat Research (IIWBR repository)",
+      "title": "Recent malt barley varieties and management practices for north western plains of India, Extension Bulletin 44",
+      "documentReference": "Fertilizer doses and time of application table; title defines north-western plains scope",
+      "url": "https://iiwbr.org.in/wp-content/uploads/2023/08/EB-44-Recent-malt-barley-varieties-and-management-practices-for-north-western-plains-of-India.pdf",
+      "status": "EXPLICIT_BASES_BUT_REGION_MISMATCH",
+      "unitsAsPublished": "kg/ha N:P2O5:K2O (explicit oxide bases)",
+      "applicability": "Malt barley in north-western plains; not a Bihar NEPZ recommendation.",
+      "code": "BARLEY_EXPLICIT_BASE_REFERENCE_REGION_MISMATCH",
+      "missingRequirement": "An explicit N/P2O5/K2O malt recommendation was located in EB-44, but it applies to north-western plains. Equal-looking rates in another advisory do not establish transferability to Bihar or feed/hulless barley.",
+      "action": "Do not copy this package to Bihar; obtain a complete Bihar/NEPZ-applicable source."
+    }
+  ]
+}

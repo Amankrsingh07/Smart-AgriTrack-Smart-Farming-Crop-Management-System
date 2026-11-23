@@ -91,7 +91,7 @@ export default async function Crops({ searchParams }: { searchParams: Promise<{ 
           </details>
           <form action={deleteCropCycle} style={{ marginTop: 9 }}>
             <input type="hidden" name="id" value={c.id} />
-            <ConfirmDeleteCycle cropName={c.crop.name} />
+            <ConfirmDeleteCycle confirmation={t("deleteConfirm")} />
           </form>
         </div>;
         })}

@@ -121,3 +121,12 @@ test("calendar reconciliation recalculates pending tasks and preserves completed
   assert.deepEqual(result.toUpsert.map(item => item.activityKey), ["flowering-check", "new-check"]);
   assert.deepEqual(result.removeObsoletePending, [obsolete]);
 });
+
+test("calendar regeneration preserves pending protection and fertilizer tasks without retaining obsolete generated tasks",()=>{
+ const protection={activityKey:"protection-inspect-2026-11-17",status:"PENDING"};
+ const completedProtection={activityKey:"protection-followup-2026-11-17",status:"COMPLETED"};
+ const fertilizer={activityKey:"smart-fertilizer:application-1",status:"PENDING"};
+ const obsolete={activityKey:"obsolete-generated",status:"PENDING"};
+ const result=reconcileCropCalendarActivities([protection,completedProtection,fertilizer,obsolete],[]);
+ assert.deepEqual(result.removeObsoletePending,[obsolete]);assert.deepEqual(result.preserveCompleted,[completedProtection]);
+});

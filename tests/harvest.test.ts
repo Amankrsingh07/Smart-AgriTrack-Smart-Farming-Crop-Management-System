@@ -33,3 +33,10 @@ test("converts saved harvest quantity and field area to kg per acre when units a
   assert.equal(calculateYieldPerAcre(100, "kg", 1, "hectare"), 100 / 2.47105);
   assert.equal(calculateYieldPerAcre(4, "bag", 1, "acre"), null);
 });
+
+test("completed cycles do not count down and unknown legacy area units produce no yield", () => {
+  const cycle = { status: "COMPLETED", expectedHarvestDate: new Date("2026-11-10T00:00:00Z") };
+  assert.equal(harvestStatus(cycle), "HARVESTED");
+  assert.equal(countdownDays(cycle), null);
+  assert.equal(calculateYieldPerAcre(200, "kg", 2, "bigha"), null);
+});

@@ -1,0 +1,54 @@
+{
+  "version": "manifest-1",
+  "activeRelease": "2026-11-18.1",
+  "reviewedOn": "2026-11-18",
+  "reviewAfterDays": 180,
+  "publicationPolicy": "Immutable releases. Source linkage is not agronomic validation. A trusted maintainer reviews a diff and evidence before a normal source-controlled release; no runtime import or client self-publication. Retain prior releases for rollback.",
+  "coverage": {
+    "namedCrops": [
+      "Wheat",
+      "Rice",
+      "Maize",
+      "Mustard",
+      "Potato",
+      "Tomato",
+      "Onion",
+      "Cotton",
+      "Sugarcane",
+      "Chickpea",
+      "Pigeon pea",
+      "Groundnut",
+      "Soybean",
+      "Brinjal",
+      "Chilli",
+      "Peas",
+      "Cauliflower",
+      "Cabbage",
+      "Mango",
+      "Banana"
+    ],
+    "aliases": {
+      "gram": "chickpea",
+      "chickpea (gram)": "chickpea",
+      "rice (paddy)": "rice",
+      "paddy": "rice",
+      "pigeonpea": "pigeon pea",
+      "arhar": "pigeon pea"
+    },
+    "missing": "Comprehensive crop/region prevalence, crop-specific treatment, registered labels, India contamination standards, calibrated diagnostic performance and licensed trained image models are not bundled. Unknown crops receive general triage."
+  },
+  "releases": [
+    {
+      "version": "2026-11-15.1",
+      "path": "releases/2026-11-15.1/knowledge.json",
+      "status": "BUNDLED_SCREENING",
+      "sha256": "908e42e6b228b476e27409c1bcdb5f6cff0402c05c57acb434db360373675411"
+    },
+    {
+      "version": "2026-11-18.1",
+      "path": "releases/2026-11-18.1/knowledge.json",
+      "status": "BUNDLED_SCREENING",
+      "sha256": "21d46f6c6ead7b87c4b743a1339d146db7110ee7184964b8913048a8d715bb24"
+    }
+  ]
+}

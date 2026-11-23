@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import {useProtectionText} from "@/i18n/crop-protection/client";
 
 type CropItem = {
   id: string;
@@ -11,6 +13,8 @@ type CropItem = {
   growthStage: string | null;
   date: string | null;
   actualHarvestDate: string | null;
+  expectedHarvestQuantity: string | null;
+  expectedHarvestUnit: string | null;
   status: string | null;
   href: string;
 };
@@ -52,6 +56,7 @@ export default function HarvestCenter({
   initialCycleId: string;
 }) {
   const t = useTranslations("Dashboard");
+  const protectionText = useProtectionText();
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState("");
@@ -96,6 +101,15 @@ export default function HarvestCenter({
     setError("");
     try {
       const result = await patch(payload);
+      if (key.startsWith("harvest-")) {
+        const update = { cropCycleId: (payload as { cropCycleId?: string }).cropCycleId };
+        window.dispatchEvent(new CustomEvent("agritrack:harvest-updated", { detail: update }));
+        if (typeof BroadcastChannel !== "undefined") {
+          const channel = new BroadcastChannel("agritrack-harvest");
+          channel.postMessage(update);
+          channel.close();
+        }
+      }
       setToast(message);
       await refresh();
       window.setTimeout(() => setToast(""), 5000);
@@ -165,7 +179,7 @@ export default function HarvestCenter({
             Add crop cycles, sowing dates and an expected date or crop duration
             to see a harvest countdown.{" "}
             <Link className="subtle-link" href="/crops">
-              Open crop calendar →
+              Open crop calendar <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
         ) : (
@@ -198,6 +212,9 @@ export default function HarvestCenter({
                         ? ` · estimated from ${cycle.growthStage} stage`
                         : ""}
                     </span>
+                    {cycle.expectedHarvestQuantity&&cycle.expectedHarvestUnit&&<span>
+                      Expected quantity: {cycle.expectedHarvestQuantity} {cycle.expectedHarvestUnit}
+                    </span>}
                   </div>
                   <strong className="harvest-countdown">
                     {status === "HARVESTED"
@@ -213,6 +230,9 @@ export default function HarvestCenter({
                               : `${Math.abs(days)} days overdue`}
                   </strong>
                   <div className="harvest-actions">
+                    <Link className="subtle-link" href={`/crop-loss?cycle=${encodeURIComponent(cycle.id)}`}>
+                      {protectionText("Harvest loss and prevention")}
+                    </Link>
                     {status !== "HARVESTED" && (
                       <button
                         className="btn"
@@ -225,7 +245,7 @@ export default function HarvestCenter({
                       </button>
                     )}
                     <Link className="subtle-link" href={cycle.href}>
-                      View crop →
+                      View crop <ArrowRight size={16} aria-hidden="true" />
                     </Link>
                   </div>
                   {status !== "HARVESTED" && openCycle === cycle.id && (
@@ -245,7 +265,7 @@ export default function HarvestCenter({
                           />
                         </div>
                         <div className="field">
-                          <label>Harvest quantity</label>
+                          <label>Actual harvest quantity</label>
                           <input
                             type="number"
                             name="quantity"
@@ -253,10 +273,12 @@ export default function HarvestCenter({
                             step="0.001"
                             required
                           />
+                          {cycle.expectedHarvestQuantity&&cycle.expectedHarvestUnit&&<small>Saved plan: {cycle.expectedHarvestQuantity} {cycle.expectedHarvestUnit}. Enter the measured actual amount here.</small>}
                         </div>
                         <div className="field">
-                          <label>Unit</label>
-                          <select name="unit">
+                          <label>Actual harvest unit</label>
+                          <select name="unit" defaultValue={cycle.expectedHarvestUnit??"kg"}>
+                            {cycle.expectedHarvestUnit&&!['kg','quintal','tonne','bag','crate'].includes(cycle.expectedHarvestUnit)&&<option value={cycle.expectedHarvestUnit}>{cycle.expectedHarvestUnit}</option>}
                             <option>kg</option>
                             <option>quintal</option>
                             <option>tonne</option>

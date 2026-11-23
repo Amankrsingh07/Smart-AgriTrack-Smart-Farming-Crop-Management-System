@@ -13,7 +13,9 @@ import { irrigationMethods, irrigationSources } from "@/lib/farm-field-options";
 import { cropGrowthStages as growthStages } from "@/lib/crop-growth-stages";
 import { calculateYieldPerAcre } from "@/lib/harvest";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { generateCalendarForCycle } from "@/lib/crop-calendar-service";
+import { closeCropCycleSchedules, syncCalendarWhenCovered } from "@/lib/crop-calendar-service";
+import { recordHarvestLot, validHarvestDate } from "@/lib/record-harvest";
+import { deleteOwnedCropCycle } from "@/lib/delete-crop-cycle";
 
 const authSchema = z.object({ name: z.string().trim().min(2).max(80).optional(), email: z.email().max(190), password: z.string().min(8).max(100), phone: z.string().max(30).optional() });
 function requireAuthConfiguration() {
@@ -72,7 +74,15 @@ export async function updateFarm(formData: FormData) {
 }
 export async function deleteFarm(formData: FormData) {
   const user=await getUser();if(!user)redirect("/");const id=String(formData.get("id")||"");
-  if(!id)redirect("/farms?error=Farm+not+found");const result=await db.farm.deleteMany({where:{id,userId:user.id}});if(!result.count)redirect("/farms?error=Farm+not+found");redirect("/farms?saved=Farm+and+its+related+records+deleted");
+  if (!id) redirect("/farms?error=Farm+not+found");
+  const result = await db.farm.deleteMany({ where: { id, userId: user.id } }).catch(error => {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      redirect("/farms?error=This+farm+has+linked+records+that+must+be+preserved");
+    }
+    throw error;
+  });
+  if (!result.count) redirect("/farms?error=Farm+not+found");
+  redirect("/farms?saved=Farm+and+its+related+records+deleted");
 }
 export async function addField(formData: FormData) {
   const user = await getUser(); if (!user) redirect("/");
@@ -81,12 +91,18 @@ export async function addField(formData: FormData) {
   const farm = await db.farm.findFirst({ where: { id: parsed.data.farmId, userId: user.id }, select: { id: true } }); if (!farm) redirect("/farms?error=Farm+not+found");
   await db.field.create({ data: { ...parsed.data, farmId: farm.id } }); redirect("/farms?saved=Field+added");
 }
+function cropSaveError(error: unknown) {
+  return error instanceof Error && !(error instanceof Prisma.PrismaClientKnownRequestError) && !(error instanceof Prisma.PrismaClientUnknownRequestError)
+    ? error.message : "Could not save the crop cycle and its calendar. Refresh and try again.";
+}
+
 export async function addCropCycle(formData: FormData) {
   const user=await getUser();if(!user)redirect("/");
-  const optionalDate=z.preprocess(value=>value===""?undefined:value,z.coerce.date().optional());
-  const durationDays = z.preprocess(value => value === "" ? null : value, z.union([z.null(), z.coerce.number().int().min(1).max(730)]));
+  const optionalDate=z.preprocess(value => value === "" ? undefined : value, z.iso.date().transform(value => new Date(value)).optional());
+  const durationDays = z.preprocess(value => value === "" || value === undefined ? null : value, z.union([z.null(), z.coerce.number().int().min(1).max(730)]));
   const parsed=z.object({fieldId:z.string().min(1),cropId:z.string().optional(),newCropName:z.string().trim().max(80).optional(),cropVariety:z.string().trim().max(120).optional(),season:z.enum(["KHARIF","RABI","ZAID"]),sowingDate:optionalDate,expectedHarvestDate:optionalDate,cropDurationDays:durationDays,growthStage:z.preprocess(value=>value===""?undefined:value,z.enum(growthStages).optional()),status:z.enum(["PLANNED","ACTIVE"]).default("PLANNED"),notes:z.string().max(1000).optional()}).safeParse(Object.fromEntries(formData));
   if(!parsed.success)redirect("/crops?error=Check+crop+cycle+details");
+  if (parsed.data.sowingDate && parsed.data.expectedHarvestDate && parsed.data.expectedHarvestDate <= parsed.data.sowingDate) redirect("/crops?error=Expected+harvest+date+must+be+after+sowing");
   let cropId=parsed.data.cropId;
   if(cropId==="__new__"){
     const name=parsed.data.newCropName?.trim();if(!name||name.length<2)redirect("/crops?error=Enter+a+crop+name+of+at+least+2+characters");
@@ -96,16 +112,26 @@ export async function addCropCycle(formData: FormData) {
   if(!cropId)redirect("/crops?error=Choose+a+crop");
   const field=await db.field.findFirst({where:{id:parsed.data.fieldId,farm:{userId:user.id}},select:{id:true}});if(!field)redirect("/crops?error=Field+not+found");
   const crop=await db.crop.findUnique({where:{id:cropId},select:{id:true,climateRequirement:{select:{cropDurationDays:true}}}});if(!crop)redirect("/crops?error=Crop+not+found");
-  const duplicate=await db.cropCycle.findFirst({where:{fieldId:field.id,cropId:crop.id,season:parsed.data.season,status:{in:["PLANNED","ACTIVE"]}},select:{id:true}});if(duplicate)redirect("/crops?error=This+crop+is+already+planned+or+active+in+that+field+and+season");
   const {fieldId: _fieldId,cropId: _cropId,newCropName: _newCropName,...cycleData}=parsed.data;
   void _fieldId; void _cropId; void _newCropName;
   const resolvedDuration = cycleData.cropDurationDays ?? crop.climateRequirement?.cropDurationDays ?? null;
   const growthStageUpdatedAt = cycleData.growthStage ? new Date() : null;
-  await db.cropCycle.create({data:{...cycleData,cropDurationDays:resolvedDuration,growthStageUpdatedAt,fieldId:field.id,cropId:crop.id}});redirect("/crops?saved=Crop+cycle+created");
+  try {
+    await db.$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM Field WHERE id = ${field.id} FOR UPDATE`;
+      const duplicate = await tx.cropCycle.findFirst({ where: { fieldId: field.id, cropId: crop.id, season: cycleData.season, status: { in: ["PLANNED", "ACTIVE"] } }, select: { id: true } });
+      if (duplicate) throw new Error("This crop is already planned or active in that field and season.");
+      const created = await tx.cropCycle.create({ data: { ...cycleData, cropDurationDays: resolvedDuration, growthStageUpdatedAt, fieldId: field.id, cropId: crop.id } });
+      if (created.sowingDate) await syncCalendarWhenCovered(user.id, created.id, tx);
+    }, { isolationLevel: "Serializable" });
+  } catch (error) {
+    redirect(`/crops?error=${encodeURIComponent(cropSaveError(error))}`);
+  }
+  redirect("/crops?saved=Crop+cycle+created");
 }
 export async function updateCropCycle(formData: FormData) {
   const user = await getUser(); if (!user) redirect("/");
-  const optionalDate = z.preprocess(value => value === "" ? null : value, z.union([z.null(), z.coerce.date()]));
+  const optionalDate = z.preprocess(value => value === "" ? null : value, z.union([z.null(), z.iso.date().transform(value => new Date(value))]));
   const durationDays = z.preprocess(value => value === "" ? null : value, z.union([z.null(), z.coerce.number().int().min(1).max(730)]));
   const parsed = z.object({
     id: z.string().min(1), fieldId: z.string().min(1), cropId: z.string().min(1), cropVariety: z.string().trim().max(120).optional(),
@@ -115,6 +141,7 @@ export async function updateCropCycle(formData: FormData) {
   }).safeParse(Object.fromEntries(formData));
   if (!parsed.success) redirect("/crops?error=Check+crop+cycle+details");
   const { id, fieldId, cropId, ...data } = parsed.data;
+  if (data.sowingDate && data.expectedHarvestDate && data.expectedHarvestDate <= data.sowingDate) redirect("/crops?error=Expected+harvest+date+must+be+after+sowing");
   const cycle = await db.cropCycle.findFirst({ where: { id, field: { farm: { userId: user.id } } }, select: { id: true, status: true, actualHarvestDate: true, growthStage: true, growthStageUpdatedAt: true } });
   if (!cycle) redirect("/crops?error=Crop+cycle+not+found");
   if (data.status === "HARVESTED" && cycle.status !== "HARVESTED" && !cycle.actualHarvestDate) redirect("/crops?error=Confirm+harvesting+with+the+Mark+as+Harvested+button");
@@ -122,20 +149,29 @@ export async function updateCropCycle(formData: FormData) {
   if (!field) redirect("/crops?error=Field+not+found");
   const crop = await db.crop.findUnique({ where: { id: cropId }, select: { id: true, climateRequirement: { select: { cropDurationDays: true } } } });
   if (!crop) redirect("/crops?error=Crop+not+found");
-  if (["PLANNED", "ACTIVE"].includes(data.status)) {
-    const duplicate = await db.cropCycle.findFirst({ where: { id: { not: id }, fieldId, cropId, season: data.season, status: { in: ["PLANNED", "ACTIVE"] } }, select: { id: true } });
-    if (duplicate) redirect("/crops?error=This+crop+is+already+planned+or+active+in+that+field+and+season");
-  }
-  const resolvedDuration = data.cropDurationDays ?? crop.climateRequirement?.cropDurationDays ?? null;
-  const growthStage = data.growthStage ?? cycle.growthStage;
-  const growthStageUpdatedAt = growthStage ? (growthStage === cycle.growthStage ? cycle.growthStageUpdatedAt : new Date()) : null;
-  await db.cropCycle.update({ where: { id }, data: { ...data, growthStage, cropDurationDays: resolvedDuration, growthStageUpdatedAt, fieldId, cropId } });
-  // Keep the linked calendar lifecycle in step with Crop Management status.
-  await db.cropCalendar.updateMany({ where: { cropCycleId: id }, data: { status: data.status } });
-  const existingCalendar = await db.cropCalendar.findUnique({ where: { cropCycleId: id }, select: { id: true } });
-  if (existingCalendar) {
-    try { await generateCalendarForCycle(user.id, { cropCycleId: id }); }
-    catch { redirect("/crops?error=Crop+cycle+saved%2C+but+its+calendar+needs+a+refresh"); }
+  try {
+    await db.$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM Field WHERE id = ${field.id} FOR UPDATE`;
+      const current = await tx.cropCycle.findFirst({ where: { id, field: { farm: { userId: user.id } } } });
+      if (!current) throw new Error("Crop cycle not found.");
+      if (current.actualHarvestDate && ["PLANNED", "ACTIVE"].includes(data.status)) throw new Error("A harvested crop cycle cannot be reopened here.");
+      if (["PLANNED", "ACTIVE"].includes(data.status)) {
+        const duplicate = await tx.cropCycle.findFirst({ where: { id: { not: id }, fieldId, cropId, season: data.season, status: { in: ["PLANNED", "ACTIVE"] } }, select: { id: true } });
+        if (duplicate) throw new Error("This crop is already planned or active in that field and season.");
+      }
+      const growthStage = data.growthStage ?? current.growthStage;
+      const growthStageUpdatedAt = growthStage === current.growthStage ? current.growthStageUpdatedAt : new Date();
+      await tx.cropCycle.update({ where: { id }, data: { ...data, growthStage, cropDurationDays: data.cropDurationDays ?? crop.climateRequirement?.cropDurationDays ?? null, growthStageUpdatedAt, fieldId, cropId } });
+      if (current.actualHarvestDate || ["HARVESTED", "COMPLETED"].includes(data.status)) {
+        await closeCropCycleSchedules(user.id, id, data.status, tx);
+      } else if (data.sowingDate) {
+        await syncCalendarWhenCovered(user.id, id, tx);
+      } else if (current.sowingDate && await tx.cropCalendar.count({ where: { cropCycleId: id } })) {
+        throw new Error("Keep a sowing date for a crop cycle with a calendar.");
+      }
+    }, { isolationLevel: "Serializable" });
+  } catch (error) {
+    redirect(`/crops?error=${encodeURIComponent(cropSaveError(error))}`);
   }
   redirect("/crops?saved=Crop+cycle+updated");
 }
@@ -153,8 +189,21 @@ export async function deleteCropCycle(formData: FormData) {
   const user = await getUser(); if (!user) redirect("/");
   const id = String(formData.get("id") ?? "");
   if (!id) redirect("/crops?error=Crop+cycle+not+found");
-  const result = await db.cropCycle.deleteMany({ where: { id, field: { farm: { userId: user.id } } } });
-  if (!result.count) redirect("/crops?error=Crop+cycle+not+found");
+  let deleted = false;
+  try {
+    deleted = await db.$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM CropCycle WHERE id = ${id} FOR UPDATE`;
+      return deleteOwnedCropCycle(tx, user.id, id);
+    }, { isolationLevel: "Serializable" });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      const constraint = typeof error.meta?.field_name === "string" ? error.meta.field_name : "a related record";
+      redirect(`/crops?error=${encodeURIComponent(`Deletion blocked by retained linked record (${constraint}). No records were deleted.`)}`);
+    }
+    redirect("/crops?error=Crop+cycle+deletion+failed.+No+records+were+deleted");
+  }
+  if (!deleted) redirect("/crops?error=Crop+cycle+not+found");
+  for (const path of ["/crops", "/dashboard", "/reports", "/expenses", "/production", "/harvests", "/inventory", "/crop-calendar", "/recommendations", "/fertilizer-recommendation", "/crop-loss"]) revalidatePath(path);
   redirect("/crops?saved=Crop+cycle+deleted");
 }
 export async function addCropCalendarEvent(formData: FormData) {
@@ -220,10 +269,13 @@ export async function deleteExpense(formData: FormData) {
 }
 export async function addProduction(formData:FormData){
   const user=await getUser();if(!user)redirect("/");
-  const parsed=z.object({cropCycleId:z.string().min(1),harvestDate:z.coerce.date(),quantity:z.coerce.number().positive().max(999999999),unit:z.string().trim().min(1).max(24),grade:z.string().max(80).optional(),notes:z.string().max(1000).optional()}).safeParse(Object.fromEntries(formData));
+  const parsed=z.object({cropCycleId:z.string().min(1),harvestDate:z.iso.date(),quantity:z.coerce.number().min(0.001).max(999999999),unit:z.string().trim().min(1).max(24),grade:z.string().max(80).optional(),notes:z.string().max(1000).optional()}).safeParse(Object.fromEntries(formData));
   if(!parsed.success)redirect("/production?error=Check+harvest+details");
-  const cycle=await db.cropCycle.findFirst({where:{id:parsed.data.cropCycleId,field:{farm:{userId:user.id}}},select:{id:true}});if(!cycle)redirect("/production?error=Crop+cycle+not+found");
-  await db.production.create({data:{...parsed.data,cropCycleId:cycle.id}});redirect("/production?saved=Harvest+recorded");
+  if (!validHarvestDate(parsed.data.harvestDate)) redirect("/production?error=Enter+a+valid+harvest+date+that+is+not+in+the+future");
+  const result = await recordHarvestLot(user.id, parsed.data, "production");
+  if (result.status === "missing") redirect("/production?error=Crop+cycle+not+found");
+  if (result.status !== "saved") redirect("/production?error=A+harvest+lot+with+this+date+and+quantity+is+already+recorded");
+  redirect("/production?saved=Harvest+recorded");
 }
 export async function saveInventoryThreshold(formData: FormData) {
   const user = await getUser(); if (!user) redirect("/");
@@ -236,22 +288,29 @@ export async function updateProduction(formData: FormData) {
   const user = await getUser(); if (!user) redirect("/");
   const parsed = z.object({ id: z.string().min(1), harvestDate: z.coerce.date(), quantity: z.string().regex(/^\d{1,9}(\.\d{1,3})?$/), grade: z.string().max(80).optional(), notes: z.string().max(1000).optional(), storageDetails: z.string().max(1000).optional() }).safeParse(Object.fromEntries(formData));
   if (!parsed.success || Number(parsed.data.quantity) <= 0) redirect("/production?error=Check+harvest+details");
-  const record = await db.production.findFirst({ where: { id: parsed.data.id, cropCycle: { field: { farm: { userId: user.id } } } }, include: { sales: true, cropCycle: { select: { fieldId: true } } } });
-  if (!record) redirect("/production?error=Harvest+record+not+found");
-  const sold = record.sales.reduce((sum, sale) => sum + Number(sale.quantity), 0);
-  if (Number(parsed.data.quantity) < sold) redirect("/production?error=Harvest+quantity+cannot+be+less+than+the+quantity+already+sold");
-  const field = await db.field.findUnique({ where: { id: record.cropCycle.fieldId }, select: { area: true, areaUnit: true } });
-  const calculatedYield = field ? calculateYieldPerAcre(Number(parsed.data.quantity), record.unit, Number(field.area), field.areaUnit) : null;
-  const yieldPerAcre = calculatedYield === null ? null : new Prisma.Decimal(calculatedYield);
-  await db.production.update({ where: { id: record.id }, data: { harvestDate: parsed.data.harvestDate, quantity: new Prisma.Decimal(parsed.data.quantity), grade: parsed.data.grade || null, notes: parsed.data.notes || null, storageDetails: parsed.data.storageDetails || null, yieldPerAcre } });
+  const outcome = await db.$transaction(async tx => {
+    const record = await tx.production.findFirst({ where: { id: parsed.data.id, cropCycle: { field: { farm: { userId: user.id } } } }, include: { sales: true, lossAssessment: true, storageInspections:{orderBy:{inspectedOn:"asc"},take:1,select:{inspectedOn:true}}, cropCycle: { select: { fieldId: true } } } });
+    if (!record) return "Harvest record not found.";
+    if (record.lossAssessment && (!record.quantity.eq(parsed.data.quantity) || record.harvestDate.getTime() !== parsed.data.harvestDate.getTime())) return "This harvest has a loss allocation. Its quantity/date are locked to preserve the allocation audit; notes and storage details can still be edited.";
+    if (record.storageInspections[0] && parsed.data.harvestDate > record.storageInspections[0].inspectedOn) return "Harvest date cannot follow a saved storage inspection.";
+    const sold = record.sales.reduce((sum, sale) => sum.add(sale.quantity), new Prisma.Decimal(0));
+    if (new Prisma.Decimal(parsed.data.quantity).lt(sold)) return "Harvest quantity cannot be less than recorded sales.";
+    const field = await tx.field.findUnique({ where: { id: record.cropCycle.fieldId }, select: { area: true, areaUnit: true } });
+    const calculatedYield = field ? calculateYieldPerAcre(Number(parsed.data.quantity), record.unit, Number(field.area), field.areaUnit) : null;
+    await tx.production.update({ where: { id: record.id }, data: { harvestDate: parsed.data.harvestDate, quantity: new Prisma.Decimal(parsed.data.quantity), grade: parsed.data.grade || null, notes: parsed.data.notes || null, storageDetails: parsed.data.storageDetails || null, yieldPerAcre: calculatedYield } });
+    return null;
+  }, { isolationLevel: "Serializable" }).catch(error => { if (error && typeof error === "object" && "code" in error && error.code === "P2034") return "Harvest changed concurrently. Refresh and retry."; throw error; });
+  if (outcome) redirect(`/production?error=${encodeURIComponent(outcome)}`);
   redirect("/production?saved=Harvest+updated");
 }
 export async function deleteProduction(formData: FormData) {
   const user = await getUser(); if (!user) redirect("/");
   const id = String(formData.get("id") || "");
-  const record = await db.production.findFirst({ where: { id, cropCycle: { field: { farm: { userId: user.id } } } }, select: { id: true } });
+  const record = await db.production.findFirst({ where: { id, cropCycle: { field: { farm: { userId: user.id } } } }, include: { lossAssessment: { select: { id: true } }, storageInspections:{take:1,select:{version:true}} } });
   if (!record) redirect(`/production?error=${encodeURIComponent("Harvest record not found.")}`);
-  await db.production.delete({ where: { id: record.id } });
+  if (record.lossAssessment) redirect(`/production?error=${encodeURIComponent("This harvest has a preserved loss allocation and cannot be deleted.")}`);
+  if (record.storageInspections.length) redirect("/production?error=Linked+storage+inspection+prevents+deletion");
+  try { await db.production.delete({ where: { id: record.id } }); } catch (error) { if (error && typeof error === "object" && "code" in error && error.code === "P2003") redirect("/production?error=Linked+loss+allocation+prevents+deletion"); throw error; }
   revalidatePath("/production");
   revalidatePath("/dashboard");
   redirect("/production?saved=Harvest+deleted");
@@ -263,10 +322,10 @@ export async function addSale(formData:FormData){
   let outcome: "saved" | "missing" | "exceeds";
   try {
     outcome = await db.$transaction(async tx => {
-      const production=await tx.production.findFirst({where:{id:parsed.data.productionId,cropCycle:{field:{farm:{userId:user.id}}}},include:{sales:true}});
+      const production=await tx.production.findFirst({where:{id:parsed.data.productionId,cropCycle:{field:{farm:{userId:user.id}}}},include:{sales:true,lossAssessment:true}});
       if(!production)return "missing";
       const quantity=new Prisma.Decimal(parsed.data.quantity);
-      if(!canSellQuantity(new Prisma.Decimal(production.quantity),production.sales.map(s=>new Prisma.Decimal(s.quantity)),quantity))return "exceeds";
+      if(!canSellQuantity(new Prisma.Decimal(production.lossAssessment?.marketable ?? production.quantity),production.sales.map(s=>new Prisma.Decimal(s.quantity)),quantity))return "exceeds";
       const totalRevenue=saleRevenue(parsed.data.quantity,parsed.data.pricePerUnit);
       await tx.sale.create({data:{...parsed.data,quantity,cropCycleId:production.cropCycleId,productionId:production.id,unit:production.unit,totalRevenue}});
       return "saved";
@@ -286,11 +345,11 @@ export async function updateSale(formData: FormData) {
   let outcome: "saved" | "missing" | "exceeds";
   try {
     outcome = await db.$transaction(async tx => {
-      const sale = await tx.sale.findFirst({ where: { id: parsed.data.id, cropCycle: { field: { farm: { userId: user.id } } } }, include: { production: { include: { sales: true } } } });
+      const sale = await tx.sale.findFirst({ where: { id: parsed.data.id, cropCycle: { field: { farm: { userId: user.id } } } }, include: { production: { include: { sales: true, lossAssessment: true } } } });
       if (!sale?.production) return "missing";
       const quantity = new Prisma.Decimal(parsed.data.quantity);
       const remaining = sale.production.sales.filter(row => row.id !== sale.id).map(row => new Prisma.Decimal(row.quantity));
-      if (!canSellQuantity(new Prisma.Decimal(sale.production.quantity), remaining, quantity)) return "exceeds";
+      if (!canSellQuantity(new Prisma.Decimal(sale.production.lossAssessment?.marketable ?? sale.production.quantity), remaining, quantity)) return "exceeds";
       const totalRevenue = saleRevenue(parsed.data.quantity, parsed.data.pricePerUnit);
       await tx.sale.update({ where: { id: sale.id }, data: { saleDate: parsed.data.saleDate, quantity, pricePerUnit: new Prisma.Decimal(parsed.data.pricePerUnit), totalRevenue, buyerName: parsed.data.buyerName || null, notes: parsed.data.notes || null } });
       return "saved";

@@ -46,6 +46,7 @@ test("Rice exposes crop-demand context but never an ordinary crop dose", () => {
   assert.equal(result.available, false);
   assert.equal(result.grossRequirementLitersMin, undefined);
   assert.ok(result.missing.some(item => item.includes("ponding, seepage, and percolation")));
+  assert.equal(calculateSimpleIrrigation({ ...base, crop: "Rice (Paddy)", moisture: measured }).available, false);
 });
 
 test("missing crop-stage Kc withholds ETc rather than averaging or inventing a value", () => {

@@ -1,0 +1,242 @@
+{
+  "version": "2026-11-23.1",
+  "records": [
+    {
+      "id": "icar-rabi-irrigated-mustard-haryana",
+      "cropKey": "mustard",
+      "state": "Haryana",
+      "district": null,
+      "zone": null,
+      "season": "RABI",
+      "productionType": "IRRIGATED",
+      "irrigationCondition": "IRRIGATED",
+      "sowingCondition": null,
+      "doseScope": "STANDARD_NPK_TARGETS",
+      "requiresProductionConfirmation": true,
+      "nutrientsKgHa": { "n": 80, "p2o5": 30, "k2o": 20 },
+      "originalBasis": "N:P2O5:K2O",
+      "recommendationUnits": "kg/ha",
+      "sourceId": "ICAR-RABI-2021-22-HARYANA-DELHI",
+      "sourcePage": null,
+      "sourceRow": null,
+      "conditions": "Irrigated Rabi mustard in Haryana; the source lists optimum sowing from 30 September to 20 October and varieties RH-30, Uvarvarshi, RH-8812, RH-0749, RH-9304, RB-50 and Pusa Mustard-32. Apply 25 kg/ha zinc sulphate (21% Zn) and inoculate seed with Azotobacter and PSB as separately described in the source. The NPK product calculation does not include those separate inputs. Confirm applicability with the local KVK; this is a general regional standard, not a soil-test-adjusted prescription.",
+      "phosphorusProduct": "SSP",
+      "verificationStatus": "VERIFIED_STANDARD_REGIONAL",
+      "datasetVersion": "2026-11-23.1",
+      "sourcePages": [116, 117],
+      "applicationTiming": [
+        { "label": "At sowing", "nFraction": 0.5, "pFraction": 1, "kFraction": 1 },
+        { "label": "At first irrigation (35–40 days after sowing)", "nFraction": 0.5, "pFraction": 0, "kFraction": 0 }
+      ]
+    },
+    {
+      "id": "icar-rabi-irrigated-mustard-delhi",
+      "cropKey": "mustard",
+      "state": "Delhi",
+      "district": null,
+      "zone": null,
+      "season": "RABI",
+      "productionType": "IRRIGATED",
+      "irrigationCondition": "IRRIGATED",
+      "sowingCondition": null,
+      "doseScope": "STANDARD_NPK_TARGETS",
+      "requiresProductionConfirmation": true,
+      "nutrientsKgHa": { "n": 80, "p2o5": 30, "k2o": 20 },
+      "originalBasis": "N:P2O5:K2O",
+      "recommendationUnits": "kg/ha",
+      "sourceId": "ICAR-RABI-2021-22-HARYANA-DELHI",
+      "sourcePage": null,
+      "sourceRow": null,
+      "conditions": "Irrigated Rabi mustard in Delhi; the source lists optimum sowing from 30 September to 20 October and varieties RH-30, Uvarvarshi, RH-8812, RH-0749, RH-9304, RB-50 and Pusa Mustard-32. Apply 25 kg/ha zinc sulphate (21% Zn) and inoculate seed with Azotobacter and PSB as separately described in the source. The NPK product calculation does not include those separate inputs. Confirm applicability with the local KVK; this is a general regional standard, not a soil-test-adjusted prescription.",
+      "phosphorusProduct": "SSP",
+      "verificationStatus": "VERIFIED_STANDARD_REGIONAL",
+      "datasetVersion": "2026-11-23.1",
+      "sourcePages": [116, 117],
+      "applicationTiming": [
+        { "label": "At sowing", "nFraction": 0.5, "pFraction": 1, "kFraction": 1 },
+        { "label": "At first irrigation (35–40 days after sowing)", "nFraction": 0.5, "pFraction": 0, "kFraction": 0 }
+      ]
+    },
+    {
+      "id": "icar-rabi-irrigated-wheat-haryana",
+      "cropKey": "wheat",
+      "state": "Haryana",
+      "district": null,
+      "zone": null,
+      "season": "RABI",
+      "productionType": "IRRIGATED",
+      "irrigationCondition": "IRRIGATED",
+      "sowingCondition": "TIMELY",
+      "doseScope": "STANDARD_NPK_TARGETS",
+      "requiresProductionConfirmation": true,
+      "nutrientsKgHa": { "n": 150, "p2o5": 60, "k2o": 30 },
+      "originalBasis": "N:P2O5:K2O",
+      "recommendationUnits": "kg/ha",
+      "sourceId": "ICAR-RABI-2021-22-HARYANA-DELHI",
+      "sourcePage": 121,
+      "sourceRow": null,
+      "conditions": "Irrigated Rabi wheat in Haryana under timely sowing (25 October–15 November). The source frames this as a general recommendation when soil testing is unavailable and lists named suitable varieties. It is not soil-test-adjusted; verify variety, sowing date and local applicability with KVK.",
+      "phosphorusProduct": "SSP",
+      "verificationStatus": "VERIFIED_STANDARD_REGIONAL",
+      "datasetVersion": "2026-11-23.1",
+      "sourcePages": [120, 121],
+      "applicationTiming": [
+        { "label": "At sowing", "nFraction": 0.5, "pFraction": 1, "kFraction": 1 },
+        { "label": "At first irrigation (21–22 days after sowing)", "nFraction": 0.5, "pFraction": 0, "kFraction": 0 }
+      ]
+    },
+    {
+      "id": "icar-rabi-irrigated-wheat-delhi",
+      "cropKey": "wheat",
+      "state": "Delhi",
+      "district": null,
+      "zone": null,
+      "season": "RABI",
+      "productionType": "IRRIGATED",
+      "irrigationCondition": "IRRIGATED",
+      "sowingCondition": "TIMELY",
+      "doseScope": "STANDARD_NPK_TARGETS",
+      "requiresProductionConfirmation": true,
+      "nutrientsKgHa": { "n": 150, "p2o5": 60, "k2o": 30 },
+      "originalBasis": "N:P2O5:K2O",
+      "recommendationUnits": "kg/ha",
+      "sourceId": "ICAR-RABI-2021-22-HARYANA-DELHI",
+      "sourcePage": 121,
+      "sourceRow": null,
+      "conditions": "Irrigated Rabi wheat in Delhi under timely sowing (25 October–15 November). The source frames this as a general recommendation when soil testing is unavailable and lists named suitable varieties. It is not soil-test-adjusted; verify variety, sowing date and local applicability with KVK.",
+      "phosphorusProduct": "SSP",
+      "verificationStatus": "VERIFIED_STANDARD_REGIONAL",
+      "datasetVersion": "2026-11-23.1",
+      "sourcePages": [120, 121],
+      "applicationTiming": [
+        { "label": "At sowing", "nFraction": 0.5, "pFraction": 1, "kFraction": 1 },
+        { "label": "At first irrigation (21–22 days after sowing)", "nFraction": 0.5, "pFraction": 0, "kFraction": 0 }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "AAU-SHILLONGANI-PULSES",
+      "organization": "Assam Agricultural University",
+      "title": "AAU Zonal Research Station Shillongani · crop-management recommendations",
+      "url": "https://www.aau.ac.in/department/department_details/117",
+      "publicationDate": null,
+      "reviewedOn": "2026-11-15",
+      "scope": "Achievement 6: green/black gram all Assam zones; Achievement 12: inoculated lentil basal package. Web page does not establish a publication date or season for these records."
+    },
+    {
+      "id": "TNAU-JUTE-NUTRIENTS",
+      "organization": "Tamil Nadu Agricultural University",
+      "title": "Nutrient Management · Jute",
+      "url": "https://agritech.tnau.ac.in/agriculture/agri_nutrientmgt_jute.html",
+      "publicationDate": null,
+      "reviewedOn": "2026-11-15",
+      "scope": "General TNAU extension package for Jute; copyright year is not treated as publication date. Explicit basal N/P2O5/K2O and two N topdressings."
+    },
+    {
+      "id": "ICAR-KHARIF-2025-ARUNACHAL",
+      "organization": "ICAR",
+      "title": "Kharif Agro-Advisories for Farmers 2025 · Arunachal Pradesh",
+      "url": "https://icar.org.in/sites/default/files/Circulars/ICAR-En-Kharif-Agro-Advisories-for-Farmers-2025.pdf",
+      "publicationDate": null,
+      "publicationYear": 2025,
+      "reviewedOn": "2026-11-15",
+      "scope": "Arunachal Pradesh, printed pp.19–21 (PDF pp.35–37). Published oxide-basis rates; timing retained only where specified."
+    },
+    {
+      "id": "AAU-ASSAM-POTATO",
+      "organization": "Assam Agricultural University, Rice Knowledge Bank Assam",
+      "title": "Potato · Agronomic practices, nutrient management",
+      "url": "https://rkbassam.aau.ac.in/crops/Potato",
+      "publicationDate": null,
+      "reviewedOn": "2026-11-15",
+      "scope": "Assam conventional seed-tuber potato, separate irrigated/rainfed basal nutrient tables. True-potato-seed nursery and transplant packages are separate and excluded."
+    },
+    {
+      "id": "ICAR-KHARIF-2025-HARYANA",
+      "organization": "ICAR",
+      "title": "Kharif Agro-Advisories for Farmers 2025 · Haryana",
+      "url": "https://icar.org.in/sites/default/files/Circulars/ICAR-En-Kharif-Agro-Advisories-for-Farmers-2025.pdf",
+      "publicationDate": null,
+      "publicationYear": 2025,
+      "reviewedOn": "2026-11-15",
+      "scope": "Named Haryana section, PDF pages 80, 81. Crop-specific targets explicitly use N/P2O5/K2O. Not a soil-adjusted model."
+    },
+    {
+      "id": "ICAR-KHARIF-2025-DELHI",
+      "organization": "ICAR",
+      "title": "Kharif Agro-Advisories for Farmers 2025 · Delhi",
+      "url": "https://icar.org.in/sites/default/files/Circulars/ICAR-En-Kharif-Agro-Advisories-for-Farmers-2025.pdf",
+      "publicationDate": null,
+      "publicationYear": 2025,
+      "reviewedOn": "2026-11-15",
+      "scope": "Named Delhi section, PDF pages 80, 81. Crop-specific targets explicitly use N/P2O5/K2O. Not a soil-adjusted model."
+    },
+    {
+      "id": "ICAR-KHARIF-2025-MIZORAM",
+      "organization": "ICAR",
+      "title": "Kharif Agro-Advisories for Farmers 2025 · Mizoram",
+      "url": "https://icar.org.in/sites/default/files/Circulars/ICAR-En-Kharif-Agro-Advisories-for-Farmers-2025.pdf",
+      "publicationDate": null,
+      "publicationYear": 2025,
+      "reviewedOn": "2026-11-15",
+      "scope": "Named Mizoram section, PDF pages 190. Crop-specific targets explicitly use N/P2O5/K2O. Not a soil-adjusted model."
+    },
+    {
+      "id": "ICAR-KHARIF-2025-ODISHA",
+      "organization": "ICAR",
+      "title": "Kharif Agro-Advisories for Farmers 2025 · Odisha",
+      "url": "https://icar.org.in/sites/default/files/Circulars/ICAR-En-Kharif-Agro-Advisories-for-Farmers-2025.pdf",
+      "publicationDate": null,
+      "publicationYear": 2025,
+      "reviewedOn": "2026-11-15",
+      "scope": "Named Odisha section, PDF pages 204. Crop-specific targets explicitly use N/P2O5/K2O. Not a soil-adjusted model."
+    },
+    {
+      "id": "TNAU-SUNFLOWER",
+      "organization": "Tamil Nadu Agricultural University",
+      "title": "Sunflower nutrient management · blanket NPK table",
+      "url": "https://agritech.tnau.ac.in/agriculture/agri_nutrientmgt_sunflower.html",
+      "publicationDate": "2013-06-13",
+      "reviewedOn": "2026-11-18",
+      "scope": "Application of Fertilizers, blanket nutrient table. Source date is the page update date."
+    },
+    {
+      "id": "TNAU-CUMBU",
+      "organization": "Tamil Nadu Agricultural University",
+      "title": "Pearl millet (cumbu) · main field fertilizer application",
+      "url": "https://agritech.tnau.ac.in/agriculture/CropProduction/Millets/millets_cumbu.html",
+      "publicationDate": null,
+      "reviewedOn": "2026-11-18",
+      "scope": "Preparation of Main Field, sections 2 and 4. Unadjusted direct-sown, irrigated package."
+    },
+    {
+      "id": "TNAU-SORGHUM",
+      "organization": "Tamil Nadu Agricultural University",
+      "title": "Sorghum · irrigated main field preparation",
+      "url": "https://agritech.tnau.ac.in/agriculture/CropProduction/Millets/millets_sorghum.html",
+      "publicationDate": null,
+      "reviewedOn": "2026-11-18",
+      "scope": "Section III, Application of Fertilizers, direct sown crop."
+    },
+    {
+      "id": "TNAU-COWPEA-FIELD",
+      "organization": "Tamil Nadu Agricultural University",
+      "title": "Crop Production · Pulses · Cowpea",
+      "url": "https://agritech.tnau.ac.in/agriculture/CropProduction/Pulses/pulses_cowpea.html",
+      "publicationDate": null,
+      "reviewedOn": "2026-11-18",
+      "scope": "Season and Varieties table and IV.4 Fertilizer Application. District, production system and variety must match."
+    },
+    {
+      "id": "ICAR-RABI-2021-22-HARYANA-DELHI",
+      "organization": "Indian Council of Agricultural Research",
+      "title": "ICAR Rabi Agro-Advisory for Farmers 2021–22",
+      "url": "https://www.icar.gov.in/sites/default/files/2022-09/Rabi-Agro-Advisory-2021-22_0.pdf",
+      "publicationDate": null,
+      "publicationYear": 2021,
+      "reviewedOn": "2026-11-23",
+      "scope": "Haryana and Delhi chapter: irrigated mustard (printed pp. 116–117) and timely irrigated wheat (printed pp. 120–121). Publication year is 2021; exact publication date is unavailable."
+    }
+  ]
+}

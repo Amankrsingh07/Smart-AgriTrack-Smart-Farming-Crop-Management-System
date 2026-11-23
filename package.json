@@ -4,17 +4,22 @@
   "private": true,
   "scripts": {
     "postinstall": "prisma generate",
-    "dev": "next dev --turbopack",
+    "dev": "prisma generate && next dev --turbopack",
     "build": "next build",
-    "prebuild": "prisma generate",
+    "prebuild": "node scripts/check-generated-types.mjs && prisma generate",
     "start": "next start",
     "lint": "eslint .",
     "test": "node --import tsx --test tests/*.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy",
+    "db:deploy": "node scripts/deploy-migrations.mjs",
     "db:seed": "tsx prisma/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "mandi:update": "node --import tsx scripts/update-mandi-snapshot.ts",
+    "typecheck": "tsc --noEmit",
+    "pretypecheck": "node scripts/check-generated-types.mjs",
+    "test:e2e": "playwright test",
+    "test:db:setup": "node scripts/push-test-schema.mjs",
+    "fertilizer:coverage": "node --import tsx scripts/generate-fertilizer-coverage.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
@@ -29,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.15.30",

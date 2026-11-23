@@ -4,20 +4,8 @@ import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/session";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { cropGrowthStages as growthStages } from "@/lib/crop-growth-stages";
 import { analyzeSoil } from "@/lib/soil-health";
-
-const schema = z.object({
-  state: z.string().trim().min(2).max(80),
-  district: z.string().trim().min(2).max(100),
-  crop: z.string().trim().min(2).max(80),
-  growthStage: z.enum(growthStages),
-  soilType: z.string().trim().min(2).max(60),
-  nitrogenKgHa: z.number().finite().min(0).max(100_000),
-  phosphorusKgHa: z.number().finite().min(0).max(100_000),
-  potassiumKgHa: z.number().finite().min(0).max(100_000),
-  soilPh: z.number().finite().min(0).max(14).optional(),
-});
+import { soilHealthSchema, soilValidationError } from "@/lib/soil-health-validation";
 
 export async function POST(request: Request) {
   const user = await getUser();
@@ -26,16 +14,25 @@ export async function POST(request: Request) {
   if (!rate.allowed) return NextResponse.json({ error: "Too many soil checks. Please try again in a minute." }, { status: 429 });
   let body: unknown;
   try { body = await request.json(); } catch { return NextResponse.json({ error: "Request body was not valid JSON." }, { status: 400 }); }
-  const parsed = schema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Enter a valid location, crop, growth stage, soil type, and NPK results. pH is optional." }, { status: 400 });
+  const parsed = soilHealthSchema.safeParse(body);
+  if (!parsed.success) return NextResponse.json({ error: soilValidationError(parsed.error.issues[0]) }, { status: 400 });
 
   const result = analyzeSoil(parsed.data);
   try {
+    if (parsed.data.cropCycleId) {
+      const cycle = await db.cropCycle.findFirst({ where: { id: parsed.data.cropCycleId, cropId: parsed.data.cropId, fieldId: parsed.data.fieldId, field: { farmId: parsed.data.farmId, farm: { userId: user.id } } }, select: { id: true } });
+      if (!cycle) return NextResponse.json({ error: "The selected crop cycle does not belong to your farm." }, { status: 403 });
+    } else if (parsed.data.fieldId) {
+      const field = await db.field.findFirst({ where: { id: parsed.data.fieldId, farmId: parsed.data.farmId, farm: { userId: user.id } }, select: { id: true } });
+      if (!field) return NextResponse.json({ error: "The selected field does not belong to your farm." }, { status: 403 });
+    }
     const saved = await db.fertilizerRecommendationHistory.create({
       data: {
         userId: user.id,
         input: { ...parsed.data, soilPh: parsed.data.soilPh ?? null } as Prisma.InputJsonValue,
         result: result as Prisma.InputJsonValue,
+        farmId: parsed.data.farmId, fieldId: parsed.data.fieldId, cropId: parsed.data.cropId, cropCycleId: parsed.data.cropCycleId,
+        sampleDate: parsed.data.sampleDate ? new Date(`${parsed.data.sampleDate}T00:00:00.000Z`) : undefined,
       },
       select: { id: true, createdAt: true },
     });

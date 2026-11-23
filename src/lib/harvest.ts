@@ -1,4 +1,4 @@
-import { indiaDateKey } from "./crop-cycle-status";
+import { indiaDateKey, isCropCycleFinished } from "./crop-cycle-status";
 
 export type HarvestCycleDates = {
   status: string;
@@ -34,7 +34,7 @@ export function expectedHarvestDate(cycle: HarvestCycleDates): Date | null {
 
 export type HarvestStatus = "UPCOMING" | "READY" | "DUE_TODAY" | "OVERDUE" | "HARVESTED";
 export function harvestStatus(cycle: HarvestCycleDates, now = new Date()): HarvestStatus | null {
-  if (cycle.actualHarvestDate || cycle.status === "HARVESTED") return "HARVESTED";
+  if (isCropCycleFinished(cycle)) return "HARVESTED";
   const date = expectedHarvestDate(cycle);
   if (!date) return null;
   const today = indiaDateKey(now);
@@ -46,6 +46,7 @@ export function harvestStatus(cycle: HarvestCycleDates, now = new Date()): Harve
 }
 
 export function countdownDays(cycle: HarvestCycleDates, now = new Date()): number | null {
+  if (isCropCycleFinished(cycle)) return null;
   const date = expectedHarvestDate(cycle);
   if (!date) return null;
   return Math.ceil((Date.parse(date.toISOString().slice(0, 10) + "T00:00:00Z") - Date.parse(indiaDateKey(now) + "T00:00:00Z")) / 86_400_000);
@@ -54,7 +55,8 @@ export function countdownDays(cycle: HarvestCycleDates, now = new Date()): numbe
 export function calculateYieldPerAcre(quantity: number, unit: string, fieldArea: number, areaUnit: string): number | null {
   const kgPerUnit: Record<string, number> = { kg: 1, kilogram: 1, quintal: 100, tonne: 1000, ton: 1000 };
   const factor = kgPerUnit[unit.trim().toLowerCase()];
-  const areaAcres = fieldArea * (areaUnit === "hectare" ? 2.47105 : 1);
+  const unitKey = areaUnit.trim().toLowerCase();
+  const areaAcres = unitKey === "hectare" || unitKey === "ha" ? fieldArea * 2.47105 : unitKey === "acre" ? fieldArea : NaN;
   if (!factor || !Number.isFinite(quantity) || quantity <= 0 || !Number.isFinite(areaAcres) || areaAcres <= 0) return null;
   return quantity * factor / areaAcres;
 }

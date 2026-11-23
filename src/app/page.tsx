@@ -1,4 +1,6 @@
 import AuthForms from "./auth-forms";
+import AgriTrackMark from "./agritrack-mark";
+import { AlertCircle, CalendarDays, ChartNoAxesCombined, LockKeyhole, Map } from "lucide-react";
 import { getUser } from "@/lib/session";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -15,7 +17,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
     <section className="auth-story" aria-label={t("about")}>
       <div className="auth-story-top">
         <Link className="brand" href="/" aria-label="AgriTrack home">
-          <span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="13" fill="currentColor"/><path d="M10 27.5c8-1 13.8-6.2 16.8-15 4.5 9.3.8 17.3-7.1 19.1-4 .9-7.5-.6-9.7-4.1Z" fill="#D9F5B9"/><path d="M9 31c5.2-5.3 10.5-8.8 18-12" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg></span>
+          <span className="brand-mark"><AgriTrackMark /></span>
           <span>AgriTrack</span>
         </Link>
         <span className="story-tag"><span className="status-dot" /> {t("tag")}</span>
@@ -26,9 +28,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
         <h1>{t("headline")}</h1>
         <p className="story-description">{t("description")}</p>
         <div className="story-points">
-          <div><span className="point-icon">↗</span><span><strong>{t("land")}</strong><small>{t("landNote")}</small></span></div>
-          <div><span className="point-icon">⌁</span><span><strong>{t("season")}</strong><small>{t("seasonNote")}</small></span></div>
-          <div><span className="point-icon">◷</span><span><strong>{t("numbers")}</strong><small>{t("numbersNote")}</small></span></div>
+          <div><span className="point-icon"><Map size={20} strokeWidth={1.8} aria-hidden="true" /></span><span><strong>{t("land")}</strong><small>{t("landNote")}</small></span></div>
+          <div><span className="point-icon"><CalendarDays size={20} strokeWidth={1.8} aria-hidden="true" /></span><span><strong>{t("season")}</strong><small>{t("seasonNote")}</small></span></div>
+          <div><span className="point-icon"><ChartNoAxesCombined size={20} strokeWidth={1.8} aria-hidden="true" /></span><span><strong>{t("numbers")}</strong><small>{t("numbersNote")}</small></span></div>
         </div>
       </div>
 
@@ -48,13 +50,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ e
     </section>
 
     <section className="auth-area" aria-label="Sign in or create an account">
-      <div className="auth-mobile-brand"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="13" fill="currentColor"/><path d="M10 27.5c8-1 13.8-6.2 16.8-15 4.5 9.3.8 17.3-7.1 19.1-4 .9-7.5-.6-9.7-4.1Z" fill="#D9F5B9"/><path d="M9 31c5.2-5.3 10.5-8.8 18-12" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg></span>AgriTrack</div>
+      <div className="auth-mobile-brand"><span className="brand-mark"><AgriTrackMark /></span>AgriTrack</div>
       <div className="auth-content">
         <div style={{display:"flex",justifyContent:"flex-end"}}><LanguageSelector /></div>
         <div className="auth-heading"><p className="eyebrow">{t("welcome")}</p><h2>{t("heading")}</h2><p>{t("prompt")}</p></div>
-        {message && <div className="auth-error" role="alert"><span aria-hidden="true">!</span><p>{message}</p></div>}
+        {message && <div className="auth-error" role="alert"><AlertCircle size={19} strokeWidth={1.9} aria-hidden="true"/><p>{message}</p></div>}
         <AuthForms />
-        <p className="privacy-note"><span aria-hidden="true">♢</span> {t("private")}</p>
+        <p className="privacy-note"><LockKeyhole size={16} strokeWidth={1.8} aria-hidden="true"/> {t("private")}</p>
         <p className="auth-legal">{t("legal")}</p>
       </div>
     </section>

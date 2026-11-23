@@ -1,0 +1,1399 @@
+{
+  "version": "2026-11-18.1",
+  "records": [
+    {
+      "id": "screen-1",
+      "name": "Rust disease",
+      "scientificName": "Puccinia spp.",
+      "crops": [
+        "Wheat"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Brown leaves",
+        "Leaf discoloration"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-2",
+      "name": "Bacterial leaf blight",
+      "scientificName": "Xanthomonas oryzae pv. oryzae",
+      "crops": [
+        "Rice"
+      ],
+      "category": "Bacterial",
+      "symptoms": [
+        "Yellow leaves",
+        "Dry leaf edges",
+        "Long yellow streaks from leaf tips with wavy edges"
+      ],
+      "distinguishingSymptoms": [
+        "Long yellow streaks from leaf tips with wavy edges"
+      ],
+      "competingSymptoms": [
+        "Pointed spots with gray centers and brown edges"
+      ],
+      "affectedParts": [
+        "Leaf"
+      ],
+      "diagnostics": "Check whether yellow streaks spread from the tip or edge and turn pale as they dry.",
+      "prevention": "Use locally recommended resistant varieties and avoid excess nitrogen.",
+      "management": "Ask a crop clinic to check fresh leaves with advancing streaks.",
+      "recovery": "Mark a streak and check whether it extends down the leaf.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Bacterial leaf blight",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://www.knowledgebank.irri.org/images/docs/diagnostic-of-common-diseases-of-rice.pdf",
+      "sourceId": "irri-rice-diagnosis",
+      "sourceOrganization": "IRRI",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "screen-3",
+      "name": "Leaf blight",
+      "scientificName": "",
+      "crops": [
+        "Maize"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Brown leaves",
+        "Leaf discoloration"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-4",
+      "name": "Alternaria blight",
+      "scientificName": "Alternaria spp.",
+      "crops": [
+        "Mustard"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Black spots",
+        "Brown leaves"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-5",
+      "name": "Late blight",
+      "scientificName": "Phytophthora infestans",
+      "crops": [
+        "Potato"
+      ],
+      "category": "Oomycete",
+      "symptoms": [
+        "Black spots",
+        "Brown leaves",
+        "Drying plants"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-6",
+      "name": "Leaf curl disease",
+      "scientificName": "Begomovirus complex",
+      "crops": [
+        "Tomato"
+      ],
+      "category": "Viral",
+      "symptoms": [
+        "Leaf curling",
+        "Stunted growth"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-7",
+      "name": "Purple blotch",
+      "scientificName": "Alternaria porri",
+      "crops": [
+        "Onion"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Leaf discoloration",
+        "Drying plants"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-8",
+      "name": "Leaf curl disease",
+      "scientificName": "Begomovirus complex",
+      "crops": [
+        "Cotton"
+      ],
+      "category": "Viral",
+      "symptoms": [
+        "Leaf curling",
+        "Stunted growth"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-9",
+      "name": "Red rot",
+      "scientificName": "Colletotrichum falcatum",
+      "crops": [
+        "Sugarcane"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Yellow leaves",
+        "Drying plants"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-10",
+      "name": "Fusarium wilt",
+      "scientificName": "Fusarium oxysporum f. sp. ciceris",
+      "crops": [
+        "Chickpea"
+      ],
+      "category": "Fungal / root",
+      "symptoms": [
+        "Plant wilting",
+        "Brown roots"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Whole plant",
+        "Root"
+      ]
+    },
+    {
+      "id": "screen-11",
+      "name": "Fusarium wilt",
+      "scientificName": "Fusarium udum",
+      "crops": [
+        "Pigeon pea"
+      ],
+      "category": "Fungal / root",
+      "symptoms": [
+        "Plant wilting",
+        "Drying plants"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-12",
+      "name": "Leaf spot",
+      "scientificName": "",
+      "crops": [
+        "Groundnut"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Black spots",
+        "Sudden leaf falling"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-13",
+      "name": "Rust disease",
+      "scientificName": "Phakopsora pachyrhizi",
+      "crops": [
+        "Soybean"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Brown leaves",
+        "Sudden leaf falling"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-14",
+      "name": "Bacterial wilt",
+      "scientificName": "Ralstonia solanacearum species complex",
+      "crops": [
+        "Brinjal"
+      ],
+      "category": "Bacterial / root",
+      "symptoms": [
+        "Plant wilting",
+        "Brown roots"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Whole plant",
+        "Root"
+      ]
+    },
+    {
+      "id": "screen-15",
+      "name": "Leaf curl disease",
+      "scientificName": "Begomovirus complex",
+      "crops": [
+        "Chilli"
+      ],
+      "category": "Viral",
+      "symptoms": [
+        "Leaf curling",
+        "Stunted growth"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-16",
+      "name": "Powdery mildew",
+      "scientificName": "Erysiphe spp.",
+      "crops": [
+        "Peas"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "White powder",
+        "Poor fruit formation"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Fruit"
+      ]
+    },
+    {
+      "id": "screen-17",
+      "name": "Black rot",
+      "scientificName": "Xanthomonas campestris pv. campestris",
+      "crops": [
+        "Cauliflower"
+      ],
+      "category": "Bacterial",
+      "symptoms": [
+        "Yellow leaves",
+        "Black spots"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-18",
+      "name": "Black rot",
+      "scientificName": "Xanthomonas campestris pv. campestris",
+      "crops": [
+        "Cabbage"
+      ],
+      "category": "Bacterial",
+      "symptoms": [
+        "Yellow leaves",
+        "Black spots"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "screen-19",
+      "name": "Powdery mildew",
+      "scientificName": "",
+      "crops": [
+        "Mango"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "White powder",
+        "Poor flowering"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "screen-20",
+      "name": "Fusarium wilt",
+      "scientificName": "Fusarium oxysporum species complex",
+      "crops": [
+        "Banana"
+      ],
+      "category": "Fungal / root",
+      "symptoms": [
+        "Yellow leaves",
+        "Plant wilting"
+      ],
+      "version": "screening-1",
+      "sourceOrganization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "source": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "diagnostics": "Crop specialist inspection and pathogen-specific laboratory testing; inspect both healthy and affected plants.",
+      "prevention": "Use locally recommended healthy planting material; monitor crops and record changes.",
+      "management": "Obtain crop-specific professional diagnosis before treatment.",
+      "severity": "Cannot be established from matching symptoms alone.",
+      "conditions": "Collect recent local weather, soil moisture and field history; no weather-based confirmation.",
+      "causes": "Possible pathogen; symptoms overlap with abiotic injury.",
+      "sourceId": "manage-screening",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "PRELIMINARY_UNVALIDATED",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "tomato-early-blight",
+      "name": "Early blight",
+      "scientificName": "Alternaria spp.",
+      "crops": [
+        "Tomato",
+        "Potato"
+      ],
+      "category": "Fungal / leaf / stem / fruit",
+      "symptoms": [
+        "Black spots",
+        "Brown leaves",
+        "Stem lesions",
+        "Fruit lesions",
+        "Brown spots with rings inside",
+        "Spots started on older lower leaves"
+      ],
+      "distinguishingSymptoms": [
+        "Brown spots with rings inside",
+        "Spots started on older lower leaves"
+      ],
+      "competingSymptoms": [
+        "Small round spots with pale centers and dark specks"
+      ],
+      "affectedParts": [
+        "Leaf",
+        "Stem",
+        "Fruit"
+      ],
+      "diagnostics": "Check older leaves for brown spots with rings. Inspect stems and fruit near the stalk.",
+      "prevention": "Rotate away from tomato and potato, mulch and water at the soil surface.",
+      "management": "Keep leaves dry where possible and ask a crop clinic to check fresh spots.",
+      "recovery": "Inspect newer leaves for new spots and compare with older photos.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Early blight",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/early-blight-in-tomato-and-potato",
+      "sourceId": "umn-early-blight",
+      "sourceOrganization": "University of Minnesota Extension",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "tomato-bacterial-wilt",
+      "name": "Bacterial wilt",
+      "scientificName": "Ralstonia solanacearum species complex",
+      "crops": [
+        "Tomato"
+      ],
+      "category": "Bacterial / root / stem",
+      "symptoms": [
+        "Plant wilting",
+        "Drying plants"
+      ],
+      "source": "https://agritech.tnau.ac.in/ta/org_farm/orgfarm_hortidiseases.html",
+      "sourceOrganization": "Tamil Nadu Agricultural University",
+      "diagnostics": "Rapid wilting needs expert stem/root examination and pathogen testing; Fusarium and moisture stress are alternatives.",
+      "conditions": "Record soil moisture, drainage, planting history and the speed of wilting.",
+      "prevention": "Discuss locally suitable rotations and healthy planting material with extension staff.",
+      "management": "Confirm the cause before treatment; symptom agreement does not establish bacterial infection.",
+      "version": "source-screening-2-2026-11-15",
+      "causes": "Possible pathogen or pest; competing abiotic causes remain possible.",
+      "severity": "Severity requires field inspection; matching symptoms are not confirmation.",
+      "sourceId": "tnau-wilt",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Whole plant"
+      ]
+    },
+    {
+      "id": "tomato-powdery-mildew",
+      "name": "Powdery mildew",
+      "scientificName": "",
+      "crops": [
+        "Tomato"
+      ],
+      "category": "Fungal / leaf",
+      "symptoms": [
+        "White powder",
+        "Yellow leaves"
+      ],
+      "source": "https://ipm.ucanr.edu/agriculture/tomato/powdery-mildew-on-field-grown-tomatoes/",
+      "sourceOrganization": "University of California IPM",
+      "diagnostics": "Inspect both leaf surfaces and obtain specialist identification of powdery growth; residue and other leaf disorders can resemble mildew.",
+      "conditions": "Temperature, humidity and canopy conditions can support investigation but do not confirm disease.",
+      "prevention": "Inspect leaves regularly and obtain locally applicable canopy management advice.",
+      "management": "Source supports differential recognition; California pesticide guidance is not an India-registered product recommendation.",
+      "version": "source-screening-2-2026-11-15",
+      "causes": "Possible pathogen or pest; competing abiotic causes remain possible.",
+      "severity": "Severity requires field inspection; matching symptoms are not confirmation.",
+      "sourceId": "ucipm-tomato",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Leaf"
+      ]
+    },
+    {
+      "id": "tomato-fruit-borer",
+      "name": "Fruit borer damage",
+      "scientificName": "Helicoverpa armigera",
+      "crops": [
+        "Tomato"
+      ],
+      "category": "Pest / fruit",
+      "symptoms": [
+        "Fruit holes",
+        "Poor fruit formation"
+      ],
+      "source": "https://agritech.tnau.ac.in/govt_schemes_services/aas/tomato_ex2.html",
+      "sourceOrganization": "Tamil Nadu Agricultural University",
+      "diagnostics": "Inspect damaged fruit for feeding holes and larvae; ask an adviser to identify the pest before management.",
+      "conditions": "Record crop stage and observed insects; poor fruit formation alone is nonspecific.",
+      "prevention": "Scout fruit and conserve beneficial insects through locally advised integrated pest management.",
+      "management": "No insecticide or dose is inferred from fruit damage; use current registered local guidance.",
+      "version": "source-screening-2-2026-11-15",
+      "causes": "Possible pathogen or pest; competing abiotic causes remain possible.",
+      "severity": "Severity requires field inspection; matching symptoms are not confirmation.",
+      "sourceId": "tnau-tomato",
+      "publicationDate": null,
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Preliminary differential recognition; locally qualified review required",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-15",
+      "units": null,
+      "evidenceLimitations": "Symptom agreement is unconfirmed and uncalibrated. Regional prevalence, treatment validity and diagnostic performance have not been validated.",
+      "contradictoryEvidence": [],
+      "affectedParts": [
+        "Fruit"
+      ]
+    },
+    {
+      "id": "rice-blast",
+      "name": "Rice blast",
+      "scientificName": "Magnaporthe oryzae",
+      "crops": [
+        "Rice"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Brown leaves",
+        "Black spots",
+        "Pointed spots with gray centers and brown edges"
+      ],
+      "distinguishingSymptoms": [
+        "Pointed spots with gray centers and brown edges"
+      ],
+      "competingSymptoms": [
+        "Long yellow streaks from leaf tips with wavy edges"
+      ],
+      "affectedParts": [
+        "Leaf"
+      ],
+      "diagnostics": "Check for spots with pointed ends and pale middles. Look at the neck below the grain head too.",
+      "prevention": "Choose locally recommended resistant seed and avoid excess nitrogen.",
+      "management": "Ask an adviser to examine fresh leaf spots and damaged grain heads.",
+      "recovery": "Mark affected patches and check for fresh spots and neck damage.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Rice blast",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://www.knowledgebank.irri.org/images/docs/diagnostic-of-common-diseases-of-rice.pdf",
+      "sourceId": "irri-rice-diagnosis",
+      "sourceOrganization": "IRRI",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "tomato-septoria",
+      "name": "Septoria leaf spot",
+      "scientificName": "Septoria lycopersici",
+      "crops": [
+        "Tomato"
+      ],
+      "category": "Fungal",
+      "symptoms": [
+        "Black spots",
+        "Yellow leaves",
+        "Small round spots with pale centers and dark specks",
+        "Spots started on older lower leaves"
+      ],
+      "distinguishingSymptoms": [
+        "Small round spots with pale centers and dark specks",
+        "Spots started on older lower leaves"
+      ],
+      "competingSymptoms": [
+        "Brown spots with rings inside"
+      ],
+      "affectedParts": [
+        "Leaf"
+      ],
+      "diagnostics": "Look for many small round spots with pale centers, dark rims and tiny dark specks.",
+      "prevention": "Remove volunteer tomatoes and reduce soil splash with mulch.",
+      "management": "Water at soil level and ask a crop clinic to check a spotted leaf.",
+      "recovery": "Check whether new spots are moving up the plant.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Septoria leaf spot",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/yard-and-garden-problems/tomato-leaf-spot-diseases",
+      "sourceId": "umn-leaf-spots",
+      "sourceOrganization": "University of Minnesota Extension",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "rice-tungro",
+      "name": "Rice tungro",
+      "scientificName": "Rice tungro viruses",
+      "crops": [
+        "Rice"
+      ],
+      "category": "Viral",
+      "symptoms": [
+        "Yellow leaves",
+        "Stunted growth",
+        "Orange-yellow leaf tips with fewer shoots"
+      ],
+      "distinguishingSymptoms": [
+        "Orange-yellow leaf tips with fewer shoots"
+      ],
+      "competingSymptoms": [
+        "Even yellowing on older leaves"
+      ],
+      "affectedParts": [
+        "Leaf",
+        "Whole plant"
+      ],
+      "diagnostics": "Check for orange-yellow tips, short plants and fewer shoots. Nitrogen shortage can also cause yellowing.",
+      "prevention": "Ask local extension about resistant rice varieties and planting dates.",
+      "management": "Request a crop clinic check and inspect for green leafhoppers with an adviser.",
+      "recovery": "Record new affected clumps and compare their shoot counts with healthy clumps.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Rice tungro",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://www.knowledgebank.irri.org/images/docs/diagnostic-of-common-diseases-of-rice.pdf",
+      "sourceId": "irri-rice-diagnosis",
+      "sourceOrganization": "IRRI",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "rice-hopper",
+      "name": "Brown planthopper damage",
+      "scientificName": "Nilaparvata lugens",
+      "crops": [
+        "Rice"
+      ],
+      "category": "Pest",
+      "symptoms": [
+        "Drying plants",
+        "Plant wilting",
+        "Brown insects at the base of rice stems"
+      ],
+      "distinguishingSymptoms": [
+        "Brown insects at the base of rice stems"
+      ],
+      "competingSymptoms": [],
+      "affectedParts": [
+        "Stem base"
+      ],
+      "diagnostics": "Part the stems and look for insects near the base of plants in and around scorched patches.",
+      "prevention": "Scout stem bases regularly and protect beneficial insects.",
+      "management": "Ask an adviser to identify the insects and assess the patch before spraying.",
+      "recovery": "Compare stem bases at the edge and center of the patch at the next check.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Brown planthopper damage",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://databases.nbair.res.in/rice/pest_description.php?user_id=3",
+      "sourceId": "icar-rice-hopper",
+      "sourceOrganization": "ICAR-NBAIR",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "rice-nitrogen",
+      "name": "Nitrogen deficiency",
+      "scientificName": "",
+      "crops": [
+        "Rice"
+      ],
+      "category": "Nutrient deficiency",
+      "symptoms": [
+        "Yellow leaves",
+        "Stunted growth",
+        "Even yellowing on older leaves"
+      ],
+      "distinguishingSymptoms": [
+        "Even yellowing on older leaves"
+      ],
+      "competingSymptoms": [
+        "Orange-yellow leaf tips with fewer shoots"
+      ],
+      "affectedParts": [
+        "Older leaves"
+      ],
+      "diagnostics": "Compare older and newer leaves and check fertilizer history and root condition.",
+      "prevention": "Use the existing soil test and local crop nutrient plan.",
+      "management": "Ask an adviser to check nutrient status before adding fertilizer.",
+      "recovery": "Watch whether new leaves grow greener after the cause is addressed.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Nitrogen deficiency",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://books.irri.org/GAP_content.pdf",
+      "sourceId": "irri-rice-nutrition",
+      "sourceOrganization": "IRRI",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "root-waterlogging",
+      "name": "Waterlogging",
+      "scientificName": "",
+      "crops": [
+        "Tomato",
+        "Potato",
+        "Maize",
+        "Wheat",
+        "Soybean",
+        "Chickpea"
+      ],
+      "category": "Water stress",
+      "symptoms": [
+        "Plant wilting",
+        "Yellow leaves",
+        "Brown roots",
+        "Water standing in field"
+      ],
+      "distinguishingSymptoms": [
+        "Water standing in field"
+      ],
+      "competingSymptoms": [],
+      "affectedParts": [
+        "Root",
+        "Whole plant"
+      ],
+      "diagnostics": "Compare roots and soil moisture in low spots and better-drained areas.",
+      "prevention": "Maintain drainage paths and check the root zone before irrigating.",
+      "management": "Check outlets and avoid adding water to saturated soil while seeking field advice.",
+      "recovery": "Track how long soil stays wet and watch for healthy new growth.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Waterlogging",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://ipm.ucanr.edu/home-and-landscape/aeration-deficit/",
+      "sourceId": "uc-waterlogging",
+      "sourceOrganization": "University of California IPM",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    },
+    {
+      "id": "tomato-herbicide",
+      "name": "Possible herbicide injury",
+      "scientificName": "",
+      "crops": [
+        "Tomato"
+      ],
+      "category": "Chemical injury",
+      "symptoms": [
+        "Leaf curling",
+        "Stunted growth",
+        "Twisted or cup-shaped new leaves"
+      ],
+      "distinguishingSymptoms": [
+        "Twisted or cup-shaped new leaves"
+      ],
+      "competingSymptoms": [],
+      "affectedParts": [
+        "New leaves",
+        "Stem"
+      ],
+      "diagnostics": "Check where distorted growth started and compare with nearby spray or amendment history.",
+      "prevention": "Follow the product label and prevent spray from drifting to other crops.",
+      "management": "Keep application records and ask an adviser to assess the crop before adding products.",
+      "recovery": "Photograph new growth and check if the newest leaves still emerge distorted.",
+      "conditions": "Check crop stage and how the damage started and changed.",
+      "causes": "Possible herbicide injury",
+      "severity": "Check the field to find how much of the crop is affected.",
+      "source": "https://herbicidestewardship.tennessee.edu/diagnosing-suspected-herbicide-damage-in-tomatoes/",
+      "sourceId": "ut-tomato-drift",
+      "sourceOrganization": "University of Tennessee Extension",
+      "publicationDate": null,
+      "version": "2026-11-18.1",
+      "datasetVersion": "2026-11-18.1",
+      "geographicApplicability": "Use with local field advice",
+      "verificationStatus": "SOURCE_LINKED_SCREENING",
+      "lastReviewed": "2026-11-18",
+      "units": null,
+      "evidenceLimitations": "Check the crop in the field. Similar signs can have several causes.",
+      "contradictoryEvidence": []
+    }
+  ],
+  "sources": [
+    {
+      "id": "manage-screening",
+      "organization": "MANAGE / ICAR; curated screening candidates requiring crop expert review",
+      "url": "https://www.manage.gov.in/publications/eBooks/Revised%20DAESI%20Study%20Material.pdf",
+      "format": "PDF",
+      "availability": "PUBLIC_REFERENCE",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "See original publication; no all-India validation inferred",
+      "cropCoverage": [
+        "Wheat",
+        "Rice",
+        "Maize",
+        "Mustard",
+        "Potato",
+        "Tomato",
+        "Onion",
+        "Cotton",
+        "Sugarcane",
+        "Chickpea",
+        "Pigeon pea",
+        "Groundnut",
+        "Soybean",
+        "Brinjal",
+        "Chilli",
+        "Peas",
+        "Cauliflower",
+        "Cabbage",
+        "Mango",
+        "Banana"
+      ],
+      "license": "Not established for full-document redistribution; only authored summaries/reference links bundled",
+      "automatedDownloads": "Not established; no automated source ingestion enabled",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-15",
+      "verification": "Reference linked; local diagnostic validation not established"
+    },
+    {
+      "id": "aps-early-blight",
+      "organization": "American Phytopathological Society",
+      "url": "https://www.apsnet.org/edcenter/pdlessons/Pages/PotatoTomato.aspx",
+      "format": "HTML",
+      "availability": "PUBLIC_REFERENCE",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "See original publication; no all-India validation inferred",
+      "cropCoverage": [
+        "Tomato",
+        "Potato"
+      ],
+      "license": "Not established for full-document redistribution; only authored summaries/reference links bundled",
+      "automatedDownloads": "Not established; no automated source ingestion enabled",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-15",
+      "verification": "Reference linked; local diagnostic validation not established"
+    },
+    {
+      "id": "tnau-wilt",
+      "organization": "Tamil Nadu Agricultural University",
+      "url": "https://agritech.tnau.ac.in/ta/org_farm/orgfarm_hortidiseases.html",
+      "format": "HTML",
+      "availability": "PUBLIC_REFERENCE",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "See original publication; no all-India validation inferred",
+      "cropCoverage": [
+        "Tomato"
+      ],
+      "license": "Not established for full-document redistribution; only authored summaries/reference links bundled",
+      "automatedDownloads": "Not established; no automated source ingestion enabled",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-15",
+      "verification": "Reference linked; local diagnostic validation not established"
+    },
+    {
+      "id": "ucipm-tomato",
+      "organization": "University of California IPM",
+      "url": "https://ipm.ucanr.edu/agriculture/tomato/powdery-mildew-on-field-grown-tomatoes/",
+      "format": "HTML",
+      "availability": "PUBLIC_REFERENCE",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "California; differential recognition only",
+      "cropCoverage": [
+        "Tomato"
+      ],
+      "license": "Not established for full-document redistribution; only authored summaries/reference links bundled",
+      "automatedDownloads": "Not established; no automated source ingestion enabled",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-15",
+      "verification": "Reference linked; local diagnostic validation not established"
+    },
+    {
+      "id": "tnau-tomato",
+      "organization": "Tamil Nadu Agricultural University",
+      "url": "https://agritech.tnau.ac.in/govt_schemes_services/aas/tomato_ex2.html",
+      "format": "HTML",
+      "availability": "PUBLIC_REFERENCE",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "See original publication; no all-India validation inferred",
+      "cropCoverage": [
+        "Tomato"
+      ],
+      "license": "Not established for full-document redistribution; only authored summaries/reference links bundled",
+      "automatedDownloads": "Not established; no automated source ingestion enabled",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-15",
+      "verification": "Reference linked; local diagnostic validation not established"
+    },
+    {
+      "id": "irri-rice-diagnosis",
+      "organization": "IRRI",
+      "url": "https://www.knowledgebank.irri.org/images/docs/diagnostic-of-common-diseases-of-rice.pdf",
+      "format": "PDF",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Rice"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    },
+    {
+      "id": "irri-rice-nutrition",
+      "organization": "IRRI",
+      "url": "https://books.irri.org/GAP_content.pdf",
+      "format": "PDF",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Rice"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    },
+    {
+      "id": "umn-early-blight",
+      "organization": "University of Minnesota Extension",
+      "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/early-blight-in-tomato-and-potato",
+      "format": "HTML",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Tomato",
+        "Potato"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    },
+    {
+      "id": "umn-leaf-spots",
+      "organization": "University of Minnesota Extension",
+      "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/yard-and-garden-problems/tomato-leaf-spot-diseases",
+      "format": "HTML",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Tomato"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    },
+    {
+      "id": "icar-rice-hopper",
+      "organization": "ICAR-NBAIR",
+      "url": "https://databases.nbair.res.in/rice/pest_description.php?user_id=3",
+      "format": "HTML",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Rice"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    },
+    {
+      "id": "uc-waterlogging",
+      "organization": "University of California IPM",
+      "url": "https://ipm.ucanr.edu/home-and-landscape/aeration-deficit/",
+      "format": "HTML",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Tomato",
+        "Potato",
+        "Maize",
+        "Wheat",
+        "Soybean",
+        "Chickpea"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    },
+    {
+      "id": "ut-tomato-drift",
+      "organization": "University of Tennessee Extension",
+      "url": "https://herbicidestewardship.tennessee.edu/diagnosing-suspected-herbicide-damage-in-tomatoes/",
+      "format": "HTML",
+      "availability": "Public institutional reference",
+      "publicationDate": null,
+      "version": null,
+      "geographicCoverage": "Use locally adapted field advice",
+      "cropCoverage": [
+        "Tomato"
+      ],
+      "license": "Authored summaries and links only",
+      "automatedDownloads": "None",
+      "updateFrequency": "Unknown",
+      "lastChecked": "2026-11-18",
+      "verification": "Source-linked screening"
+    }
+  ]
+}

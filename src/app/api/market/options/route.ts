@@ -20,7 +20,7 @@ export async function GET(request: Request) {
     try {
       const result = await fetchLiveMandi({ state: params.get("state") || undefined, district: params.get("district") || undefined });
       const commodities = [...new Set(result.records.map(row => row.commodity).filter((name): name is string => Boolean(name)))].sort((a, b) => a.localeCompare(b));
-      return NextResponse.json({ commodities, scope: "data.gov.in", count: result.total });
+      return NextResponse.json({ commodities, scope: result.provider, count: result.total });
     } catch (error) {
       return NextResponse.json({ commodities: [], error: error instanceof Error ? error.message : "Could not load online commodity options." }, { status: 503 });
     }
@@ -33,6 +33,6 @@ export async function GET(request: Request) {
     commodities,
     scope: "offline-snapshot",
     dataDate: mandiSnapshot.meta.dataDate,
-    message: source === "online" ? "Choose a district to load live VoiceOfVillage mandi prices; commodity names here come from the offline reference snapshot." : undefined,
+    message: source === "online" ? "Choose a district to load live mandi prices; commodity names here come from the offline reference snapshot." : undefined,
   });
 }

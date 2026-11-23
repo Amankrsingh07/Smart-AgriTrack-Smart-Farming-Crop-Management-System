@@ -1,0 +1,56 @@
+{
+  "version": "workspace-i18n-2026-11-18",
+  "origin": "Existing bundled machine-assisted translations and locally authored harvest dashboard translations.",
+  "coverage": {
+    "hi": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "pa": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "mr": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "gu": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "bn": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "ta": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "te": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "kn": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "ml": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    },
+    "or": {
+      "expected": 1347,
+      "translated": 1347,
+      "missing": []
+    }
+  }
+}

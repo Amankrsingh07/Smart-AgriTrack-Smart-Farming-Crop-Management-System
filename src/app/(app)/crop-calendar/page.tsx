@@ -1,3 +1,8 @@
+import { calendarLabel, calendarText } from "@/i18n/crop-calendar/format";
+import { calendarCatalog } from "@/i18n/crop-calendar";
+import Link from "next/link";
+import { getLocale } from "next-intl/server";
+import { protectionText } from "@/i18n/crop-protection";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/session";
 import { cropCalendarDatasetVersion, cropCalendarProfileNames, getCropCalendarProfileOptions } from "@/lib/crop-calendar";
@@ -6,8 +11,8 @@ import { generateCalendarForCycle } from "@/lib/crop-calendar-service";
 
 export const dynamic = "force-dynamic";
 
-export default async function CropCalendarPage() {
-  const user = await getUser();
+export default async function CropCalendarPage({ searchParams }: { searchParams: Promise<{ cycle?: string }> }) {
+  const [user, params] = await Promise.all([getUser(), searchParams]);
   if (!user) return null;
   const cycles = await db.cropCycle.findMany({
       where: { status: { in: ["PLANNED", "ACTIVE"] }, field: { farm: { userId: user.id } } },
@@ -55,5 +60,25 @@ export default async function CropCalendarPage() {
       notes: activity.notes, source: activity.source, sourceUrl: activity.sourceUrl,
     })),
   }));
-  return <CropCalendarDashboard cycles={cycleOptions} calendars={records} availableCrops={cropCalendarProfileNames}/>;
+  const locale = await getLocale();
+  const storageReminders = await db.alert.findMany({
+    where: { userId: user.id, dedupeKey: { startsWith: "loss:" }, productionId: { not: null }, dueOn: { not: null }, completedAt: null, href: { startsWith: "/crop-loss?" } },
+    select: { id: true, dueOn: true, cropName: true, message: true, href: true },
+    orderBy: { dueOn: "asc" },
+    take: 50,
+  });
+  const catalog = calendarCatalog(locale);
+  const l = (text: string) => calendarText(catalog, text);
+  const protectionEvents=await db.cropCalendarEvent.findMany({where:{userId:user.id,notes:{contains:"Report: /crop-protection/"}},orderBy:{eventDate:"asc"},take:200});
+  return <><CropCalendarDashboard catalog={catalog} key={params.cycle ?? ""} initialCycleId={params.cycle} cycles={cycleOptions} calendars={records} availableCrops={cropCalendarProfileNames}/>
+   {storageReminders.length>0&&<section className="panel" style={{marginTop:20}}>
+    <h2>{protectionText(locale,"Prevention reminders")}</h2><ul>
+     {storageReminders.map(reminder=><li key={reminder.id}><time dateTime={reminder.dueOn!.toISOString().slice(0,10)}>
+      {new Intl.DateTimeFormat(locale,{dateStyle:"medium",timeZone:"UTC"}).format(reminder.dueOn!)}</time>
+      {" · "}<Link href={reminder.href!}>{reminder.cropName && calendarLabel(catalog, locale, reminder.cropName)}</Link><p>{protectionText(locale,reminder.message)}</p>
+     </li>)}
+    </ul>
+   </section>}
+   {protectionEvents.length > 0 && <section className="panel" style={{marginTop:20}}><h2>{l("Additional crop protection reminders")}</h2><ul>{protectionEvents.map(event=><li key={event.id} style={{margin:"14px 0"}}><strong>{new Intl.DateTimeFormat(locale, { timeZone: "UTC", dateStyle: "medium" }).format(event.eventDate)} · {protectionText(locale, event.title)}</strong><p>{event.notes && protectionText(locale, event.notes.split(" Report: ")[0])}</p></li>)}</ul></section>}</>;
+
 }

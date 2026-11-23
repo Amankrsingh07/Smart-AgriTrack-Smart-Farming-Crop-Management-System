@@ -50,3 +50,39 @@ test("district geocoding never falls back to a result in the wrong state", async
     assert.equal((await geocodeIndianDistrict("Rampur", "Uttar Pradesh"))?.admin1, "Uttar Pradesh");
   } finally { globalThis.fetch = original; }
 });
+
+test("invalid coordinates and incomplete current readings cannot be used as provider weather", async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = (async () => {
+    calls++;
+    return response({ ...validPayload, current: { ...validPayload.current, relative_humidity_2m: null } });
+  }) as unknown as typeof fetch;
+  try {
+    await assert.rejects(loadOpenMeteoForecast(91, 77), /invalid weather coordinates/i);
+    assert.equal(calls, 0);
+    await assert.rejects(loadOpenMeteoForecast(28.6, 77.2), /incomplete current conditions/i);
+    assert.equal(calls, 1);
+  } finally { globalThis.fetch = original; }
+});
+
+test("crop-loss forecast cache coalesces requests and expires after four minutes", async () => {
+  const { readCropLossWeather } = await import("../src/lib/crop-loss-weather");
+  const original = Date.now;
+  let now = original();
+  let loads = 0;
+  const load = async () => { loads++; return validPayload; };
+  Date.now = () => now;
+  try {
+    const [first, second] = await Promise.all([
+      readCropLossWeather(27.31, 76.41, true, load),
+      readCropLossWeather(27.31, 76.41, true, load),
+    ]);
+    assert.equal(first.source, "Live API");
+    assert.equal(second.source, "Cached");
+    assert.equal(loads, 1);
+    now += 4 * 60_000;
+    assert.equal((await readCropLossWeather(27.31, 76.41, true, load)).source, "Live API");
+    assert.equal(loads, 2);
+  } finally { Date.now = original; }
+});

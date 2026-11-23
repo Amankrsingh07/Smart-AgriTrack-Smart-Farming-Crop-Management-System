@@ -1,0 +1,65 @@
+{
+  "version": "2026-11-14",
+  "profiles": [
+    {
+      "names": ["Wheat"],
+      "summary": "Wheat favours structured loam or clay loam with drainage and moisture retention.",
+      "texture": "Loam, light loam or clay loam; an alluvial label alone does not identify texture.",
+      "drainage": "Check drainage and soil structure; a heavy soil needs an open, aerated structure.",
+      "ph": null,
+      "source": "Sikkim Agriculture Department · Wheat cultivation",
+      "url": "https://agri.sikkim.gov.in/Department/AgriSubMenuDetails?ContID=23&SubContID=61",
+      "scope": "General wheat guidance; not a Chhapra field trial."
+    },
+    {
+      "names": ["Rice (Paddy)", "Rice", "Paddy"],
+      "summary": "Rice is grown on riverine alluvium and several other soils; clay-rich soils retain water well.",
+      "texture": "Clay or clay loam with organic matter is preferred for water retention.",
+      "drainage": "Manage water retention for the rice establishment system; problem soils also need a drainage plan.",
+      "ph": [5.5, 6.5],
+      "source": "TNAU Agritech · Paddy soil conditions",
+      "url": "https://agritech.tnau.ac.in/expert_system/paddy/cultivationpractices1.html",
+      "scope": "General preferred range, not the full rice tolerance range or a Bihar prescription."
+    },
+    {
+      "names": ["Maize"],
+      "summary": "Maize requires fertile soil that drains freely.",
+      "texture": "Assess fertility and drainage from a field soil test and inspection.",
+      "drainage": "Use well-drained soil; review standing water before irrigation.",
+      "ph": [6, 7],
+      "source": "Kerala Agricultural University · Maize",
+      "url": "https://kau.in/ml/book/maize-zea-mays",
+      "scope": "General optimum pH; source reports a wider range of 5.5–8.0. Confirm Bihar management locally."
+    },
+    {
+      "names": ["Mustard"],
+      "summary": "Mustard generally performs best on medium to heavy loam.",
+      "texture": "Medium or heavy loam; requirements vary between rapeseed-mustard species.",
+      "drainage": "Check drainage with the local crop advisory before planting.",
+      "ph": null,
+      "source": "Rajasthan Agriculture Competitiveness Project · Mustard value chain",
+      "url": "https://www.tourism.rajasthan.gov.in/content/dam/agriculture/Rajasthan%20Agricultural%20Competitiveness%20Project/valuechainreport/RACP_VC_Mustard.pdf",
+      "scope": "Rajasthan reference; not a Bihar fertilizer or variety recommendation."
+    },
+    {
+      "names": ["Chickpea (Gram)", "Chickpea", "Bengal Gram", "Gram"],
+      "summary": "Bengal gram prefers well-drained soils with medium fertility.",
+      "texture": "Sandy loam to deep loam.",
+      "drainage": "Inspect drainage before sowing; the reference specifies well-drained conditions.",
+      "ph": null,
+      "source": "Government of India · NFSM package of practices",
+      "url": "https://nfsm.gov.in/ReadyReckoner/NFSM_Package.pdf",
+      "scope": "General crop guidance; soil-test advice takes precedence."
+    }
+  ],
+  "bihar": {
+    "note": "Bihar has extensive alluvial soils. ICAR identifies drainage, salinity/alkalinity and sulphur, boron and zinc deficiencies as regional constraints. These are testing priorities, not confirmed problems in your field.",
+    "source": "ICAR · Bihar natural resource management",
+    "url": "https://www.icar.gov.in/en/node/17260"
+  },
+  "soilTest": {
+    "note": "Request pH, EC, organic carbon, available nitrogen, phosphorus and potassium, sulphur, zinc and boron on the soil report. Use the laboratory's crop-specific recommendation for nutrient quantities and amendment rates.",
+    "source": "Government of India · Soil Health Card teacher manual",
+    "url": "https://soilhealth.dac.gov.in/files/Manual/140723DraftTeacherManual_PDF.pdf"
+  }
+}

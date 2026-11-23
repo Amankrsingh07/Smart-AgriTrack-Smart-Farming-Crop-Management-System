@@ -1,0 +1,11 @@
+[Unit]
+Description=Run AgriTrack fertilizer forecast review twice daily
+
+[Timer]
+OnCalendar=*-*-* 05:30:00 Asia/Kolkata
+OnCalendar=*-*-* 15:30:00 Asia/Kolkata
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

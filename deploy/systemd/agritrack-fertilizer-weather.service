@@ -1,0 +1,14 @@
+[Unit]
+Description=AgriTrack fertilizer forecast review
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=agritrack
+WorkingDirectory=/srv/agritrack
+EnvironmentFile=/etc/agritrack/weather.env
+ExecStart=/usr/bin/node --import tsx scripts/check-fertilizer-weather.ts --write
+TimeoutStartSec=45min
+NoNewPrivileges=yes
+PrivateTmp=yes

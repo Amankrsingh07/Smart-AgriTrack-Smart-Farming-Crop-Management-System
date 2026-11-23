@@ -1,6 +1,8 @@
+import { WeatherForecastError, forecastNetworkFailure } from "./weather-diagnostics";
 import { indianStateNamesMatch } from "./india-location";
 
 export type OpenMeteoForecast = {
+  demo?: true;
   current: { time: string; temperature_2m: number; relative_humidity_2m: number; precipitation: number; wind_speed_10m: number; weather_code: number };
   daily: { time: string[]; temperature_2m_min: Array<number | null>; temperature_2m_max: Array<number | null>; precipitation_probability_max: Array<number | null>; precipitation_sum: Array<number | null>; et0_fao_evapotranspiration?: Array<number | null>; wind_speed_10m_max: Array<number | null>; weather_code: Array<number | null> };
   timezone?: string;
@@ -21,6 +23,7 @@ export function loadOfflineForecast(latitude = 30.3165, longitude = 78.0322): Op
   const temps = dates.map((_, i) => 24 + ((seed + i * 3) % 9));
   const rain = dates.map((_, i) => ((seed + i * 7) % 5 === 0 ? 8 : ((seed + i * 2) % 3)));
   return {
+    demo: true,
     current: { time: `${dates[0]}T09:00`, temperature_2m: temps[0], relative_humidity_2m: 58, precipitation: 0, wind_speed_10m: 8, weather_code: 1 },
     daily: { time: dates, temperature_2m_min: temps.map(t => t - 8), temperature_2m_max: temps, precipitation_probability_max: rain.map(v => v ? 55 : 10), precipitation_sum: rain, et0_fao_evapotranspiration: dates.map((_, i) => 3.2 + ((seed + i) % 9) / 10), wind_speed_10m_max: dates.map((_, i) => 10 + ((seed + i) % 12)), weather_code: rain.map(v => v ? 61 : 1) },
     timezone: "Asia/Kolkata", timezone_abbreviation: "IST", utc_offset_seconds: 19800,
@@ -28,23 +31,32 @@ export function loadOfflineForecast(latitude = 30.3165, longitude = 78.0322): Op
 }
 
 export async function loadOpenMeteoForecast(latitude: number, longitude: number): Promise<OpenMeteoForecast> {
-  if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) throw new Error("Invalid weather coordinates.");
+  if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 || !Number.isFinite(longitude) || longitude < -180 || longitude > 180) throw new WeatherForecastError("INVALID_COORDINATES", "Invalid weather coordinates.");
   const params = new URLSearchParams({
     latitude: String(latitude), longitude: String(longitude),
     current: "temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,weather_code",
     daily: "temperature_2m_min,temperature_2m_max,precipitation_probability_max,precipitation_sum,et0_fao_evapotranspiration,wind_speed_10m_max,weather_code",
     forecast_days: "7", timezone: "auto", wind_speed_unit: "kmh",
-    precipitation_unit: "mm",
+    precipitation_unit: "mm", temperature_unit: "celsius",
   });
   let response: Response;
   try { response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`, { cache: "no-store", signal: AbortSignal.timeout(12_000) }); }
-  catch { throw new Error("Open-Meteo forecast is unavailable because the weather service could not be reached."); }
-  if (!response.ok) throw new Error(`Open-Meteo forecast is unavailable (HTTP ${response.status}).`);
-  const payload = await response.json() as Partial<OpenMeteoForecast> & { error?: boolean; reason?: string };
+  catch (error) { throw forecastNetworkFailure(error); }
+  if (!response.ok) throw new WeatherForecastError(response.status === 429 ? "RATE_LIMITED" : "PROVIDER_HTTP", `Open-Meteo forecast is unavailable (HTTP ${response.status}).`, response.status);
+  let payload: Partial<OpenMeteoForecast> & { error?: boolean; reason?: string };
+  try { payload = await response.json(); } catch { throw new WeatherForecastError("INVALID_RESPONSE", "Open-Meteo returned a response that was not valid JSON."); }
   if (payload.error) throw new Error(payload.reason || "Weather service returned an error.");
   const data = payload as OpenMeteoForecast;
+  const current = data.current;
+  if (!current || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(current.time)
+    || !Number.isFinite(Date.parse(`${current.time}Z`))
+    || ![current.temperature_2m, current.relative_humidity_2m, current.precipitation, current.wind_speed_10m, current.weather_code].every(Number.isFinite)
+    || current.relative_humidity_2m < 0 || current.relative_humidity_2m > 100
+    || current.precipitation < 0 || current.wind_speed_10m < 0 || current.weather_code < 0) {
+    throw new WeatherForecastError("INVALID_RESPONSE", "Open-Meteo returned invalid or incomplete current conditions.");
+  }
   const daily = data.daily;
-  if (!data.current?.time || !Array.isArray(daily?.time) || !daily.time.length
+  if (!Array.isArray(daily?.time) || !daily.time.length
     || !Array.isArray(daily.precipitation_sum) || daily.precipitation_sum.length !== daily.time.length
     || !Array.isArray(daily.precipitation_probability_max) || daily.precipitation_probability_max.length !== daily.time.length
     || !Array.isArray(daily.temperature_2m_max) || daily.temperature_2m_max.length !== daily.time.length

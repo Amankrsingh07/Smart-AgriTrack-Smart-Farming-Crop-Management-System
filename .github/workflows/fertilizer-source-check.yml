@@ -1,0 +1,30 @@
+name: Fertilizer publication availability
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '24 3 * * 1'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      FERTILIZER_DATASET_REVIEW_DIR: .fertilizer-dataset-review
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/cache@v4
+        with:
+          path: .fertilizer-dataset-review/source-checks.json
+          key: fertilizer-source-check-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: fertilizer-source-check-
+      - run: npm ci
+      - run: node --import tsx scripts/manage-fertilizer-datasets.ts check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: publication-check
+          path: .fertilizer-dataset-review/*.json*
+          include-hidden-files: true

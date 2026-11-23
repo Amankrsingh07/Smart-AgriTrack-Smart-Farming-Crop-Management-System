@@ -50,6 +50,9 @@ enum WaterDataStatus {
 }
 
 model User {
+  protectionAssessments CropProtectionAssessment[]
+  protectionGrant CropProtectionExpertGrant?
+  fertilizerProducts FertilizerProduct[]
   id                              String                            @id @default(cuid())
   name                            String
   email                           String                            @unique
@@ -62,18 +65,19 @@ model User {
   expenses                        Expense[]
   budgets                         Budget[]
   irrigationSchedules             IrrigationSchedule[]
-  rainfallObservations             RainfallObservation[]
+  rainfallObservations            RainfallObservation[]
   marketQuotes                    MarketQuote[]
   inventoryThresholds             InventoryThreshold[]
   cropRecommendations             CropRecommendation[]
   fertilizerRecommendationHistory FertilizerRecommendationHistory[]
   alerts                          Alert[]
-  harvestNotifications           HarvestNotification[]
-  harvestReminderSettings        HarvestReminderSettings?
-  pushSubscriptions              PushSubscription[]
+  harvestNotifications            HarvestNotification[]
+  harvestReminderSettings         HarvestReminderSettings?
+  pushSubscriptions               PushSubscription[]
   cropCalendarEvents              CropCalendarEvent[]
   cropCalendars                   CropCalendar[]
-  cropCalendarNotifications      CropCalendarNotification[]
+  cropCalendarNotifications       CropCalendarNotification[]
+  assistantConversations          AssistantConversation[]
 }
 
 model FarmerProfile {
@@ -87,58 +91,60 @@ model FarmerProfile {
 }
 
 model Farm {
-  id          String    @id @default(cuid())
-  userId      String
-  name        String
-  state       String
-  district    String
-  village     String?
-  latitude    Decimal?  @db.Decimal(9, 6)
-  longitude   Decimal?  @db.Decimal(9, 6)
-  description String?   @db.Text
-  createdAt   DateTime  @default(now())
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fields      Field[]
+  id            String                            @id @default(cuid())
+  userId        String
+  name          String
+  state         String
+  district      String
+  village       String?
+  latitude      Decimal?                          @db.Decimal(9, 6)
+  longitude     Decimal?                          @db.Decimal(9, 6)
+  description   String?                           @db.Text
+  createdAt     DateTime                          @default(now())
+  user          User                              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fields        Field[]
   cropCalendars CropCalendar[]
-  expenses    Expense[]
+  expenses      Expense[]
+  soilTests     FertilizerRecommendationHistory[]
 
   @@index([userId])
 }
 
 model Field {
-  id                String      @id @default(cuid())
+  id                String                            @id @default(cuid())
   farmId            String
   name              String
-  area              Decimal     @db.Decimal(10, 2)
-  areaUnit          String      @default("acre")
+  area              Decimal                           @db.Decimal(10, 2)
+  areaUnit          String                            @default("acre")
   soilType          String
   soilTexture       String?
   irrigationMethod  String
   irrigationSource  String?
-  waterAvailability WaterLevel  @default(MEDIUM)
-  soilPh            Decimal?    @db.Decimal(4, 2)
-  notes             String?     @db.Text
-  farm              Farm        @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  waterAvailability WaterLevel                        @default(MEDIUM)
+  soilPh            Decimal?                          @db.Decimal(4, 2)
+  notes             String?                           @db.Text
+  farm              Farm                              @relation(fields: [farmId], references: [id], onDelete: Cascade)
   cropCycles        CropCycle[]
   expenses          Expense[]
+  soilTests         FertilizerRecommendationHistory[]
 
   @@index([farmId])
 }
 
 model Crop {
-  id                    String                    @id @default(cuid())
-  name                  String                    @unique
+  id                    String                            @id @default(cuid())
+  name                  String                            @unique
   seasons               String
-  soilTypes             String                    @db.Text
+  soilTypes             String                            @db.Text
   waterNeed             WaterLevel
   minRainfallMm         Int?
   maxRainfallMm         Int?
-  minTempC              Decimal?                  @db.Decimal(4, 1)
-  maxTempC              Decimal?                  @db.Decimal(4, 1)
-  description           String?                   @db.Text
+  minTempC              Decimal?                          @db.Decimal(4, 1)
+  maxTempC              Decimal?                          @db.Decimal(4, 1)
+  description           String?                           @db.Text
   source                String?
-  sourceUrl             String?                   @db.Text
-  illustrative          Boolean                   @default(true)
+  sourceUrl             String?                           @db.Text
+  illustrative          Boolean                           @default(true)
   cycles                CropCycle[]
   locationSuitabilities CropLocationSuitability[]
   cropSeasons           CropSeason[]
@@ -148,6 +154,7 @@ model Crop {
   districtSuitabilities CropDistrictSuitability[]
   recommendationItems   CropRecommendationItem[]
   calendars             CropCalendar[]
+  soilTests             FertilizerRecommendationHistory[]
 }
 
 model State {
@@ -250,13 +257,13 @@ model CropClimateRequirement {
 }
 
 model CropWaterStage {
-  id                        String          @id @default(cuid())
-  cropId                    String
-  cropSeasonId              String?
-  stageName                 String
-  startDay                  Int?
-  endDay                    Int?
-  cropCoefficient           Decimal?        @db.Decimal(5, 3)
+  id                         String          @id @default(cuid())
+  cropId                     String
+  cropSeasonId               String?
+  stageName                  String
+  startDay                   Int?
+  endDay                     Int?
+  cropCoefficient            Decimal?        @db.Decimal(5, 3)
   rootDepthMeters            Decimal?        @db.Decimal(5, 2)
   allowableDepletionFraction Decimal?        @db.Decimal(5, 3)
   publicationDate            DateTime?       @db.Date
@@ -264,23 +271,23 @@ model CropWaterStage {
   publicationYear            Int?
   tableReference             String?         @db.VarChar(120)
   verifiedAt                 DateTime?       @db.Date
-  isFullSeasonTotal         Boolean         @default(false)
-  waterMeasure              WaterMeasure?
-  waterRequirementMm        Decimal?        @db.Decimal(8, 2)
-  minimumWaterRequirementMm Decimal?        @db.Decimal(8, 2)
-  maximumWaterRequirementMm Decimal?        @db.Decimal(8, 2)
-  source                    String?
-  sourceUrl                 String?         @db.Text
-  notes                     String?         @db.Text
-  dataStatus                WaterDataStatus @default(ESTIMATED)
-  geographicScope           String?         @db.VarChar(160)
-  irrigationMethod          String?         @db.VarChar(40)
-  supportingSource          String?         @db.VarChar(255)
-  supportingSourceUrl       String?         @db.Text
-  createdAt                 DateTime        @default(now())
-  updatedAt                 DateTime        @updatedAt
-  crop                      Crop            @relation(fields: [cropId], references: [id], onDelete: Cascade)
-  cropSeason                CropSeason?     @relation(fields: [cropSeasonId, cropId], references: [id, cropId], onDelete: Cascade)
+  isFullSeasonTotal          Boolean         @default(false)
+  waterMeasure               WaterMeasure?
+  waterRequirementMm         Decimal?        @db.Decimal(8, 2)
+  minimumWaterRequirementMm  Decimal?        @db.Decimal(8, 2)
+  maximumWaterRequirementMm  Decimal?        @db.Decimal(8, 2)
+  source                     String?
+  sourceUrl                  String?         @db.Text
+  notes                      String?         @db.Text
+  dataStatus                 WaterDataStatus @default(ESTIMATED)
+  geographicScope            String?         @db.VarChar(160)
+  irrigationMethod           String?         @db.VarChar(40)
+  supportingSource           String?         @db.VarChar(255)
+  supportingSourceUrl        String?         @db.Text
+  createdAt                  DateTime        @default(now())
+  updatedAt                  DateTime        @updatedAt
+  crop                       Crop            @relation(fields: [cropId], references: [id], onDelete: Cascade)
+  cropSeason                 CropSeason?     @relation(fields: [cropSeasonId, cropId], references: [id, cropId], onDelete: Cascade)
 
   @@unique([cropId, cropSeasonId, stageName, waterMeasure])
   @@index([cropId, startDay])
@@ -360,33 +367,41 @@ model CropLocationSuitability {
 }
 
 model CropCycle {
-  id                  String               @id @default(cuid())
-  fieldId             String
-  cropId              String
-  cropVariety         String?              @db.VarChar(120)
-  season              Season
-  sowingDate          DateTime?
-  expectedHarvestDate DateTime?
-  actualHarvestDate   DateTime?
-  cropDurationDays    Int?
+  assistantConversations AssistantConversation[]
+  protectionAssessments CropProtectionAssessment[]
+  fertilizerPlans FertilizerPlan[]
+  fertilizerApplications FertilizerApplication[]
+  fertilizerAnalyses FertilizerAnalysis[]
+  id                   String                            @id @default(cuid())
+  fieldId              String
+  cropId               String
+  cropVariety          String?                           @db.VarChar(120)
+  season               Season
+  sowingDate           DateTime?
+  expectedHarvestDate  DateTime?
+  expectedHarvestQuantity Decimal? @db.Decimal(12, 3)
+  expectedHarvestUnit String? @db.VarChar(24)
+  actualHarvestDate    DateTime?
+  cropDurationDays     Int?
   growthStageUpdatedAt DateTime?
-  status              CropStatus           @default(PLANNED)
-  growthStage         String?              @db.VarChar(60)
-  seedQuantity        Decimal?             @db.Decimal(10, 2)
-  seedCost            Decimal?             @db.Decimal(12, 2)
-  waterRequirement    String?
-  notes               String?              @db.Text
-  createdAt           DateTime             @default(now())
-  field               Field                @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-  crop                Crop                 @relation(fields: [cropId], references: [id])
-  expenses            Expense[]
-  productions         Production[]
-  sales               Sale[]
-  schedules           IrrigationSchedule[]
+  status               CropStatus                        @default(PLANNED)
+  growthStage          String?                           @db.VarChar(60)
+  seedQuantity         Decimal?                          @db.Decimal(10, 2)
+  seedCost             Decimal?                          @db.Decimal(12, 2)
+  waterRequirement     String?
+  notes                String?                           @db.Text
+  createdAt            DateTime                          @default(now())
+  field                Field                             @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  crop                 Crop                              @relation(fields: [cropId], references: [id])
+  expenses             Expense[]
+  productions          Production[]
+  sales                Sale[]
+  schedules            IrrigationSchedule[]
   rainfallObservations RainfallObservation[]
-  harvestNotification HarvestNotification?
+  harvestNotification  HarvestNotification?
   calendarEvents       CropCalendarEvent[]
   cropCalendar         CropCalendar?
+  soilTests            FertilizerRecommendationHistory[]
 
   @@index([fieldId, status])
 }
@@ -436,25 +451,25 @@ model CropCalendar {
 }
 
 model CropCalendarActivity {
-  id                   String       @id @default(cuid())
+  id                   String                     @id @default(cuid())
   calendarId           String
-  activityKey          String       @db.VarChar(120)
-  activityName         String       @db.VarChar(160)
-  activityType         String       @db.VarChar(32)
-  growthStage          String?      @db.VarChar(80)
-  scheduledDate        DateTime     @db.Date
+  activityKey          String                     @db.VarChar(120)
+  activityName         String                     @db.VarChar(160)
+  activityType         String                     @db.VarChar(32)
+  growthStage          String?                    @db.VarChar(80)
+  scheduledDate        DateTime                   @db.Date
   actualCompletionDate DateTime?
-  description          String       @db.Text
-  recommendation       String?      @db.Text
-  status               String       @default("PENDING") @db.VarChar(16)
-  isWeatherAdjusted    Boolean      @default(false)
-  isManuallyModified   Boolean      @default(false)
-  notes                String?      @db.VarChar(500)
-  source               String?      @db.VarChar(255)
-  sourceUrl            String?      @db.Text
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  calendar             CropCalendar @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+  description          String                     @db.Text
+  recommendation       String?                    @db.Text
+  status               String                     @default("PENDING") @db.VarChar(16)
+  isWeatherAdjusted    Boolean                    @default(false)
+  isManuallyModified   Boolean                    @default(false)
+  notes                String?                    @db.VarChar(500)
+  source               String?                    @db.VarChar(255)
+  sourceUrl            String?                    @db.Text
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+  calendar             CropCalendar               @relation(fields: [calendarId], references: [id], onDelete: Cascade)
   notifications        CropCalendarNotification[]
 
   @@unique([calendarId, activityKey])
@@ -465,11 +480,11 @@ model CropCalendarNotification {
   id               String               @id @default(cuid())
   userId           String
   activityId       String
-  notificationDate DateTime              @db.Date
-  message          String                @db.VarChar(500)
-  isRead           Boolean               @default(false)
-  createdAt        DateTime              @default(now())
-  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notificationDate DateTime             @db.Date
+  message          String               @db.VarChar(500)
+  isRead           Boolean              @default(false)
+  createdAt        DateTime             @default(now())
+  user             User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   activity         CropCalendarActivity @relation(fields: [activityId], references: [id], onDelete: Cascade)
 
   @@unique([activityId, notificationDate])
@@ -477,6 +492,7 @@ model CropCalendarNotification {
 }
 
 model Expense {
+  fertilizerApplication FertilizerApplication?
   id               String          @id @default(cuid())
   userId           String
   farmId           String
@@ -508,17 +524,44 @@ model Budget {
 }
 
 model Production {
-  id          String    @id @default(cuid())
-  cropCycleId String
-  harvestDate DateTime
-  quantity    Decimal   @db.Decimal(12, 3)
-  unit        String
-  grade       String?
-  notes       String?   @db.Text
-  storageDetails String? @db.Text
-  yieldPerAcre Decimal? @db.Decimal(12, 3)
-  cropCycle   CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Cascade)
-  sales       Sale[]
+  id             String              @id @default(cuid())
+  cropCycleId    String
+  harvestDate    DateTime
+  quantity       Decimal             @db.Decimal(12, 3)
+  unit           String
+  grade          String?
+  notes          String?             @db.Text
+  storageDetails String?             @db.Text
+  yieldPerAcre   Decimal?            @db.Decimal(12, 3)
+  cropCycle      CropCycle           @relation(fields: [cropCycleId], references: [id], onDelete: Cascade)
+  sales          Sale[]
+  lossAssessment CropLossAssessment?
+  storageInspections StorageInspection[]
+}
+
+model StorageInspection {
+  productionId String
+  version Int
+  inspectedOn DateTime @db.Date
+  findings Json
+  createdAt DateTime @default(now())
+  production Production @relation(fields: [productionId], references: [id], onDelete: Restrict)
+
+  attachments StorageInspectionAttachment[]
+
+  @@id([productionId, version])
+}
+
+model StorageInspectionAttachment {
+  id String @id @default(cuid())
+  productionId String
+  version Int
+  filename String
+  mediaType String
+  content Bytes @db.MediumBlob
+  inspection StorageInspection @relation(fields: [productionId, version], references: [productionId, version], onDelete: Cascade)
+
+  @@index([productionId, version])
 }
 
 model Sale {
@@ -580,13 +623,13 @@ model IrrigationSchedule {
   soilMoistureStatus            String?   @db.VarChar(12)
   lastWateredAt                 DateTime? @db.Date
   soilMoistureSource            String?   @db.VarChar(24)
-  observedRainfallMm             Decimal?  @db.Decimal(8, 2)
+  observedRainfallMm            Decimal?  @db.Decimal(8, 2)
   advisoryStatus                String?   @db.VarChar(24)
   isCheckOnly                   Boolean   @default(false)
   recommendedQuantityLiters     Decimal?  @db.Decimal(14, 2)
   actualQuantityLiters          Decimal?  @db.Decimal(14, 2)
-  actualQuantityUnit             String?   @db.VarChar(16)
-  status                         String?   @db.VarChar(16)
+  actualQuantityUnit            String?   @db.VarChar(16)
+  status                        String?   @db.VarChar(16)
   netQuantityLiters             Decimal?  @db.Decimal(14, 2)
   areaSquareMeters              Decimal?  @db.Decimal(12, 2)
   areaAcres                     Decimal?  @db.Decimal(10, 4)
@@ -612,51 +655,73 @@ model IrrigationSchedule {
 }
 
 model RainfallObservation {
-  id                    String    @id @default(cuid())
-  clientTransactionId   String?   @unique
-  userId                String
-  cropCycleId           String
-  rainfallDate          DateTime  @db.Date
-  moistureMeasuredDate  DateTime? @db.Date
-  soilFieldCapacityPercent Decimal? @db.Decimal(5, 2)
-  soilCurrentMoisturePercent Decimal? @db.Decimal(5, 2)
-  soilRootZoneDepthM     Decimal?  @db.Decimal(5, 2)
-  grossRainfallMm       Decimal   @db.Decimal(8, 2)
-  runoffLossMm          Decimal?  @db.Decimal(8, 2)
-  drainageLossMm        Decimal?  @db.Decimal(8, 2)
-  effectiveRainfallMm   Decimal?  @db.Decimal(8, 2)
-  source                String    @db.VarChar(32)
-  calculationStatus    String    @db.VarChar(48)
-  notes                 String?   @db.VarChar(500)
-  recordedAt            DateTime  @default(now())
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cropCycle             CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Cascade)
+  id                         String    @id @default(cuid())
+  clientTransactionId        String?   @unique
+  userId                     String
+  cropCycleId                String
+  rainfallDate               DateTime  @db.Date
+  moistureMeasuredDate       DateTime? @db.Date
+  soilFieldCapacityPercent   Decimal?  @db.Decimal(5, 2)
+  soilCurrentMoisturePercent Decimal?  @db.Decimal(5, 2)
+  soilRootZoneDepthM         Decimal?  @db.Decimal(5, 2)
+  grossRainfallMm            Decimal   @db.Decimal(8, 2)
+  runoffLossMm               Decimal?  @db.Decimal(8, 2)
+  drainageLossMm             Decimal?  @db.Decimal(8, 2)
+  effectiveRainfallMm        Decimal?  @db.Decimal(8, 2)
+  source                     String    @db.VarChar(32)
+  calculationStatus          String    @db.VarChar(48)
+  notes                      String?   @db.VarChar(500)
+  recordedAt                 DateTime  @default(now())
+  user                       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cropCycle                  CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Cascade)
 
   @@index([userId, rainfallDate])
   @@index([cropCycleId, rainfallDate])
 }
 
 model FertilizerRecommendationHistory {
-  id        String   @id @default(cuid())
-  userId    String
-  input     Json
-  result    Json
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String     @id @default(cuid())
+  userId      String
+  input       Json
+  result      Json
+  createdAt   DateTime   @default(now())
+  sampleDate  DateTime?  @db.Date
+  farmId      String?
+  fieldId     String?
+  cropId      String?
+  cropCycleId String?
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  farm        Farm?      @relation(fields: [farmId], references: [id], onDelete: SetNull)
+  field       Field?     @relation(fields: [fieldId], references: [id], onDelete: SetNull)
+  crop        Crop?      @relation(fields: [cropId], references: [id], onDelete: SetNull)
+  cropCycle   CropCycle? @relation(fields: [cropCycleId], references: [id], onDelete: SetNull)
+
+  attachments SoilReportAttachment[]
 
   @@index([userId, createdAt])
+  @@index([userId, fieldId, sampleDate])
+  @@index([farmId])
+  @@index([fieldId])
+  @@index([cropId])
+  @@index([cropCycleId])
 }
 
 model Alert {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   title     String
-  message   String   @db.Text
+  message   String    @db.Text
   href      String?
   dedupeKey String?
   readAt    DateTime?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completedAt DateTime?
+  cropName String?
+  productionId String?
+  dueOn DateTime? @db.Date
+  priority String?
+  actionId String?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, dedupeKey])
   @@index([userId, readAt, createdAt])
@@ -688,12 +753,12 @@ model HarvestNotification {
 }
 
 model HarvestReminderSettings {
-  id                   String   @id @default(cuid())
-  userId               String   @unique
-  reminderIntervalHours Int     @default(24)
-  pushEnabled          Boolean  @default(true)
-  updatedAt            DateTime @updatedAt
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  reminderIntervalHours Int      @default(24)
+  pushEnabled           Boolean  @default(true)
+  updatedAt             DateTime @updatedAt
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PushSubscription {
@@ -710,3 +775,236 @@ model PushSubscription {
   @@index([userId])
 }
 
+// Private original documents. Ownership and field/cycle links inherit from report.
+model SoilReportAttachment {
+  id        String                          @id @default(cuid())
+  reportId  String
+  filename  String                          @db.VarChar(200)
+  mediaType String                          @db.VarChar(40)
+  size      Int
+  sha256    String                          @db.Char(64)
+  content   Bytes                           @db.LongBlob
+  createdAt DateTime                        @default(now())
+  report    FertilizerRecommendationHistory @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, createdAt])
+}
+
+// One reconciled allocation per existing harvest lot; no duplicate production.
+model CropLossAssessment {
+  id                  String     @id @default(cuid())
+  productionId        String     @unique
+  assessedDate        DateTime   @db.Date
+  marketable          Decimal    @db.Decimal(12, 3)
+  damaged             Decimal    @db.Decimal(12, 3)
+  wasted              Decimal    @db.Decimal(12, 3)
+  unit                String     @db.VarChar(24)
+  harvestedSnapshot   Decimal    @db.Decimal(12, 3)
+  quantitiesConfirmed Boolean    @default(false)
+  evidence            String     @db.VarChar(500)
+  pricePerUnit        Decimal?   @db.Decimal(12, 2)
+  damagedRecovery     Decimal?   @db.Decimal(14, 2)
+  priceEvidence       String?    @db.VarChar(500)
+  priceConfirmed      Boolean    @default(false)
+  cause               String     @db.VarChar(80)
+  notes               String?    @db.Text
+  version             Int        @default(1)
+  revisions           Json
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  production          Production @relation(fields: [productionId], references: [id], onDelete: Restrict)
+
+  @@index([assessedDate])
+}
+
+// Additive decision-support records. Existing soil history remains authoritative.
+model FertilizerReference {
+  id String @id
+  metadata Json
+  createdAt DateTime @default(now())
+  plans FertilizerPlan[]
+}
+
+model FertilizerPlan {
+  id String @id @default(cuid())
+  cropCycleId String
+  referenceId String
+  input Json
+  result Json
+  createdAt DateTime @default(now())
+  cropCycle CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Restrict)
+  reference FertilizerReference @relation(fields: [referenceId], references: [id], onDelete: Restrict)
+  applications FertilizerApplication[]
+  @@index([cropCycleId, createdAt])
+}
+
+model FertilizerProduct {
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  id String @id @default(cuid())
+  ownerId String
+  name String @db.VarChar(100)
+  composition Json
+  source String @db.VarChar(500)
+  manufacturer String? @db.VarChar(120)
+  packSizeKg Decimal? @db.Decimal(10,3)
+  organic Boolean @default(false)
+  createdAt DateTime @default(now())
+  prices FertilizerPrice[]
+  stockMovements FertilizerStockMovement[]
+  @@index([ownerId])
+}
+
+model FertilizerStockMovement {
+  id String @id @default(cuid())
+  productId String
+  requestKey String @db.VarChar(64)
+  kind String @db.VarChar(16)
+  deltaKg Decimal @db.Decimal(12,3)
+  occurredOn DateTime @db.Date
+  batchNumber String? @db.VarChar(80)
+  supplier String? @db.VarChar(120)
+  note String? @db.VarChar(300)
+  totalCost Decimal? @db.Decimal(12,2)
+  recordedAt DateTime @default(now())
+  product FertilizerProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([productId, requestKey])
+  @@index([productId, occurredOn])
+}
+
+model FertilizerPrice {
+  id String @id @default(cuid())
+  productId String
+  price Decimal @db.Decimal(12,2)
+  bagKg Decimal @db.Decimal(10,3)
+  recordedAt DateTime @default(now())
+  product FertilizerProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
+  @@index([productId, recordedAt])
+}
+
+model FertilizerApplication {
+  id String @id @default(cuid())
+  cropCycleId String
+  planId String?
+  requestKey String @unique @db.VarChar(191)
+  slot String? @unique @db.VarChar(191)
+  product String @db.VarChar(100)
+  quantityKg Decimal @db.Decimal(12,3)
+  composition Json
+  scheduledDate DateTime @db.Date
+  appliedDate DateTime? @db.Date
+  offsetDays Int?
+  status String @default("PLANNED") @db.VarChar(16)
+  method String? @db.VarChar(120)
+  cost Decimal? @db.Decimal(12,2)
+  expenseId String? @unique
+  notes String? @db.VarChar(1000)
+  version Int @default(1)
+  revisions Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cropCycle CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Restrict)
+  plan FertilizerPlan? @relation(fields: [planId], references: [id], onDelete: Restrict)
+  expense Expense? @relation(fields: [expenseId], references: [id], onDelete: Restrict)
+  @@index([cropCycleId, status, scheduledDate])
+}
+
+model FertilizerAnalysis {
+  id String @id @default(cuid())
+  cropCycleId String
+  kind String @db.VarChar(16)
+  metadata Json
+  image Bytes? @db.LongBlob
+  mediaType String? @db.VarChar(40)
+  createdAt DateTime @default(now())
+  cropCycle CropCycle @relation(fields: [cropCycleId], references: [id], onDelete: Restrict)
+  @@index([cropCycleId, createdAt])
+}
+
+model CropProtectionAssessment {
+  assignedExpertId String? @db.VarChar(191)
+  id String @id @default(cuid())
+  userId String
+  cropCycleId String?
+  cropName String @db.VarChar(120)
+  input Json
+  findings Json
+  reviews CropProtectionReview[]
+  recoveryStatus String @default("Expert review required") @db.VarChar(40)
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+  cropCycle CropCycle? @relation(fields: [cropCycleId], references: [id], onDelete: SetNull)
+  photos CropProtectionPhoto[]
+  followups CropProtectionFollowup[]
+  @@index([userId, createdAt])
+}
+model CropProtectionPhoto {
+  id String @id @default(cuid())
+  assessmentId String
+  kind String @db.VarChar(40)
+  mediaType String @db.VarChar(30)
+  bytes Bytes @db.LongBlob
+  assessment CropProtectionAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  @@index([assessmentId])
+}
+model CropProtectionFollowup {
+  id String @id @default(cuid())
+  assessmentId String
+  status String @db.VarChar(40)
+  notes String @db.Text
+  createdAt DateTime @default(now())
+  assessment CropProtectionAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  @@index([assessmentId, createdAt])
+}
+
+model CropProtectionExpertGrant {
+  userId String @id
+  role String @db.VarChar(40)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model CropProtectionReview {
+  id String @id @default(cuid())
+  assessmentId String
+  reviewerId String @db.VarChar(191)
+  reviewerName String @db.VarChar(191)
+  observations String @db.Text
+  suspectedCause String @db.VarChar(500)
+  verificationStatus String @db.VarChar(60)
+  laboratoryEvidence Json
+  createdAt DateTime @default(now())
+  assessment CropProtectionAssessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  @@index([assessmentId, createdAt])
+}
+
+model AssistantConversation {
+  id          String             @id @default(cuid())
+  userId      String
+  cropCycleId String?
+  title       String             @db.VarChar(180)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cropCycle   CropCycle?         @relation(fields: [cropCycleId], references: [id], onDelete: SetNull)
+  messages    AssistantMessage[]
+
+  @@index([userId, updatedAt])
+  @@index([cropCycleId])
+}
+
+model AssistantMessage {
+  id             String               @id @default(cuid())
+  conversationId String
+  sequence       Int
+  requestId      String?              @db.VarChar(80)
+  role           String               @db.VarChar(12)
+  content        String               @db.Text
+  mode           String?              @db.VarChar(12)
+  advice         Json?
+  sources        Json?
+  createdAt      DateTime             @default(now())
+  conversation  AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, sequence])
+  @@unique([conversationId, sequence])
+  @@unique([conversationId, requestId])
+}

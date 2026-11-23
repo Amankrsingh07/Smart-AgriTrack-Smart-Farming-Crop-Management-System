@@ -1,0 +1,515 @@
+{
+  "version": "2026-11-14.3-basis",
+  "standards": [
+    {
+      "id": "PAU_PUNJAB_2025",
+      "name": "PAU Punjab laboratory report interpretation · Rabi 2025–26",
+      "states": [
+        "Punjab"
+      ],
+      "source": "Punjab Agricultural University · Package of Practices for Crops of Punjab, Rabi 2025–26, printed pp. 106–108",
+      "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf",
+      "methodRequirement": "The publication does not specify extraction methods here. Apply only to a laboratory report whose issuing lab confirms this PAU interpretation applies to its methods; never assume equivalence for Olsen, Bray, Mehlich or total nutrient tests.",
+      "phosphorus": {
+        "basis": "P",
+        "unit": "kg/acre",
+        "lowBelow": 5,
+        "mediumThrough": 9,
+        "highThrough": 20
+      },
+      "potassium": {
+        "basis": "K2O",
+        "unit": "kg/acre",
+        "deficientBelow": 55,
+        "sufficientAbove": 55
+      },
+      "organicCarbon": {
+        "basis": "OC",
+        "unit": "%",
+        "lowBelow": 0.4,
+        "mediumThrough": 0.75
+      },
+      "nitrogen": null,
+      "note": "OC bands are the source's nitrogen-availability index, not a direct N assay. Direct nitrogen readings are not classified by this standard. At exactly 55 kg K2O/acre the published strict inequalities leave the K class unspecified. No fertilizer adjustment is calculated from these classes.",
+      "version": "PAU-2025-26-reviewed-2026-11-14",
+      "scope": "Regional publication; analytical method mapping not established",
+      "classificationEnabled": false,
+      "rules": [],
+      "reviewNote": "Retained for history and source lookup. Arbitrary method text or a confirmation checkbox cannot establish analytical equivalence. New automated classification is disabled until a source validates the methods."
+    },
+    {
+      "version": "GOI-2011-basis-reviewed-2026-11-14",
+      "classificationEnabled": true,
+      "source": "Government of India · Soil Testing in India, January 2011, Table 1 and analytical methods",
+      "url": "https://biharsoilhealth.in/documents/manualgoi.pdf",
+      "scope": "Indicative national laboratory screening; not a state-calibrated field diagnosis or fertilizer prescription",
+      "methodRequirement": "Requires issuing laboratory identity, exact supported analytical method, explicit nutrient basis/unit and laboratory confirmation that this GOI baseline applies to this sample. Olsen P requires a recorded alkaline soil:water 1:2.5 pH. Hosting or procedural adoption alone does not prove local calibration.",
+      "note": "The manual warns that these broad classes need local refinement. Ratings describe this confirmed baseline only, not crop response. No dose adjustment or composite health score is inferred.",
+      "rules": [
+        {
+          "parameter": "nitrogen",
+          "methods": [
+            "ALKALINE_KMNO4_N"
+          ],
+          "basis": "N",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 280,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 280,
+              "max": 560,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 560,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true
+        },
+        {
+          "parameter": "phosphorus",
+          "methods": [
+            "OLSEN_P"
+          ],
+          "basis": "P",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 10,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 10,
+              "max": 24.6,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 24.6,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true,
+          "requiresAlkalineWaterPh": true,
+          "allowBasisConversion": true
+        },
+        {
+          "parameter": "potassium",
+          "methods": [
+            "NEUTRAL_1N_NH4OAC_K"
+          ],
+          "basis": "K",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 108,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 108,
+              "max": 280,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 280,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true,
+          "allowBasisConversion": true
+        },
+        {
+          "parameter": "organicCarbon",
+          "methods": [
+            "WALKLEY_BLACK_OC"
+          ],
+          "basis": "OC",
+          "unit": "%",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 0.5,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 0.5,
+              "max": 0.75,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 0.75,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true
+        }
+      ],
+      "id": "BIHAR_CSTL_GOI_2011",
+      "name": "Bihar CSTL-hosted GOI 2011 · lab-confirmed indicative baseline",
+      "states": [
+        "Bihar"
+      ],
+      "regionalSource": "Bihar Central Soil Testing Laboratory, Department of Agriculture",
+      "regionalUrl": "https://www.biharsoilhealth.in/index.php"
+    },
+    {
+      "version": "GOI-2011-basis-reviewed-2026-11-14",
+      "classificationEnabled": true,
+      "source": "Government of India · Soil Testing in India, January 2011, Table 1 and analytical methods",
+      "url": "https://biharsoilhealth.in/documents/manualgoi.pdf",
+      "scope": "Indicative national laboratory screening; not a state-calibrated field diagnosis or fertilizer prescription",
+      "methodRequirement": "Requires issuing laboratory identity, exact supported analytical method, explicit nutrient basis/unit and laboratory confirmation that this GOI baseline applies to this sample. Olsen P requires a recorded alkaline soil:water 1:2.5 pH. Hosting or procedural adoption alone does not prove local calibration.",
+      "note": "The manual warns that these broad classes need local refinement. Ratings describe this confirmed baseline only, not crop response. No dose adjustment or composite health score is inferred.",
+      "rules": [
+        {
+          "parameter": "nitrogen",
+          "methods": [
+            "ALKALINE_KMNO4_N"
+          ],
+          "basis": "N",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 280,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 280,
+              "max": 560,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 560,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true
+        },
+        {
+          "parameter": "phosphorus",
+          "methods": [
+            "OLSEN_P"
+          ],
+          "basis": "P",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 10,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 10,
+              "max": 24.6,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 24.6,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true,
+          "requiresAlkalineWaterPh": true,
+          "allowBasisConversion": true
+        },
+        {
+          "parameter": "potassium",
+          "methods": [
+            "NEUTRAL_1N_NH4OAC_K"
+          ],
+          "basis": "K",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 108,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 108,
+              "max": 280,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 280,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true,
+          "allowBasisConversion": true
+        },
+        {
+          "parameter": "organicCarbon",
+          "methods": [
+            "WALKLEY_BLACK_OC"
+          ],
+          "basis": "OC",
+          "unit": "%",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 0.5,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 0.5,
+              "max": 0.75,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 0.75,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "sourceSection": "GOI Methods Manual (2011), Table 1, printed p.33; analytical procedures pp.84–98",
+          "classificationEnabled": true
+        }
+      ],
+      "id": "ODISHA_GOI_2024",
+      "name": "Odisha GOI-method SOP · lab-confirmed indicative baseline",
+      "states": [
+        "Odisha"
+      ],
+      "regionalSource": "Odisha Department of Agriculture · Soil Testing SOP 2024–25, p.46",
+      "regionalUrl": "https://agri.odisha.gov.in/sites/default/files/2025-03/SOP%20for%20Soil%20Testing%20for%202024-25.pdf"
+    },
+    {
+      "id": "KERALA_SHIS_REVIEW_2026",
+      "name": "Kerala Soil Health Information System · reference-only review",
+      "states": [
+        "Kerala"
+      ],
+      "version": "SHIS-reviewed-2026-11-14",
+      "classificationEnabled": false,
+      "source": "Government of Kerala · Soil fertility classes",
+      "url": "https://keralasoilfertility.net/en/soil_fertility_classes.jsp",
+      "scope": "State laboratory ratings; extraction methods and nutrient-basis mapping not verified here",
+      "methodRequirement": "Do not infer a method from a state name or a confirmation checkbox.",
+      "note": "Thresholds retained for provenance, but new classifications remain Unknown until compatible analytical-method and basis references are verified.",
+      "rules": [
+        {
+          "parameter": "organicCarbon",
+          "methods": [],
+          "basis": "OC",
+          "unit": "%",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 0.7,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "Medium",
+              "min": 0.7,
+              "max": 1.5,
+              "minInclusive": false,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 1.5,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "classificationEnabled": false
+        },
+        {
+          "parameter": "phosphorus",
+          "methods": [],
+          "basis": "UNVERIFIED",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 11,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 11,
+              "max": 24,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 24,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "classificationEnabled": false
+        },
+        {
+          "parameter": "potassium",
+          "methods": [],
+          "basis": "UNVERIFIED",
+          "unit": "kg/ha",
+          "bands": [
+            {
+              "label": "Low",
+              "min": 0,
+              "max": 116,
+              "minInclusive": true,
+              "maxInclusive": false
+            },
+            {
+              "label": "Medium",
+              "min": 116,
+              "max": 275,
+              "minInclusive": true,
+              "maxInclusive": true
+            },
+            {
+              "label": "High",
+              "min": 275,
+              "max": null,
+              "minInclusive": false,
+              "maxInclusive": false
+            }
+          ],
+          "classificationEnabled": false
+        }
+      ]
+    }
+  ],
+  "phSource": {
+    "source": "Government of India · Soil Health Card teacher manual, pH interpretation table (soil:water 1:2.5)",
+    "url": "https://soilhealth.dac.gov.in/files/Manual/Updated_140723FinalDraftManualClasses6_8.pdf",
+    "note": "Published intervals are recorded literally; gaps between rounded classes are not silently filled. Other pH methods are not classified against this table.",
+    "id": "GOI_SHC_WATER_PH_2023",
+    "version": "2023-reviewed-2026-11-14",
+    "method": "WATER_1_2_5",
+    "region": "India; general soil reaction, not crop optimum",
+    "unit": "pH",
+    "basis": "soil reaction",
+    "bands": [
+      {
+        "label": "Strongly acidic",
+        "min": 0,
+        "max": 4.5,
+        "minInclusive": true,
+        "maxInclusive": false
+      },
+      {
+        "label": "Moderately acidic",
+        "min": 4.6,
+        "max": 5.5,
+        "minInclusive": true,
+        "maxInclusive": true
+      },
+      {
+        "label": "Slightly acidic",
+        "min": 5.6,
+        "max": 6.5,
+        "minInclusive": true,
+        "maxInclusive": true
+      },
+      {
+        "label": "Neutral",
+        "min": 6.6,
+        "max": 7.5,
+        "minInclusive": true,
+        "maxInclusive": true
+      },
+      {
+        "label": "Slightly alkaline",
+        "min": 7.6,
+        "max": 8.5,
+        "minInclusive": true,
+        "maxInclusive": true
+      },
+      {
+        "label": "Moderately alkaline",
+        "min": 8.6,
+        "max": 9.5,
+        "minInclusive": true,
+        "maxInclusive": true
+      },
+      {
+        "label": "Strongly alkaline",
+        "min": 9.5,
+        "max": 14,
+        "minInclusive": false,
+        "maxInclusive": true
+      }
+    ]
+  }
+}

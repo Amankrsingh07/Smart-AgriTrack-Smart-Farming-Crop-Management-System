@@ -8,6 +8,7 @@ import MarketSearch from "./market-search";
 import { fetchLiveMandi } from "@/lib/live-mandi";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { indiaDateKey } from "@/lib/crop-cycle-status";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type SearchParams = {
   error?: string;
@@ -15,7 +16,6 @@ type SearchParams = {
   commodity?: string;
   state?: string;
   district?: string;
-  arrivalDate?: string;
   search?: string;
   page?: string;
   source?: string;
@@ -24,10 +24,6 @@ type SearchParams = {
 const PAGE_SIZE = 500;
 type LocalMandiRow = { State?: string; District?: string; Market?: string; Commodity?: string; Arrival_Date?: string; Variety?: string; Grade?: string; Min_Price?: string | number; Max_Price?: string | number; Modal_Price?: string | number };
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
-const normalizeArrivalDate = (value: string) => {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
-  return normalize(match ? `${match[3]}/${match[2]}/${match[1]}` : value);
-};
 const stateAliases: Record<string, string> = { andamanandnicobar: "andamanandnicobarislands", chattisgarh: "chhattisgarh", keralam: "kerala", nctofdelhi: "delhi", pondicherry: "puducherry" };
 const normalizeState = (value: string) => stateAliases[normalize(value)] ?? normalize(value);
 
@@ -51,7 +47,6 @@ function buildPageUrl(
     commodity: string;
     state: string;
     district: string;
-    arrivalDate: string;
     source: string;
   }
 ) {
@@ -71,7 +66,6 @@ function buildPageUrl(
   if (filters.district) {
     params.set("district", filters.district);
   }
-  if (filters.arrivalDate) params.set("arrivalDate", filters.arrivalDate);
   params.set("source", filters.source);
 
   return `/market?${params.toString()}`;
@@ -90,7 +84,6 @@ export default async function MarketPage({
   const commodity = query.commodity?.trim() ?? "";
   const state = query.state?.trim() ?? "";
   const district = query.district?.trim() ?? "";
-  const arrivalDate = query.arrivalDate?.trim() ?? "";
   const source = query.source === "online" ? "online" : "offline";
   const pageSize = PAGE_SIZE;
 
@@ -103,8 +96,7 @@ export default async function MarketPage({
   const filteredRows = query.search === "1" ? snapshotRows.filter(row =>
     (!state || normalizeState(row.State ?? "") === normalizeState(state)) &&
     (!district || normalize(row.District ?? "") === normalize(district)) &&
-    (!commodity || normalize(row.Commodity ?? "") === normalize(commodity)) &&
-    (!arrivalDate || normalizeArrivalDate(row.Arrival_Date ?? "") === normalizeArrivalDate(arrivalDate))
+    (!commodity || normalize(row.Commodity ?? "") === normalize(commodity))
   ) : [];
   let liveTotal = filteredRows.length;
   let liveRows: LocalMandiRow[] = filteredRows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -119,7 +111,7 @@ export default async function MarketPage({
       liveError = "Too many live mandi requests. Please wait a minute and try again. Showing matching records from the offline snapshot instead.";
     } else {
       try {
-        const live = await fetchLiveMandi({ state: state || undefined, district: district || undefined, commodity: commodity || undefined, arrivalDate: arrivalDate || undefined });
+        const live = await fetchLiveMandi({ state: state || undefined, district: district || undefined, commodity: commodity || undefined });
         liveRows = live.records.map(row => ({
           State: row.state,
           District: row.district,
@@ -133,9 +125,13 @@ export default async function MarketPage({
           Modal_Price: row.modal_price,
         }));
         liveTotal = live.total;
-        dataSourceNotice = `Online VoiceOfVillage prices · ${live.total.toLocaleString("en-IN")} records${live.asOf ? ` · source dated ${live.asOf}` : ""}. Arrival dates come from the published mandi reports.`;
-        dataSourceHref = "https://www.voiceofvillage.com/developers";
-        dataSourceLabel = "VoiceOfVillage API";
+        dataSourceNotice = `Online mandi prices · ${live.total.toLocaleString("en-IN")} records${live.asOf ? ` · source dated ${live.asOf}` : ""}.`;
+        dataSourceHref = live.provider === "Finnid"
+          ? "https://finnid.in/MarketLinkage/LivePrices"
+          : live.provider === "data.gov.in"
+            ? "https://data.gov.in/resource/current-daily-price-various-commodities-various-markets-mandi"
+            : "https://www.voiceofvillage.com/developers";
+        dataSourceLabel = live.provider;
         upstreamSourceUrl = live.sourceUrl || "";
       } catch (error) {
         liveError = `${error instanceof Error ? error.message : "Online mandi search failed."} Showing matching records from the offline snapshot instead.`;
@@ -156,7 +152,6 @@ export default async function MarketPage({
     commodity,
     state,
     district,
-    arrivalDate,
     source,
   });
 
@@ -164,7 +159,6 @@ export default async function MarketPage({
     commodity,
     state,
     district,
-    arrivalDate,
     source,
   });
 
@@ -202,7 +196,6 @@ export default async function MarketPage({
           stateValue={state}
           districtValue={district}
           commodityValue={commodity}
-          arrivalDateValue={arrivalDate}
           sourceValue={source}
         />
 
@@ -224,7 +217,7 @@ export default async function MarketPage({
           <>
             <p className="muted" style={{ fontSize: 13 }}>
               {source === "online"
-                ? `Showing ${liveRows.length} records returned by VoiceOfVillage.`
+                ? `Showing ${liveRows.length} records returned by ${dataSourceLabel}.`
                 : <>Showing {liveRows.length} records out of {liveTotal.toLocaleString("en-IN")} available records. Page {currentPage} of {totalPages}. Page size: {pageSize}.</>}
             </p>
 
@@ -267,8 +260,8 @@ export default async function MarketPage({
               </table>
             </div>
 
-            {/* The VoiceOfVillage mandi tool returns a district result set and
-                does not expose offset pagination. */}
+            {/* Online APIs return district-filtered records; page through the
+                complete bundled snapshot only in offline mode. */}
             {source === "offline" && <>
             <div
               style={{
@@ -287,22 +280,22 @@ export default async function MarketPage({
               <div style={{ display: "flex", gap: 10 }}>
                 {currentPage > 1 ? (
                   <a href={previousUrl} className="btn">
-                    ← Previous
+                    <ChevronLeft size={18} aria-hidden="true" /> Previous
                   </a>
                 ) : (
                   <button className="btn" disabled>
-                    ← Previous
+                    <ChevronLeft size={18} aria-hidden="true" /> Previous
                   </button>
                 )}
 
                 {currentPage < totalPages &&
                 liveRows.length === pageSize ? (
                   <a href={nextUrl} className="btn">
-                    Next →
+                    Next <ChevronRight size={18} aria-hidden="true" />
                   </a>
                 ) : (
                   <button className="btn" disabled>
-                    Next →
+                    Next <ChevronRight size={18} aria-hidden="true" />
                   </button>
                 )}
               </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 type HarvestItem = { id: string; crop: string; field: string; farm: string; date: string };
 type Labels = { readySoon: string; upcoming: string; dueToday: string; overdue: string; daysRemaining: string; oneDayRemaining: string; daysOverdue: string; expected: string; markHarvested: string; viewCrop: string };
@@ -32,7 +33,7 @@ export default function UpcomingHarvestList({ items, locale, labels }: { items: 
         <p className="dashboard-upcoming-field">{item.farm} · {item.field}</p>
         <p className="dashboard-upcoming-date">{labels.expected}: {dateFormat.format(new Date(`${item.date}T00:00:00Z`))}</p>
         <strong className={`dashboard-upcoming-countdown${days < 0 ? " overdue" : ""}`}>{countdown}</strong>
-        <div className="dashboard-upcoming-actions"><Link className="btn" href={`/harvests?cropCycleId=${encodeURIComponent(item.id)}`}>{labels.markHarvested}</Link><Link className="subtle-link" href={`/crops#cycle-${encodeURIComponent(item.id)}`}>{labels.viewCrop} →</Link></div>
+        <div className="dashboard-upcoming-actions"><Link className="btn" href={`/harvests?cropCycleId=${encodeURIComponent(item.id)}`}>{labels.markHarvested}</Link><Link className="subtle-link" href={`/crops#cycle-${encodeURIComponent(item.id)}`}>{labels.viewCrop} <ArrowRight size={16} aria-hidden="true" /></Link></div>
       </article>;
     })}
   </section>;

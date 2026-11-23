@@ -7,27 +7,24 @@ export default function MarketSearch({
   stateValue,
   districtValue,
   commodityValue,
-  arrivalDateValue,
   sourceValue,
 }: {
   stateValue: string;
   districtValue: string;
   commodityValue: string;
-  arrivalDateValue: string;
   sourceValue: "offline" | "online";
 }) {
   const [state, setState] = useState(stateValue);
   const [district, setDistrict] = useState(districtValue);
   const [commodity, setCommodity] = useState(commodityValue);
-  const [arrivalDate, setArrivalDate] = useState(arrivalDateValue);
   const [commodities, setCommodities] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [optionsError, setOptionsError] = useState("");
   const [source, setSource] = useState(sourceValue);
+  const [onlineSourceName, setOnlineSourceName] = useState("online mandi API");
 
   useEffect(() => setSource(sourceValue), [sourceValue]);
   useEffect(() => setCommodity(commodityValue), [commodityValue]);
-  useEffect(() => setArrivalDate(arrivalDateValue), [arrivalDateValue]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -43,6 +40,7 @@ export default function MarketSearch({
       })
       .then(data => {
         setCommodities(Array.isArray(data.commodities) ? data.commodities : []);
+        if (typeof data.scope === "string" && data.scope !== "offline-snapshot") setOnlineSourceName(data.scope);
         setOptionsError(data.message || data.error || "");
       })
       .catch(error => {
@@ -89,9 +87,9 @@ export default function MarketSearch({
           setCommodity("");
         }}>
           <option value="offline">Offline bundled snapshot (no internet)</option>
-          <option value="online">Online VoiceOfVillage mandi prices</option>
+          <option value="online">Online mandi prices</option>
         </select>
-        <small className="muted">Online mode loads VoiceOfVillage prices on the server. Its mandi lookup requires a district; if unavailable, results fall back to the bundled offline snapshot.</small>
+        <small className="muted">Online prices load securely through the configured mandi API. Select a district. If the API is unavailable, the page shows matching offline snapshot records.</small>
       </div>
 
       <div className="field">
@@ -112,23 +110,17 @@ export default function MarketSearch({
               ? optionsError
             : state
               ? commodities.length
-                ? source === "online" ? "Commodity names loaded from VoiceOfVillage for this district." : "Commodity names are loaded from the bundled data.gov.in snapshot."
+                ? source === "online" ? `Commodity names loaded from ${onlineSourceName} for this district.` : "Commodity names are loaded from the bundled data.gov.in snapshot."
                 : source === "offline"
                   ? district
                     ? "No offline prices match this district. Clear the district to check other markets in this state, or switch to online prices."
                     : "No offline prices are available for this state in the bundled snapshot. Switch to online prices to check current listings."
                   : "No online commodities were returned for this location. Try a different district or state."
-              : source === "online" ? "Choose a state and district to load VoiceOfVillage prices." : "Select a state to load available commodities from the bundled snapshot."}
+              : source === "online" ? "Choose a state and district to load online prices." : "Select a state to load available commodities from the bundled snapshot."}
         </small>
       </div>
 
-      <div className="field">
-        <label htmlFor="arrivalDate">Arrival date</label>
-        <input id="arrivalDate" name="arrivalDate" type="date" value={arrivalDate} onChange={event => setArrivalDate(event.target.value)} />
-        <small className="muted">Optional. Filters on the arrival date reported in the mandi price data.</small>
-      </div>
-
-      <button className="btn" type="submit">{source === "online" ? "Search VoiceOfVillage prices" : "Search offline prices"}</button>
+      <button className="btn" type="submit">{source === "online" ? "Search online prices" : "Search offline prices"}</button>
     </form>
   );
 }

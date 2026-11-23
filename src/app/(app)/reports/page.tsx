@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { protectionText } from "@/i18n/crop-protection";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/session";
 import ExportButtons from "../export-buttons";
@@ -35,6 +37,7 @@ export default async function Reports() {
     <ExportButtons title={t("financeReports")} filename="agritrack-finance-report" columns={[{ key: "section", label: t("section") }, { key: "item", label: t("item") }, { key: "amount", label: `${t("amount")} / ${t("revenue")} (INR)` }, { key: "production", label: t("productionUnit") }, { key: "unit", label: t("unit") }, { key: "date", label: t("date") }]} rows={exportRows} />
     <p className="muted">{t("financeHelp")}</p>
     <Analytics />
+    <p><Link className="subtle-link" href="/crop-loss">{protectionText(locale,"Harvest loss and prevention")}</Link></p>
     <div className="split" style={{ marginTop: 20 }}>
       <section className="panel"><h2 style={{ marginTop: 0 }}>{t("farmSummary")}</h2>{farms.length ? farms.map(farm => <div key={farm.name} style={{ padding: "12px 0", borderTop: "1px solid #edf0ec" }}><strong>{farm.name}</strong><p className="muted" style={{ margin: "5px 0" }}>{t("expenses")}: {money(farm.expenses.reduce((sum, row) => sum + Number(row.amount), 0))}</p></div>) : <p className="muted">{t("addFarmsForSummary")}</p>}</section>
       <section className="panel"><h2 style={{ marginTop: 0 }}>{t("cropPerformance")}</h2>{crops.size ? <div style={{ overflowX: "auto" }}><table className="table"><thead><tr><th>{t("crop")}</th><th>{t("productionUnit")}</th><th>{t("revenue")}</th></tr></thead><tbody>{[...crops].map(([name, row]) => <tr key={name}><td>{displayLabel(name, locale)}</td><td>{row.production.toLocaleString(locale)} {row.unit}</td><td>{money(row.revenue)}</td></tr>)}</tbody></table></div> : <p className="muted">{t("recordsAppear")}</p>}</section>

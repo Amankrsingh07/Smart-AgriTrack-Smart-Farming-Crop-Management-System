@@ -38,7 +38,7 @@ export default async function Farms({ searchParams }: { searchParams: Promise<{ 
         {farms.length === 0 ? <p className="muted">{t("createFarmFirst")}</p> : <form action={addField}>
           <Field label={t("farm")}><select name="farmId" required>{farms.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}</select></Field>
           <Field label={t("fieldName")}><input name="name" required /></Field>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div className="farm-field-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <Field label={t("area")}><input name="area" type="number" min="0.01" step="0.01" required /></Field>
             <Field label={t("unit")}><select name="areaUnit"><option value="acre">{t("acre")}</option><option value="hectare">{t("hectare")}</option></select></Field>
           </div>
@@ -88,7 +88,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Coordinates({ latitude = "", longitude = "" }: { latitude?: string; longitude?: string }) {
   // The coordinates are optional until verified farm coordinates are available.
-  return <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+  return <div className="farm-field-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
     <Field label="Latitude (optional)"><input name="latitude" type="number" min="-90" max="90" step="0.000001" defaultValue={latitude} /></Field>
     <Field label="Longitude (optional)"><input name="longitude" type="number" min="-180" max="180" step="0.000001" defaultValue={longitude} /></Field>
   </div>;

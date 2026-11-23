@@ -37,8 +37,8 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ success: false, error: "Check the crop, soil, growth stage, method, and watering interval." }, { status: 400 });
 
   const cycle = await db.cropCycle.findFirst({
-    where: { id: parsed.data.cropCycleId, status: { in: ["PLANNED", "ACTIVE"] }, field: { farm: { userId: user.id } } },
-    select: { id: true, crop: { select: { name: true } }, growthStage: true, field: { select: { area: true, areaUnit: true, farm: { select: { state: true, district: true } } } } },
+    where: { id: parsed.data.cropCycleId, actualHarvestDate: null, status: { in: ["PLANNED", "ACTIVE"] }, field: { farm: { userId: user.id } } },
+    select: { id: true, crop: { select: { name: true } }, growthStage: true, field: { select: { area: true, areaUnit: true, farm: { select: { state: true, district: true, latitude: true, longitude: true } } } } },
   });
   if (!cycle) return NextResponse.json({ success: false, error: "Crop cycle not found." }, { status: 404 });
   const today = indiaCalendarDate();
@@ -53,7 +53,10 @@ export async function POST(request: Request) {
   let weatherRetrievedAt: string | undefined;
   if (parsed.data.weatherMode === "live") {
     try {
-      const location = await geocodeIndianDistrict(cycle.field.farm.district, cycle.field.farm.state);
+      const { latitude, longitude, district, state } = cycle.field.farm;
+      const location = latitude !== null && longitude !== null
+        ? { latitude: Number(latitude), longitude: Number(longitude) }
+        : await geocodeIndianDistrict(district, state);
       if (location) {
         const liveForecast = await loadOpenMeteoForecast(location.latitude, location.longitude);
         const dateIndex = liveForecast.daily.time.indexOf(calculationDate);
@@ -96,6 +99,8 @@ export async function POST(request: Request) {
   const note = `Soil-check reminder only; this is not an automatic watering instruction. Based on measured root-zone depletion ${round(result.depletionMm!)} mm and adjusted allowable depletion ${round(result.allowableDepletionMm!)} mm. ${result.rainfallNote}`;
   try {
     const row = await db.$transaction(async tx => {
+      const activeCycle = await tx.cropCycle.count({ where: { id: cycle.id, status: { in: ["PLANNED", "ACTIVE"] }, actualHarvestDate: null, field: { farm: { userId: user.id } } } });
+      if (activeCycle === 0) return null;
       const existing = await tx.irrigationSchedule.findFirst({ where: { userId: user.id, cropCycleId: cycle.id, completedAt: null, scheduledAt: { gte: start, lt: end }, OR: [{ status: "PLANNED" }, { status: null }] }, select: { id: true } });
       if (existing) return { id: existing.id, duplicate: true };
       const created = await tx.irrigationSchedule.create({ data: {
@@ -106,6 +111,7 @@ export async function POST(request: Request) {
       }, select: { id: true } });
       return { id: created.id, duplicate: false };
     }, { isolationLevel: "Serializable" });
+    if (!row) return NextResponse.json({ success: false, error: "The crop cycle is no longer active." }, { status: 409 });
     return NextResponse.json({ success: true, id: row.id, duplicate: row.duplicate, scheduledAt: plannedCheckDate, data: result }, { status: row.duplicate ? 200 : 201 });
   } catch (error) {
     if (error && typeof error === "object" && "code" in error && error.code === "P2034") return NextResponse.json({ success: false, error: "A concurrent soil-check reminder was saved; refresh irrigation history." }, { status: 409 });

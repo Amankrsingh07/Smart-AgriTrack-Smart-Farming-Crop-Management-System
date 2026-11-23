@@ -9,3 +9,8 @@ coverage
 *.log
 .DS_Store
 *.tsbuildinfo
+
+playwright-report
+test-results
+
+.fertilizer-dataset-review/

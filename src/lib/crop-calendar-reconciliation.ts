@@ -6,8 +6,8 @@ export function reconcileCropCalendarActivities<T extends GeneratedActivity, E e
   const existingByKey = new Map(existing.map(item => [item.activityKey, item]));
   const keys = new Set(generated.map(item => item.activityKey));
   return {
-    toUpsert: generated.filter(item => existingByKey.get(item.activityKey)?.status !== "COMPLETED"),
+    toUpsert: generated.filter(item => !["COMPLETED", "CANCELLED"].includes(existingByKey.get(item.activityKey)?.status ?? "")),
     preserveCompleted: existing.filter(item => item.status === "COMPLETED"),
-    removeObsoletePending: existing.filter(item => item.status !== "COMPLETED" && !keys.has(item.activityKey)),
+    removeObsoletePending: existing.filter(item => !["COMPLETED", "CANCELLED"].includes(item.status) && !item.activityKey.startsWith("smart-fertilizer:") && !item.activityKey.startsWith("protection-") && !keys.has(item.activityKey)),
   };
 }

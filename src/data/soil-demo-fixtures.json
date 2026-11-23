@@ -1,0 +1,10 @@
+{
+  "version": "2026-11-14-v1",
+  "note": "Synthetic software test fixtures, not observations, laboratory reports or fertilizer recommendations. Expected classes exercise the documented GOI baseline rules and do not establish field suitability.",
+  "fixtures": [
+    { "id": "bihar-alkaline-medium", "name": "Bihar · medium nutrient bands", "description": "Exercises compatible methods, elemental bases and the alkaline Olsen condition.", "values": { "nitrogenKgHa": 300, "phosphorusKgHa": 18, "potassiumKgHa": 150, "organicCarbonPercent": 0.55, "soilPh": 8 }, "expected": { "nitrogen": "Medium", "phosphorus": "Medium", "potassium": "Medium", "organicCarbon": "Medium", "ph": "Slightly alkaline" } },
+    { "id": "bihar-neutral-olsen-incompatible", "name": "Bihar · pH 6.8 / Olsen incompatibility", "description": "Preserves phosphorus Unknown because the selected Olsen reference requires alkaline soil.", "values": { "nitrogenKgHa": 240, "phosphorusKgHa": 18, "potassiumKgHa": 150.09, "organicCarbonPercent": 0.55, "soilPh": 6.8 }, "expected": { "nitrogen": "Low", "phosphorus": "Unknown", "potassium": "Medium", "organicCarbon": "Medium", "ph": "Neutral" } },
+    { "id": "bihar-low-bands", "name": "Bihar · low nutrient bands", "description": "Exercises the low side of all four nutrient thresholds.", "values": { "nitrogenKgHa": 200, "phosphorusKgHa": 8, "potassiumKgHa": 90, "organicCarbonPercent": 0.3, "soilPh": 8 }, "expected": { "nitrogen": "Low", "phosphorus": "Low", "potassium": "Low", "organicCarbon": "Low", "ph": "Slightly alkaline" } },
+    { "id": "bihar-high-bands", "name": "Bihar · high nutrient bands", "description": "Exercises the high side of all four nutrient thresholds.", "values": { "nitrogenKgHa": 600, "phosphorusKgHa": 30, "potassiumKgHa": 300, "organicCarbonPercent": 0.9, "soilPh": 8 }, "expected": { "nitrogen": "High", "phosphorus": "High", "potassium": "High", "organicCarbon": "High", "ph": "Slightly alkaline" } }
+  ]
+}

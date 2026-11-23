@@ -1,6 +1,5 @@
 import dataset from "@/data/crop-calendar.json";
 import growthStageDataset from "@/data/crop-growth-stages.json";
-import { calculateIcarFertilizer, getIcarRecipes } from "@/lib/icar-fertilizer";
 
 export const cropCalendarDatasetVersion = `${dataset.version}+${growthStageDataset.version}`;
 export const cropCalendarProfileNames = dataset.crops.map(profile => profile.crop);
@@ -21,6 +20,8 @@ export type GeneratedCalendarActivity = {
 export type CropGrowthWindow = { key: string; name: string; startDay: number; endDay: number; description: string; recommendation: string };
 
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+
+export class CropCalendarCoverageError extends Error {}
 
 export function findCropCalendarProfile(cropName: string): CropCalendarProfile | undefined {
   const name = normalize(cropName);
@@ -73,7 +74,7 @@ export function selectCropDuration(profile: CropCalendarProfile, variety?: strin
   const chosen = variety?.trim();
   const varietyProfile = chosen ? profile.varieties.find(item => normalize(item.name) === normalize(chosen)) : undefined;
   if (profile.requiresVariety && !varietyProfile) {
-    throw new Error(`Select a millet type or variety from the available options: ${profile.varieties.map(item => item.name).join(", ")}.`);
+    throw new CropCalendarCoverageError(`Select a millet type or variety from the available options: ${profile.varieties.map(item => item.name).join(", ")}.`);
   }
   const source = varietyProfile && "source" in varietyProfile && typeof varietyProfile.source === "string" ? varietyProfile.source : profile.source;
   const sourceUrl = varietyProfile && "sourceUrl" in varietyProfile && typeof varietyProfile.sourceUrl === "string" ? varietyProfile.sourceUrl : profile.sourceUrl;
@@ -101,8 +102,8 @@ export function generateCropCalendarActivities(input: {
   areaHa: number;
 }) {
   const profile = findCropCalendarProfile(input.cropName);
-  if (!profile) throw new Error(`No offline calendar profile is configured for “${input.cropName}”. Supported crops: ${cropCalendarProfileNames.join(", ")}. No schedule was generated.`);
-  if (!profile.seasons.includes(input.season)) throw new Error(`${profile.crop} is configured for ${profile.seasons.join(", ")} in this calendar dataset. Check the crop season before generating.`);
+  if (!profile) throw new CropCalendarCoverageError(`No offline calendar profile is configured for “${input.cropName}”. Supported crops: ${cropCalendarProfileNames.join(", ")}. No schedule was generated.`);
+  if (!profile.seasons.includes(input.season)) throw new CropCalendarCoverageError(`${profile.crop} is configured for ${profile.seasons.join(", ")} in this calendar dataset. Check the crop season before generating.`);
   const duration = selectCropDuration(profile, input.variety, input.durationDays);
   const dateAt = (day: number) => {
     const date = new Date(input.sowingDate);
@@ -149,27 +150,7 @@ export function generateCropCalendarActivities(input: {
       source: ruleSource, sourceUrl: ruleSourceUrl });
   }
 
-  const recipes = getIcarRecipes(input.cropName, input.state, input.district);
-  const recipe = recipes[0];
-  if (recipe && Number.isFinite(input.areaHa) && input.areaHa > 0) {
-    const plan = calculateIcarFertilizer(recipe, input.areaHa);
-    for (const [index, split] of plan.schedule.entries()) {
-      const day = fertilizerDay(split.label);
-      if (day === null) continue;
-      const quantity = `Calculated for ${input.areaHa.toFixed(3)} ha using the existing ICAR fertilizer calculator: Urea ${split.urea.toFixed(1)} kg, DAP ${split.dap.toFixed(1)} kg, MOP ${split.mop.toFixed(1)} kg.`;
-      add({ activityKey: `fertilizer-${recipe.id}-${index}`, activityName: `Fertilizer application · ${split.label}`, activityType: "FERTILIZER", growthStage: split.label, day, description: `${recipe.conditions} ${quantity}`, recommendation: `Source schedule: ${split.label}. Verify with current soil-test and local extension guidance before application.`, source: recipe.source.title, sourceUrl: recipe.source.url });
-    }
-  }
-  return { profile, duration, activities: result.sort((a, b) => a.scheduledDate.getTime() - b.scheduledDate.getTime()), estimatedHarvestDate: dateAt(duration.days), fertilizerProfileMatched: Boolean(recipe), geographicScopeNote: profile.scope };
-}
-
-function fertilizerDay(label: string): number | null {
-  if (/at sowing|basal|puddling|transplanting/i.test(label)) return 0;
-  const weeks = label.match(/(\d+)\s*weeks?/i);
-  if (weeks) return Number(weeks[1]) * 7;
-  const days = label.match(/(\d+)\s*(?:days?|DAS)/i);
-  if (days) return Number(days[1]);
-  return null;
+  return { profile, duration, activities: result.sort((a, b) => a.scheduledDate.getTime() - b.scheduledDate.getTime()), estimatedHarvestDate: dateAt(duration.days), fertilizerProfileMatched: false, geographicScopeNote: profile.scope };
 }
 
 export function toHectares(area: number, unit: string) {

@@ -1,0 +1,3 @@
+import type { OpenMeteoForecast } from "./open-meteo";
+
+export function weatherAlerts(f: OpenMeteoForecast) { const alerts:string[]=[];if(f.daily.temperature_2m_min.some(x=>x !== null && x<=2))alerts.push("Frost risk: forecast minimum at or below 2°C. Check sensitive crops and local advisories.");if(f.daily.precipitation_sum.some((x,i)=>x !== null && (x>=50||((f.daily.precipitation_probability_max[i]??0)>=80&&x>=25))))alerts.push("Heavy rain possible: review drainage and postpone field work where soils are wet.");if(f.daily.temperature_2m_max.some(x=>x !== null && x>=40))alerts.push("Heat alert: forecast maximum at or above 40°C. Monitor crop and worker heat stress.");return alerts; }

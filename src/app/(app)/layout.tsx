@@ -3,22 +3,28 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/lib/session";
 import { logout } from "../actions";
 import AppNav from "./app-nav";
-import LanguageSelector from "./language-selector";
+import { AppShell, SidebarCollapseButton } from "./app-shell";
 import { getTranslations } from "next-intl/server";
+import { LogOut } from "lucide-react";
+import AgriTrackMark from "../agritrack-mark";
+import AppTopbar from "./app-topbar";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await getUser();
   if (!user) redirect("/");
   const t = await getTranslations("Navigation");
-  return <div className="layout app-layout">
-    <aside className="sidebar app-sidebar">
-      <Link href="/dashboard" className="app-brand"><span className="app-brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M5 10.5c6.2 1.4 12.8 1.4 22 0M5 16c6.2 1.4 12.8 1.4 22 0M5 21.5c6.2 1.4 12.8 1.4 22 0" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/><path d="M8 7v18M16 8v16M24 7v18" stroke="currentColor" strokeWidth=".8" opacity=".55"/></svg></span><span>AgriTrack<small>FARM MANAGEMENT</small></span></Link>
+  return <AppShell>
+    <aside id="main-sidebar" className="sidebar app-sidebar">
+      <div className="sidebar-heading">
+        <Link href="/dashboard" className="app-brand" title="AgriTrack"><span className="app-brand-mark"><AgriTrackMark /></span><span className="app-brand-copy">AgriTrack<small>FARM MANAGEMENT</small></span></Link>
+        <SidebarCollapseButton />
+      </div>
       <AppNav />
       <div className="sidebar-bottom">
-        <Link href="/profile" className="profile-chip"><span className="avatar-mark">{user.name.trim().charAt(0).toUpperCase()}</span><span className="profile-copy"><strong>{user.name}</strong><small>{user.email}</small></span><span className="profile-more">···</span></Link>
-        <form action={logout}><button className="logout-button"><span aria-hidden="true">↗</span> {t("signOut")}</button></form>
+        <Link href="/profile" className="profile-chip" title={user.name}><span className="avatar-mark">{user.name.trim().charAt(0).toUpperCase()}</span><span className="profile-copy"><strong>{user.name}</strong><small>{user.email}</small></span><span className="profile-more">···</span></Link>
+        <form action={logout}><button className="logout-button" title={t("signOut")}><LogOut size={18} strokeWidth={1.8} aria-hidden="true"/><span className="logout-label">{t("signOut")}</span></button></form>
       </div>
     </aside>
-      <main className="app-main"><header className="topbar"><span><i className="topbar-dot"/> AGRITRACK</span><div className="topbar-right"><LanguageSelector/><span className="topbar-date">{t("account")}</span><span className="topbar-avatar" aria-label={user.name}>{user.name.trim().charAt(0).toUpperCase()}</span></div></header><div className="content">{children}</div></main>
-  </div>;
+      <main className="app-main"><AppTopbar name={user.name}/><div className="content">{children}</div></main>
+  </AppShell>;
 }

@@ -12,11 +12,15 @@ export function dateOnlyInIndia(date: Date): Date {
   return new Date(`${indiaDateKey(date)}T00:00:00.000Z`);
 }
 
+export function isCropCycleFinished(cycle: { status: string; actualHarvestDate?: Date | null }) {
+  return Boolean(cycle.actualHarvestDate) || cycle.status === "HARVESTED" || cycle.status === "COMPLETED";
+}
+
 export function deriveCropCycleDisplayStatus(
   cycle: { status: string; sowingDate: Date | null; expectedHarvestDate: Date | null; actualHarvestDate: Date | null },
   now = new Date(),
 ): CropCycleDisplayStatus | null {
-  if (cycle.actualHarvestDate || cycle.status === "HARVESTED") return "HARVEST_COMPLETED";
+  if (isCropCycleFinished(cycle)) return "HARVEST_COMPLETED";
 
   const today = indiaDateKey(now);
   const sowing = cycle.sowingDate ? indiaDateKey(cycle.sowingDate) : null;

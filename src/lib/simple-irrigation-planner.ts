@@ -34,7 +34,7 @@ export function calculateSimpleIrrigation(input: SimplePlannerInput) {
   const stage = stageCoefficient(coefficientRow, input.growthStage);
   const areaSquareMetres = input.areaUnit.toLowerCase() === "hectare" ? input.area * 10_000
     : input.areaUnit.toLowerCase() === "acre" ? input.area * 4046.856 : NaN;
-  const rice = /^(rice|paddy)$/i.test(input.crop.trim());
+  const rice = cropName === "rice";
   const moisture = input.moisture;
   const moistureValuesPresent = [moisture?.fieldCapacityPercent, moisture?.wiltingPointPercent, moisture?.currentPercent, moisture?.rootZoneDepthM]
     .every(value => typeof value === "number" && Number.isFinite(value));

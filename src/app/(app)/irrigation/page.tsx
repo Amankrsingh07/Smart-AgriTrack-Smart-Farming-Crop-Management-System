@@ -2,8 +2,8 @@ import { db } from "@/lib/db";
 import { getUser } from "@/lib/session";
 import SimpleIrrigationPlanner, { type IrrigationReport, type PlannerCycle, type PlannerHistoryRow } from "./simple-irrigation-planner";
 
-export default async function IrrigationPage() {
-  const user = await getUser();
+export default async function IrrigationPage({ searchParams }: { searchParams: Promise<{ cycle?: string }> }) {
+  const [user, params] = await Promise.all([getUser(), searchParams]);
   if (!user) return null;
   const [cycles, history] = await Promise.all([
     db.cropCycle.findMany({
@@ -58,5 +58,5 @@ export default async function IrrigationPage() {
     byCrop: [...cropTotals].map(([crop, values]) => ({ crop, ...values })).sort((a, b) => b.liters - a.liters),
     byMonth: [...monthTotals].map(([month, values]) => ({ month, label: new Intl.DateTimeFormat("en-IN", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${month}-01T12:00:00.000Z`)), ...values })).sort((a, b) => b.month.localeCompare(a.month)),
   };
-  return <SimpleIrrigationPlanner cycles={cycleData.filter(cycle => cycle.status === "PLANNED" || cycle.status === "ACTIVE")} recordCycles={cycleData} history={historyData} reports={reports} />;
+  return <SimpleIrrigationPlanner key={params.cycle ?? ""} initialCycleId={params.cycle} cycles={cycleData.filter(cycle => cycle.status === "PLANNED" || cycle.status === "ACTIVE")} recordCycles={cycleData} history={historyData} reports={reports} />;
 }

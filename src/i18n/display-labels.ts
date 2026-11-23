@@ -1,3 +1,4 @@
+import { farmerTerm } from "./farmer-terms";
 import { isLanguageCode, type LanguageCode } from "./languages";
 
 const labels: Partial<Record<LanguageCode, Record<string, string>>> = {
@@ -17,5 +18,5 @@ const labels: Partial<Record<LanguageCode, Record<string, string>>> = {
 /** Localize known application-owned labels while leaving unknown/user-entered text intact. */
 export function displayLabel(value: string, locale: string) {
   const language = isLanguageCode(locale) ? locale : "en";
-  return labels[language]?.[value] ?? value;
+  return farmerTerm(language, value) ?? labels[language]?.[value] ?? value;
 }
