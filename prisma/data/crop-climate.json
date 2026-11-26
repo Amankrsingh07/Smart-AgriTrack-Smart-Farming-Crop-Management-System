@@ -1,4 +1,18 @@
 [
-  { "cropName": "Chickpea (Gram)", "minRainfallMm": 600, "maxRainfallMm": 900, "source": "NITI Aayog, Strategies and Pathways for Accelerating Growth in Pulses", "sourceUrl": "https://www.niti.gov.in/hi/node/1853", "notes": "Annual rainfall range reported for chickpea; temperature and NPK are not scored without sourced ranges." },
-  { "cropName": "Rice (Paddy)", "minTemperatureC": 16, "maxTemperatureC": 32, "source": "ICAR-CRIDA, Rainfed Rice Growing Scenarios", "sourceUrl": "https://www.icar-crida.res.in/assets/img/Books/2004-05/Rice.pdf", "notes": "This envelope combines separate stage-specific ranges (flowering/fertilization and ripening); above 35°C harms pollen shedding and grain filling. It is an indicative screen, not a Delhi forecast." }
+  {
+    "cropName": "Chickpea (Gram)",
+    "minRainfallMm": 600,
+    "maxRainfallMm": 900,
+    "source": "NITI Aayog, Strategies and Pathways for Accelerating Growth in Pulses",
+    "sourceUrl": "https://www.niti.gov.in/hi/node/1853",
+    "notes": "Annual rainfall range reported for chickpea; temperature and NPK are not scored without sourced ranges."
+  },
+  {
+    "cropName": "Rice (Paddy)",
+    "minTemperatureC": 16,
+    "maxTemperatureC": 32,
+    "source": "ICAR-CRIDA, Rainfed Rice Growing Scenarios",
+    "sourceUrl": "https://www.icar-crida.res.in/assets/img/Books/2004-05/Rice.pdf",
+    "notes": "This envelope combines separate stage-specific ranges (flowering/fertilization and ripening); above 35°C harms pollen shedding and grain filling. It is an indicative screen, not a Delhi forecast."
+  }
 ]

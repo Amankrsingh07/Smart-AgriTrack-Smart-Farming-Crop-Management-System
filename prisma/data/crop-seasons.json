@@ -1,7 +1,32 @@
 [
-  { "cropName": "Wheat", "season": "RABI", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" },
-  { "cropName": "Mustard", "season": "RABI", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" },
-  { "cropName": "Chickpea (Gram)", "season": "RABI", "source": "ICAR Rabi Agro-Advisory for Haryana and Delhi", "sourceUrl": "https://icar.gov.in/sites/default/files/2022-09/Rabi-Agro-Advisory-2021-22_0.pdf" },
-  { "cropName": "Rice (Paddy)", "season": "KHARIF", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" },
-  { "cropName": "Maize", "season": "KHARIF", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" }
+  {
+    "cropName": "Wheat",
+    "season": "RABI",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  },
+  {
+    "cropName": "Mustard",
+    "season": "RABI",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  },
+  {
+    "cropName": "Chickpea (Gram)",
+    "season": "RABI",
+    "source": "ICAR Rabi Agro-Advisory for Haryana and Delhi",
+    "sourceUrl": "https://icar.gov.in/sites/default/files/2022-09/Rabi-Agro-Advisory-2021-22_0.pdf"
+  },
+  {
+    "cropName": "Rice (Paddy)",
+    "season": "KHARIF",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  },
+  {
+    "cropName": "Maize",
+    "season": "KHARIF",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  }
 ]

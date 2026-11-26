@@ -1,92 +1,40 @@
 "use client";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import {useProtectionText} from "@/i18n/crop-protection/client";
+import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useProtectionText } from "@/i18n/crop-protection/client";
+import { cropAdviceLabel } from "@/i18n/crop-advice";
+import { indiaDateKey } from "@/lib/crop-cycle-status";
+import type { HarvestTrackerEntry as CropItem } from "@/lib/harvest-tracker";
+import { notifyHarvestUpdate, useHarvestData } from "../harvest-refresh";
 
-type CropItem = {
-  id: string;
-  crop: string;
-  field: string;
-  farm: string;
-  growthStage: string | null;
-  date: string | null;
-  actualHarvestDate: string | null;
-  expectedHarvestQuantity: string | null;
-  expectedHarvestUnit: string | null;
-  status: string | null;
-  href: string;
-};
-type Data = {
-  crops: CropItem[];
-};
-const statusText: Record<string, string> = {
-  UPCOMING: "Upcoming",
-  READY: "Ready soon",
-  DUE_TODAY: "Due today",
-  OVERDUE: "Overdue",
-  HARVESTED: "Harvested",
-};
-function daysUntil(date: string | null) {
-  if (!date) return null;
-  const now = new Date();
-  const indiaNow = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Kolkata",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(now);
-  return Math.round(
-    (Date.parse(`${date}T00:00:00Z`) - Date.parse(`${indiaNow}T00:00:00Z`)) /
-      86_400_000,
-  );
-}
-function todayInIndia() {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Kolkata",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date());
-}
 export default function HarvestCenter({
   initialCycleId,
 }: {
   initialCycleId: string;
 }) {
   const t = useTranslations("Dashboard");
+  const common = useTranslations("Common");
+  const records = useTranslations("Records");
+  const cropLabels = useTranslations("Crops");
+  const locale = useLocale();
   const protectionText = useProtectionText();
-  const [data, setData] = useState<Data | null>(null);
+  const { crops, state, refresh } = useHarvestData();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState("");
   const [toast, setToast] = useState("");
   const [openCycle, setOpenCycle] = useState(initialCycleId);
-  const refresh = useCallback(async () => {
-    try {
-      const response = await fetch("/api/harvests", {
-        cache: "no-store",
-      });
-      if (!response.ok) {
-        const body = await response.json().catch(() => null);
-        throw new Error(
-          body?.error ||
-            `Could not load harvest data (HTTP ${response.status}).`,
-        );
-      }
-      const next = (await response.json()) as Data;
-      setData(next);
-      setError("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not load harvest data.");
-    }
-  }, []);
-  useEffect(() => {
-    void refresh();
-    const timer = window.setInterval(() => void refresh(), 60_000);
-    return () => clearInterval(timer);
-  }, [refresh]);
-  async function patch(payload: object) {
+  useEffect(() => setOpenCycle(initialCycleId), [initialCycleId]);
+  const formatter = new Intl.DateTimeFormat(locale, {
+    dateStyle: "medium",
+    timeZone: "Asia/Kolkata",
+  });
+  const date = (value: string | null) =>
+    value ? formatter.format(new Date(`${value}T00:00:00Z`)) : t("notRecorded");
+  const active = crops?.filter((crop) => crop.status !== "HARVESTED");
+  const history = crops?.filter((crop) => crop.status === "HARVESTED");
+  async function patch(payload: { cropCycleId: string }) {
     const response = await fetch("/api/harvests", {
       method: "PATCH",
       headers: { "content-type": "application/json" },
@@ -96,26 +44,29 @@ export default function HarvestCenter({
     if (!response.ok) throw new Error(body.error || "Action failed.");
     return body;
   }
-  async function act(key: string, payload: object, message: string) {
+  async function act(
+    key: string,
+    payload: { cropCycleId: string },
+    message: string,
+  ) {
     setBusy(key);
     setError("");
     try {
       const result = await patch(payload);
-      if (key.startsWith("harvest-")) {
-        const update = { cropCycleId: (payload as { cropCycleId?: string }).cropCycleId };
-        window.dispatchEvent(new CustomEvent("agritrack:harvest-updated", { detail: update }));
-        if (typeof BroadcastChannel !== "undefined") {
-          const channel = new BroadcastChannel("agritrack-harvest");
-          channel.postMessage(update);
-          channel.close();
-        }
-      }
-      setToast(message);
-      await refresh();
+      notifyHarvestUpdate(payload.cropCycleId);
+      const yieldText =
+        typeof result.yieldPerAcre === "number"
+          ? new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(
+              result.yieldPerAcre,
+            ) + " kg/acre"
+          : "";
+      setToast([message, yieldText].filter(Boolean).join(" · "));
       window.setTimeout(() => setToast(""), 5000);
       return result;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Action failed.");
+      setError(
+        e instanceof Error ? protectionText(e.message) : common("error"),
+      );
       return null;
     } finally {
       setBusy("");
@@ -139,21 +90,15 @@ export default function HarvestCenter({
     const result = await act(
       `harvest-${cycle.id}`,
       payload,
-      "Harvest recorded. Crop status and stock history have been updated.",
+      cropLabels("harvestConfirmed"),
     );
-    if (result?.yieldPerAcre !== null && result?.yieldPerAcre !== undefined)
-      setToast(
-        `Harvest recorded. Calculated yield: ${Number(result.yieldPerAcre).toFixed(2)} kg/acre.`,
-      );
-    setOpenCycle("");
+    if (result) setOpenCycle("");
   }
+
   return (
     <main className="harvest-center">
       <header className="harvest-center-toolbar">
         <div>
-          <p className="muted" style={{ margin: "0 0 7px", fontSize: 11 }}>
-            Live crop countdowns and harvest records
-          </p>
           <h1>{t("harvestAlert")}</h1>
         </div>
       </header>
@@ -167,159 +112,225 @@ export default function HarvestCenter({
           {toast}
         </p>
       )}
-      <section>
-        <div className="dashboard-section-title">
-          <div>
-            <p className="eyebrow">CROP CALENDAR</p>
-            <h2>Countdowns</h2>
-          </div>
+      {state === "loading" && <p role="status">{common("loading")}</p>}
+      {state === "offline" && <p role="status">{t("trackerOffline")}</p>}
+      {state === "error" && (
+        <div className="harvest-tracker-actions">
+          <p role="alert">{t("trackerError")}</p>
+          <button className="btn" type="button" onClick={() => void refresh()}>
+            {t("trackerRetry")}
+          </button>
         </div>
-        {!data?.crops.length ? (
-          <div className="panel muted">
-            Add crop cycles, sowing dates and an expected date or crop duration
-            to see a harvest countdown.{" "}
-            <Link className="subtle-link" href="/crops">
-              Open crop calendar <ArrowRight size={16} aria-hidden="true" />
-            </Link>
-          </div>
-        ) : (
-          <div className="harvest-grid">
-            {data.crops.map((cycle) => {
-              const days = daysUntil(cycle.date);
-              const status = cycle.status ?? "UPCOMING";
-              return (
-                <article
-                  className="harvest-cycle-card"
-                  key={cycle.id}
-                  id={`harvest-${cycle.id}`}
-                >
-                  <div className="harvest-cycle-top">
-                    <h3>{cycle.crop}</h3>
-                    <span
-                      className={`harvest-status-pill ${status.toLowerCase()}`}
-                    >
-                      {statusText[status] ?? status}
-                    </span>
-                  </div>
-                  <div className="harvest-cycle-meta">
-                    <span>
-                      {cycle.farm} · {cycle.field}
-                    </span>
-                    <span>
-                      Expected:{" "}
-                      {cycle.date ?? "Add a duration or expected date"}
-                      {cycle.growthStage
-                        ? ` · estimated from ${cycle.growthStage} stage`
-                        : ""}
-                    </span>
-                    {cycle.expectedHarvestQuantity&&cycle.expectedHarvestUnit&&<span>
-                      Expected quantity: {cycle.expectedHarvestQuantity} {cycle.expectedHarvestUnit}
-                    </span>}
-                  </div>
-                  <strong className="harvest-countdown">
-                    {status === "HARVESTED"
-                      ? `Harvested ${cycle.actualHarvestDate ?? ""}`
-                      : days === null
-                        ? "Date needed"
-                        : days > 1
-                          ? `${days} days remaining`
-                          : days === 1
-                            ? "1 day remaining"
-                            : days === 0
-                              ? "Due today"
-                              : `${Math.abs(days)} days overdue`}
-                  </strong>
-                  <div className="harvest-actions">
-                    <Link className="subtle-link" href={`/crop-loss?cycle=${encodeURIComponent(cycle.id)}`}>
-                      {protectionText("Harvest loss and prevention")}
-                    </Link>
-                    {status !== "HARVESTED" && (
-                      <button
-                        className="btn"
-                        type="button"
-                        onClick={() =>
-                          setOpenCycle(openCycle === cycle.id ? "" : cycle.id)
+      )}
+      {state === "live" && !active?.length && (
+        <div className="panel">
+          <p>{t("trackerEmpty")}</p>
+          <Link className="btn" href="/crops#add-crop">
+            {t("addCrop")}
+          </Link>
+        </div>
+      )}
+      {[
+        { heading: t("harvestTracker"), entries: active },
+        { heading: records("harvestRecords"), entries: history },
+      ].map(({ heading, entries }) =>
+        entries?.length ? (
+          <section key={heading}>
+            <h2>{heading}</h2>
+            <div className="harvest-grid">
+              {entries.map((cycle) => {
+                const days = cycle.days;
+                const status = cycle.status;
+                const statusLabel =
+                  status === "HARVESTED"
+                    ? cropLabels("harvested")
+                    : status === "READY"
+                      ? t("readySoon")
+                      : status === "DUE_TODAY"
+                        ? t("dueToday")
+                        : status === "OVERDUE"
+                          ? t("overdue")
+                          : status === "UPCOMING"
+                            ? t("upcoming")
+                            : t("dateNeeded");
+                return (
+                  <article
+                    className="harvest-cycle-card"
+                    key={cycle.id}
+                    id={`harvest-${cycle.id}`}
+                  >
+                    <div className="harvest-cycle-top">
+                      <h3>{cropAdviceLabel(cycle.crop, locale)}</h3>
+                      <span
+                        className={`harvest-status-pill ${status?.toLowerCase() ?? ""}`}
+                      >
+                        {statusLabel}
+                      </span>
+                    </div>
+                    <div className="harvest-cycle-meta">
+                      <span>
+                        {cycle.farm} · {cycle.field}
+                      </span>
+                      <span>
+                        {t("expectedHarvest")}: {date(cycle.date)}
+                        {cycle.growthStage &&
+                          ` · ${cropAdviceLabel(cycle.growthStage, locale)}`}
+                      </span>
+                      {cycle.expectedHarvestQuantity &&
+                        cycle.expectedHarvestUnit && (
+                          <span>
+                            {records("quantity")}:{" "}
+                            {cycle.expectedHarvestQuantity}{" "}
+                            {cycle.expectedHarvestUnit}
+                          </span>
+                        )}
+                    </div>
+                    <strong className="harvest-countdown">
+                      {status === "HARVESTED"
+                        ? date(cycle.actualHarvestDate)
+                        : days === null || days === 0
+                          ? statusLabel
+                          : days < 0
+                            ? t("daysOverdue", { count: -days })
+                            : days === 1
+                              ? t("oneDayRemaining")
+                              : t("daysRemaining", { count: days })}
+                    </strong>
+                    <div className="harvest-actions">
+                      <Link
+                        className="subtle-link"
+                        href={`/crop-loss?cycle=${encodeURIComponent(cycle.id)}`}
+                      >
+                        {protectionText("Harvest loss and prevention")}
+                      </Link>
+                      {status !== "HARVESTED" && (
+                        <button
+                          className="btn"
+                          type="button"
+                          onClick={() =>
+                            setOpenCycle(openCycle === cycle.id ? "" : cycle.id)
+                          }
+                        >
+                          {t("markHarvested")}
+                        </button>
+                      )}
+                      <Link
+                        className="subtle-link"
+                        href={
+                          status === null
+                            ? `/crops?edit=${encodeURIComponent(cycle.id)}#cycle-${encodeURIComponent(cycle.id)}`
+                            : cycle.href
                         }
                       >
-                        Mark as harvested
-                      </button>
-                    )}
-                    <Link className="subtle-link" href={cycle.href}>
-                      View crop <ArrowRight size={16} aria-hidden="true" />
-                    </Link>
-                  </div>
-                  {status !== "HARVESTED" && openCycle === cycle.id && (
-                    <details open>
-                      <summary>Harvest details</summary>
-                      <form
-                        className="harvest-confirm-form"
-                        onSubmit={(event) => void submitHarvest(event, cycle)}
-                      >
-                        <div className="field">
-                          <label>Actual harvest date</label>
-                          <input
-                            type="date"
-                            name="harvestDate"
-                            defaultValue={todayInIndia()}
-                            required
-                          />
-                        </div>
-                        <div className="field">
-                          <label>Actual harvest quantity</label>
-                          <input
-                            type="number"
-                            name="quantity"
-                            min="0.001"
-                            step="0.001"
-                            required
-                          />
-                          {cycle.expectedHarvestQuantity&&cycle.expectedHarvestUnit&&<small>Saved plan: {cycle.expectedHarvestQuantity} {cycle.expectedHarvestUnit}. Enter the measured actual amount here.</small>}
-                        </div>
-                        <div className="field">
-                          <label>Actual harvest unit</label>
-                          <select name="unit" defaultValue={cycle.expectedHarvestUnit??"kg"}>
-                            {cycle.expectedHarvestUnit&&!['kg','quintal','tonne','bag','crate'].includes(cycle.expectedHarvestUnit)&&<option value={cycle.expectedHarvestUnit}>{cycle.expectedHarvestUnit}</option>}
-                            <option>kg</option>
-                            <option>quintal</option>
-                            <option>tonne</option>
-                            <option>bag</option>
-                            <option>crate</option>
-                          </select>
-                        </div>
-                        <div className="field">
-                          <label>Quality / grade</label>
-                          <input
-                            name="quality"
-                            maxLength={80}
-                            placeholder="Optional"
-                          />
-                        </div>
-                        <div className="field full">
-                          <label>Storage details</label>
-                          <input
-                            name="storageDetails"
-                            maxLength={1000}
-                            placeholder="Location, method or notes"
-                          />
-                        </div>
-                        <button
-                          className="btn full"
-                          type="submit"
-                          disabled={busy === `harvest-${cycle.id}`}
+                        {t(status === null ? "trackerEdit" : "viewCrop")}{" "}
+                        <ArrowRight size={16} aria-hidden="true" />
+                      </Link>
+                    </div>
+                    {status !== "HARVESTED" && openCycle === cycle.id && (
+                      <details open>
+                        <summary>{records("recordHarvest")}</summary>
+                        <form
+                          className="harvest-confirm-form"
+                          onSubmit={(event) => void submitHarvest(event, cycle)}
                         >
-                          {busy === `harvest-${cycle.id}`
-                            ? "Saving…"
-                            : "Confirm harvest"}
-                        </button>
-                      </form>
-                    </details>
-                  )}
-                </article>
-              );
-            })}
-          </div>
-        )}
-      </section>
+                          <div className="field">
+                            <label htmlFor={`harvestDate-${cycle.id}`}>
+                              {records("harvestDate")}
+                            </label>
+                            <input
+                              type="date"
+                              id={`harvestDate-${cycle.id}`}
+                              name="harvestDate"
+                              defaultValue={indiaDateKey(new Date())}
+                              required
+                            />
+                          </div>
+                          <div className="field">
+                            <label htmlFor={`quantity-${cycle.id}`}>
+                              {records("quantity")}
+                            </label>
+                            <input
+                              type="number"
+                              id={`quantity-${cycle.id}`}
+                              name="quantity"
+                              min="0.001"
+                              step="0.001"
+                              required
+                            />
+                            {cycle.expectedHarvestQuantity &&
+                              cycle.expectedHarvestUnit && (
+                                <small>
+                                  {t("expectedHarvest")}:{" "}
+                                  {cycle.expectedHarvestQuantity}{" "}
+                                  {cycle.expectedHarvestUnit}
+                                </small>
+                              )}
+                          </div>
+                          <div className="field">
+                            <label htmlFor={`unit-${cycle.id}`}>
+                              {records("unit")}
+                            </label>
+                            <select
+                              id={`unit-${cycle.id}`}
+                              name="unit"
+                              defaultValue={cycle.expectedHarvestUnit ?? "kg"}
+                            >
+                              {cycle.expectedHarvestUnit &&
+                                ![
+                                  "kg",
+                                  "quintal",
+                                  "tonne",
+                                  "bag",
+                                  "crate",
+                                ].includes(cycle.expectedHarvestUnit) && (
+                                  <option value={cycle.expectedHarvestUnit}>
+                                    {cycle.expectedHarvestUnit}
+                                  </option>
+                                )}
+                              <option>kg</option>
+                              <option>quintal</option>
+                              <option>tonne</option>
+                              <option>bag</option>
+                              <option>crate</option>
+                            </select>
+                          </div>
+                          <div className="field">
+                            <label>{protectionText("Quality / grade")}</label>
+                            <input
+                              name="quality"
+                              maxLength={80}
+                              placeholder={protectionText("Optional")}
+                            />
+                          </div>
+                          <div className="field full">
+                            <label>{protectionText("Storage details")}</label>
+                            <input
+                              name="storageDetails"
+                              maxLength={1000}
+                              placeholder={protectionText(
+                                "Location, method or notes",
+                              )}
+                            />
+                          </div>
+                          <button
+                            className="btn full"
+                            type="submit"
+                            disabled={busy === `harvest-${cycle.id}`}
+                          >
+                            {busy === `harvest-${cycle.id}`
+                              ? common("loading")
+                              : t("markHarvested")}
+                          </button>
+                        </form>
+                      </details>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        ) : null,
+      )}
     </main>
   );
 }

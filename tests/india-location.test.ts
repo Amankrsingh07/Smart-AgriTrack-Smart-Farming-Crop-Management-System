@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { findIndianDistrict, findIndianState, indianStateNamesMatch } from "../src/lib/india-location";
+import {
+  findIndianDistrict,
+  findIndianState,
+  indianStateNamesMatch,
+} from "../src/lib/india-location";
 
 test("weather location matching ignores case, punctuation and spacing differences", () => {
   const state = findIndianState(" jAmMu & Kashmir ");

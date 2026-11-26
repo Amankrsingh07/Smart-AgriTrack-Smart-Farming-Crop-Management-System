@@ -1,13 +1,68 @@
 {
- "version":"historical-ppqs-restrictions-2024-reviewed-2026-11-15",
- "source":{"organization":"Government of India pesticide restriction list, hosted by Himachal Pradesh Department of Horticulture","url":"https://eudyan.hp.gov.in/cms/media/1peh1uul/list-of-pesticides-which-are-banned-refused-registration-and-restricted-in-use.pdf","documentDate":"2024-03-31","accessedOn":"2026-11-15"},
- "limitations":"Historical restriction flags only, not a complete current registration/label database. Absence of a match is never approval. Confirm current official registration, crop label, formulation and restrictions with a qualified adviser. No dose or chemical mixing recommendation is supplied.",
- "records":[
-  {"ingredient":"carbaryl","crops":["*"],"guidance":"The dated source lists this ingredient under manufacture/import/use bans. Pause further use and obtain current qualified regulatory advice."},
-  {"ingredient":"phorate","crops":["*"],"guidance":"The dated source lists this ingredient among banned-use entries. Do not infer authorization from old extension pages."},
-  {"ingredient":"chlorpyriphos","crops":["Ber","Citrus","Tobacco"],"guidance":"The dated source records crop-specific use restrictions. Verify current crop label and registration before any further application."},
-  {"ingredient":"malathion","crops":["Sorghum","Pea","Peas","Soybean","Castor","Sunflower","Bhindi","Brinjal","Cauliflower","Radish","Turnip","Tomato","Apple","Mango","Grape"],"guidance":"The dated source records use restrictions on this crop. Obtain qualified current regulatory review; no treatment is recommended."},
-  {"ingredient":"mancozeb","crops":["Guava","Jowar","Sorghum","Tapioca"],"guidance":"The dated source records use restrictions on this crop. Confirm current official label and restrictions."},
-  {"ingredient":"monocrotophos","crops":["Tomato","Potato","Onion","Brinjal","Chilli","Peas","Pea","Cauliflower","Cabbage"],"guidance":"The dated source restricts use on vegetables; this record covers only the listed supported vegetable names. A nonmatch is not permission."}
- ]
+  "version": "historical-ppqs-restrictions-2024-reviewed-2026-11-15",
+  "source": {
+    "organization": "Government of India pesticide restriction list, hosted by Himachal Pradesh Department of Horticulture",
+    "url": "https://eudyan.hp.gov.in/cms/media/1peh1uul/list-of-pesticides-which-are-banned-refused-registration-and-restricted-in-use.pdf",
+    "documentDate": "2024-03-31",
+    "accessedOn": "2026-11-15"
+  },
+  "limitations": "Historical restriction flags only, not a complete current registration/label database. Absence of a match is never approval. Confirm current official registration, crop label, formulation and restrictions with a qualified adviser. No dose or chemical mixing recommendation is supplied.",
+  "records": [
+    {
+      "ingredient": "carbaryl",
+      "crops": ["*"],
+      "guidance": "The dated source lists this ingredient under manufacture/import/use bans. Pause further use and obtain current qualified regulatory advice."
+    },
+    {
+      "ingredient": "phorate",
+      "crops": ["*"],
+      "guidance": "The dated source lists this ingredient among banned-use entries. Do not infer authorization from old extension pages."
+    },
+    {
+      "ingredient": "chlorpyriphos",
+      "crops": ["Ber", "Citrus", "Tobacco"],
+      "guidance": "The dated source records crop-specific use restrictions. Verify current crop label and registration before any further application."
+    },
+    {
+      "ingredient": "malathion",
+      "crops": [
+        "Sorghum",
+        "Pea",
+        "Peas",
+        "Soybean",
+        "Castor",
+        "Sunflower",
+        "Bhindi",
+        "Brinjal",
+        "Cauliflower",
+        "Radish",
+        "Turnip",
+        "Tomato",
+        "Apple",
+        "Mango",
+        "Grape"
+      ],
+      "guidance": "The dated source records use restrictions on this crop. Obtain qualified current regulatory review; no treatment is recommended."
+    },
+    {
+      "ingredient": "mancozeb",
+      "crops": ["Guava", "Jowar", "Sorghum", "Tapioca"],
+      "guidance": "The dated source records use restrictions on this crop. Confirm current official label and restrictions."
+    },
+    {
+      "ingredient": "monocrotophos",
+      "crops": [
+        "Tomato",
+        "Potato",
+        "Onion",
+        "Brinjal",
+        "Chilli",
+        "Peas",
+        "Pea",
+        "Cauliflower",
+        "Cabbage"
+      ],
+      "guidance": "The dated source restricts use on vegetables; this record covers only the listed supported vegetable names. A nonmatch is not permission."
+    }
+  ]
 }

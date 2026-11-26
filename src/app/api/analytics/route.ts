@@ -14,7 +14,11 @@ const categories: Record<string, string> = {
   OTHER: "Other",
 };
 const monthLabel = (date: Date) =>
-  date.toLocaleString("en-IN", { month: "short", year: "2-digit", timeZone: "UTC" });
+  date.toLocaleString("en-IN", {
+    month: "short",
+    year: "2-digit",
+    timeZone: "UTC",
+  });
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,8 +33,11 @@ export async function GET(request: NextRequest) {
     const now = new Date();
     let start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
     if (range === "6m")
-      start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1));
-    if (range === "year") start = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+      start = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1),
+      );
+    if (range === "year")
+      start = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
     if (range === "custom") {
       const from = params.get("from"),
         to = params.get("to");
@@ -92,7 +99,9 @@ export async function GET(request: NextRequest) {
       revenue: number;
       profit: number;
     }[] = [];
-    const cursor = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
+    const cursor = new Date(
+      Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1),
+    );
     while (cursor <= end) {
       months.push({
         key: `${cursor.getUTCFullYear()}-${cursor.getUTCMonth()}`,
@@ -125,7 +134,8 @@ export async function GET(request: NextRequest) {
       const name = row.cropCycle.crop.name;
       cropMap.set(name, (cropMap.get(name) || 0) + Number(row.quantity));
     }
-    for (const month of months) month.profit = netProfit(month.revenue, month.expenses);
+    for (const month of months)
+      month.profit = netProfit(month.revenue, month.expenses);
     return NextResponse.json({
       summary: {
         expenses: months.reduce((sum, month) => sum + month.expenses, 0),

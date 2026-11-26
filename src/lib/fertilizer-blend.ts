@@ -1,8 +1,20 @@
 import { nutrientContribution, type Nutrients } from "./smart-fertilizer";
-import { phosphorusGrades, type PhosphorusGrade, verifiedFertilizerProducts } from "./fertilizer-product-grades";
+import {
+  phosphorusGrades,
+  type PhosphorusGrade,
+  verifiedFertilizerProducts,
+} from "./fertilizer-product-grades";
 
-export function calculateProductQuantities(target: Nutrients, source: PhosphorusGrade) {
-  if (Object.values(target).some(value => !Number.isFinite(value) || value < 0 || value > 100_000)) return null;
+export function calculateProductQuantities(
+  target: Nutrients,
+  source: PhosphorusGrade,
+) {
+  if (
+    Object.values(target).some(
+      (value) => !Number.isFinite(value) || value < 0 || value > 100_000,
+    )
+  )
+    return null;
   const grade = phosphorusGrades[source];
   if (!grade) return null;
   const { Urea, MOP } = verifiedFertilizerProducts;
@@ -27,19 +39,35 @@ export function calculateProductQuantities(target: Nutrients, source: Phosphorus
   };
 }
 
-export function theoreticalFertilizerBlend(weightKg: number, percentages: Nutrients, source: PhosphorusGrade = "DAP") {
+export function theoreticalFertilizerBlend(
+  weightKg: number,
+  percentages: Nutrients,
+  source: PhosphorusGrade = "DAP",
+) {
   const { n, p2o5, k2o } = percentages;
-  if (!Number.isFinite(weightKg) || weightKg < 0.001 || weightKg > 100_000 ||
-      Object.values(percentages).some(value => !Number.isFinite(value) || value < 0 || value > 100) ||
-      n + p2o5 + k2o > 100) {
+  if (
+    !Number.isFinite(weightKg) ||
+    weightKg < 0.001 ||
+    weightKg > 100_000 ||
+    Object.values(percentages).some(
+      (value) => !Number.isFinite(value) || value < 0 || value > 100,
+    ) ||
+    n + p2o5 + k2o > 100
+  ) {
     return { status: "invalid" } as const;
   }
 
-  const target = { n: weightKg * n / 100, p2o5: weightKg * p2o5 / 100, k2o: weightKg * k2o / 100 };
+  const target = {
+    n: (weightKg * n) / 100,
+    p2o5: (weightKg * p2o5) / 100,
+    k2o: (weightKg * k2o) / 100,
+  };
   const result = calculateProductQuantities(target, source);
   if (!result) return { status: "invalid" } as const;
   if (result.phosphorusGapKg > 1e-8) {
-    return { status: source === "DAP" ? "excess-nitrogen" : "nutrient-gap" } as const;
+    return {
+      status: source === "DAP" ? "excess-nitrogen" : "nutrient-gap",
+    } as const;
   }
   const total = Object.values(result.products).reduce((sum, kg) => sum + kg, 0);
   if (total > weightKg + 1e-8) return { status: "excess-weight" } as const;
@@ -48,10 +76,10 @@ export function theoreticalFertilizerBlend(weightKg: number, percentages: Nutrie
     products: result.products,
     fillerKg: Math.max(0, weightKg - total),
     composition: {
-      n: result.supplied.n / weightKg * 100,
-      p2o5: result.supplied.p2o5 / weightKg * 100,
-      k2o: result.supplied.k2o / weightKg * 100,
+      n: (result.supplied.n / weightKg) * 100,
+      p2o5: (result.supplied.p2o5 / weightKg) * 100,
+      k2o: (result.supplied.k2o / weightKg) * 100,
     },
-    sulphurPercent: result.sulphurKg / weightKg * 100,
+    sulphurPercent: (result.sulphurKg / weightKg) * 100,
   } as const;
 }

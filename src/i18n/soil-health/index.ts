@@ -2,7 +2,9 @@ import translations from "./translations.json";
 import { translateSoil } from "./translate";
 export { soilDateLabel } from "./translate";
 
-export function soilCatalog(locale: string): Record<string, string> | undefined {
+export function soilCatalog(
+  locale: string,
+): Record<string, string> | undefined {
   return (translations as Record<string, Record<string, string>>)[locale];
 }
 

@@ -1,18 +1,163 @@
 {
-  "meta": {"dataset":"Indicative available soil water capacity by texture","units":"mm water per m soil depth","source":"FAO Soil and Water, Chapter 2, Table 8 (adapted from Salter and Williams 1967)","sourceUrl":"https://www.fao.org/4/v9926e/v9926e04.htm","verificationStatus":"PUBLISHED_TYPICAL_CLASS_VALUES; field-specific measurement recommended","notes":"Values are typical and vary with soil structure and management. They are not a substitute for a local soil test; absent calibrated root depth and field capacity data, the app does not convert a sensor moisture percentage into stored water."},
+  "meta": {
+    "dataset": "Indicative available soil water capacity by texture",
+    "units": "mm water per m soil depth",
+    "source": "FAO Soil and Water, Chapter 2, Table 8 (adapted from Salter and Williams 1967)",
+    "sourceUrl": "https://www.fao.org/4/v9926e/v9926e04.htm",
+    "verificationStatus": "PUBLISHED_TYPICAL_CLASS_VALUES; field-specific measurement recommended",
+    "notes": "Values are typical and vary with soil structure and management. They are not a substitute for a local soil test; These Table 8 capacities are context only. Estimated mode uses the separate FAO-56 Table 19 volumetric texture ranges when an exact texture is available."
+  },
   "fao56TypicalValues": {
-    "source": "FAO Irrigation and Drainage Paper 56, Chapter 8, Table 19",
+    "source": "FAO Irrigation and Drainage Paper 56, Chapter 7, Table 19",
     "sourceUrl": "https://www.fao.org/4/X0490E/x0490e0c.htm",
     "verificationStatus": "FAO56_PUBLISHED_RANGES; defaults are arithmetic midpoints of published ranges, not field measurements",
     "referenceUnits": "m3/m3",
     "storedUnits": "percent volumetric water content (% v/v)",
-    "notes": "Typical defaults use the midpoint of each FAO-56 range. Clay loam is not a Table 19 class and is left unavailable rather than mapped to a different texture. Farmer overrides are recommended when local measurements exist."
+    "notes": "Typical values are the midpoints of FAO-56 volumetric ranges. Soil choices without published volumetric ranges require field measurements. Table 8 available water capacity is context only."
   },
   "soils": [
-    {"soil":"Sandy Soil","availableWaterCapacityMmPerM":150,"fieldCapacityPercent":12,"wiltingPointPercent":4.5,"fieldCapacityRange":[7,17],"wiltingPointRange":[2,7],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Sand: FC 0.07–0.17, WP 0.02–0.07 m³/m³"},
-    {"soil":"Sandy Loam","availableWaterCapacityMmPerM":180,"fieldCapacityPercent":23,"wiltingPointPercent":11,"fieldCapacityRange":[18,28],"wiltingPointRange":[6,16],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Sandy loam: FC 0.18–0.28, WP 0.06–0.16 m³/m³"},
-    {"soil":"Loamy Soil","availableWaterCapacityMmPerM":180,"fieldCapacityPercent":25,"wiltingPointPercent":12,"fieldCapacityRange":[20,30],"wiltingPointRange":[7,17],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Loam: FC 0.20–0.30, WP 0.07–0.17 m³/m³"},
-    {"soil":"Clay Loam","availableWaterCapacityMmPerM":180,"verificationStatus":"UNAVAILABLE_FAO56_TEXTURE_CLASS","reference":"No matching Clay Loam row in FAO-56 Table 19; enter field-specific FC/WP overrides to calculate."},
-    {"soil":"Clay Soil","availableWaterCapacityMmPerM":180,"fieldCapacityPercent":36,"wiltingPointPercent":22,"fieldCapacityRange":[32,40],"wiltingPointRange":[20,24],"verificationStatus":"FAO56_TABLE19_RANGE_MIDPOINT","reference":"FAO-56 Table 19, Clay: FC 0.32–0.40, WP 0.20–0.24 m³/m³"}
+    {
+      "soil": "Sandy Soil",
+      "availableWaterCapacityMmPerM": 150,
+      "fieldCapacityPercent": 12,
+      "wiltingPointPercent": 4.5,
+      "fieldCapacityRange": [7, 17],
+      "wiltingPointRange": [2, 7],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Sand: FC 0.07–0.17, WP 0.02–0.07 m³/m³"
+    },
+    {
+      "soil": "Loamy Sand",
+      "availableWaterCapacityMmPerM": 160,
+      "fieldCapacityPercent": 15.0,
+      "wiltingPointPercent": 6.5,
+      "fieldCapacityRange": [11, 19],
+      "wiltingPointRange": [3, 10],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Loamy Sand: FC 0.11–0.19, WP 0.03–0.10 m³/m³"
+    },
+    {
+      "soil": "Sandy Loam",
+      "availableWaterCapacityMmPerM": 180,
+      "fieldCapacityPercent": 23,
+      "wiltingPointPercent": 11,
+      "fieldCapacityRange": [18, 28],
+      "wiltingPointRange": [6, 16],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Sandy loam: FC 0.18–0.28, WP 0.06–0.16 m³/m³"
+    },
+    {
+      "soil": "Loamy Soil",
+      "availableWaterCapacityMmPerM": 180,
+      "fieldCapacityPercent": 25,
+      "wiltingPointPercent": 12,
+      "fieldCapacityRange": [20, 30],
+      "wiltingPointRange": [7, 17],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Loam: FC 0.20–0.30, WP 0.07–0.17 m³/m³"
+    },
+    {
+      "soil": "Silt Loam",
+      "availableWaterCapacityMmPerM": 200,
+      "fieldCapacityPercent": 29.0,
+      "wiltingPointPercent": 15.0,
+      "fieldCapacityRange": [22, 36],
+      "wiltingPointRange": [9, 21],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Silt Loam: FC 0.22–0.36, WP 0.09–0.21 m³/m³"
+    },
+    {
+      "soil": "Silt",
+      "fieldCapacityPercent": 32.0,
+      "wiltingPointPercent": 17.0,
+      "fieldCapacityRange": [28, 36],
+      "wiltingPointRange": [12, 22],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Silt: FC 0.28–0.36, WP 0.12–0.22 m³/m³"
+    },
+    {
+      "soil": "Sandy Clay Loam",
+      "availableWaterCapacityMmPerM": 150,
+      "fieldCapacityPercent": 25.5,
+      "wiltingPointPercent": 14.8,
+      "verificationStatus": "USDA_ARS_WEPS_TABLE_H3_TEXTURE_MEAN",
+      "sourceLabel": "USDA ARS WEPS Table H-3",
+      "sourceUrl": "https://infosys.ars.usda.gov/winderosion/weps/docs/weps_tech.pdf",
+      "reference": "USDA ARS WEPS Table H-3, Sandy Clay Loam: volumetric texture-class means from Rawls et al. (1982)."
+    },
+    {
+      "soil": "Clay Loam",
+      "availableWaterCapacityMmPerM": 180,
+      "fieldCapacityPercent": 31.8,
+      "wiltingPointPercent": 19.7,
+      "verificationStatus": "USDA_ARS_WEPS_TABLE_H3_TEXTURE_MEAN",
+      "sourceLabel": "USDA ARS WEPS Table H-3",
+      "sourceUrl": "https://infosys.ars.usda.gov/winderosion/weps/docs/weps_tech.pdf",
+      "reference": "USDA ARS WEPS Table H-3, Clay Loam: volumetric texture-class means from Rawls et al. (1982)."
+    },
+    {
+      "soil": "Silty Clay Loam",
+      "availableWaterCapacityMmPerM": 190,
+      "fieldCapacityPercent": 33.5,
+      "wiltingPointPercent": 20.5,
+      "fieldCapacityRange": [30, 37],
+      "wiltingPointRange": [17, 24],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Silt clay loam: FC 0.30–0.37, WP 0.17–0.24 m³/m³"
+    },
+    {
+      "soil": "Sandy Clay",
+      "availableWaterCapacityMmPerM": 140,
+      "fieldCapacityPercent": 33.9,
+      "wiltingPointPercent": 23.9,
+      "verificationStatus": "USDA_ARS_WEPS_TABLE_H3_TEXTURE_MEAN",
+      "sourceLabel": "USDA ARS WEPS Table H-3",
+      "sourceUrl": "https://infosys.ars.usda.gov/winderosion/weps/docs/weps_tech.pdf",
+      "reference": "USDA ARS WEPS Table H-3, Sandy Clay: volumetric texture-class means from Rawls et al. (1982)."
+    },
+    {
+      "soil": "Silty Clay",
+      "fieldCapacityPercent": 36.0,
+      "wiltingPointPercent": 23.0,
+      "fieldCapacityRange": [30, 42],
+      "wiltingPointRange": [17, 29],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Silty Clay: FC 0.30–0.42, WP 0.17–0.29 m³/m³"
+    },
+    {
+      "soil": "Clay Soil",
+      "availableWaterCapacityMmPerM": 180,
+      "fieldCapacityPercent": 36,
+      "wiltingPointPercent": 22,
+      "fieldCapacityRange": [32, 40],
+      "wiltingPointRange": [20, 24],
+      "verificationStatus": "FAO56_TABLE19_RANGE_MIDPOINT",
+      "reference": "FAO-56 Table 19, Clay: FC 0.32–0.40, WP 0.20–0.24 m³/m³"
+    },
+    {
+      "soil": "Alluvial",
+      "verificationStatus": "FIELD_MEASUREMENTS_REQUIRED",
+      "reference": "No typical volumetric field capacity and wilting point are configured for this soil. Use field measurements."
+    },
+    {
+      "soil": "Black",
+      "verificationStatus": "FIELD_MEASUREMENTS_REQUIRED",
+      "reference": "No typical volumetric field capacity and wilting point are configured for this soil. Use field measurements."
+    },
+    {
+      "soil": "Red",
+      "verificationStatus": "FIELD_MEASUREMENTS_REQUIRED",
+      "reference": "No typical volumetric field capacity and wilting point are configured for this soil. Use field measurements."
+    },
+    {
+      "soil": "Laterite",
+      "verificationStatus": "FIELD_MEASUREMENTS_REQUIRED",
+      "reference": "No typical volumetric field capacity and wilting point are configured for this soil. Use field measurements."
+    },
+    {
+      "soil": "Other",
+      "verificationStatus": "FIELD_MEASUREMENTS_REQUIRED",
+      "reference": "No typical volumetric field capacity and wilting point are configured for this soil. Use field measurements."
+    }
   ]
 }

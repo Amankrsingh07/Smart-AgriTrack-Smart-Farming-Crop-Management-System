@@ -33,17 +33,19 @@ export default function MarketSearch({
     setOptionsError("");
 
     fetch(`/api/market/options?${params}`, { signal: controller.signal })
-      .then(async response => {
+      .then(async (response) => {
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Unable to load commodities.");
+        if (!response.ok)
+          throw new Error(data.error || "Unable to load commodities.");
         return data;
       })
-      .then(data => {
+      .then((data) => {
         setCommodities(Array.isArray(data.commodities) ? data.commodities : []);
-        if (typeof data.scope === "string" && data.scope !== "offline-snapshot") setOnlineSourceName(data.scope);
+        if (typeof data.scope === "string" && data.scope !== "offline-snapshot")
+          setOnlineSourceName(data.scope);
         setOptionsError(data.message || data.error || "");
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.name !== "AbortError") {
           setCommodities([]);
           setOptionsError(error.message || "Unable to load commodities.");
@@ -57,7 +59,7 @@ export default function MarketSearch({
   }, [state, district, source]);
 
   const selectedCommodityExists = commodities.some(
-    value => value.toLowerCase() === commodity.toLowerCase()
+    (value) => value.toLowerCase() === commodity.toLowerCase(),
   );
 
   return (
@@ -82,25 +84,43 @@ export default function MarketSearch({
 
       <div className="field">
         <label htmlFor="market-source">Price data mode</label>
-        <select id="market-source" name="source" value={source} onChange={event => {
-          setSource(event.target.value as "offline" | "online");
-          setCommodity("");
-        }}>
-          <option value="offline">Offline bundled snapshot (no internet)</option>
+        <select
+          id="market-source"
+          name="source"
+          value={source}
+          onChange={(event) => {
+            setSource(event.target.value as "offline" | "online");
+            setCommodity("");
+          }}
+        >
+          <option value="offline">
+            Offline bundled snapshot (no internet)
+          </option>
           <option value="online">Online mandi prices</option>
         </select>
-        <small className="muted">Online prices load securely through the configured mandi API. Select a district. If the API is unavailable, the page shows matching offline snapshot records.</small>
+        <small className="muted">
+          Online prices load securely through the configured mandi API. Select a
+          district. If the API is unavailable, the page shows matching offline
+          snapshot records.
+        </small>
       </div>
 
       <div className="field">
         <label htmlFor="commodity">Commodity</label>
-        <select id="commodity" name="commodity" value={commodity} onChange={event => setCommodity(event.target.value)}>
+        <select
+          id="commodity"
+          name="commodity"
+          value={commodity}
+          onChange={(event) => setCommodity(event.target.value)}
+        >
           <option value="">All commodities</option>
           {commodity && !selectedCommodityExists && (
             <option value={commodity}>{commodity}</option>
           )}
-          {commodities.map(value => (
-            <option key={value} value={value}>{value}</option>
+          {commodities.map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
           ))}
         </select>
         <small className="muted">
@@ -108,19 +128,25 @@ export default function MarketSearch({
             ? "Loading commodities for this location…"
             : optionsError
               ? optionsError
-            : state
-              ? commodities.length
-                ? source === "online" ? `Commodity names loaded from ${onlineSourceName} for this district.` : "Commodity names are loaded from the bundled data.gov.in snapshot."
-                : source === "offline"
-                  ? district
-                    ? "No offline prices match this district. Clear the district to check other markets in this state, or switch to online prices."
-                    : "No offline prices are available for this state in the bundled snapshot. Switch to online prices to check current listings."
-                  : "No online commodities were returned for this location. Try a different district or state."
-              : source === "online" ? "Choose a state and district to load online prices." : "Select a state to load available commodities from the bundled snapshot."}
+              : state
+                ? commodities.length
+                  ? source === "online"
+                    ? `Commodity names loaded from ${onlineSourceName} for this district.`
+                    : "Commodity names are loaded from the bundled data.gov.in snapshot."
+                  : source === "offline"
+                    ? district
+                      ? "No offline prices match this district. Clear the district to check other markets in this state, or switch to online prices."
+                      : "No offline prices are available for this state in the bundled snapshot. Switch to online prices to check current listings."
+                    : "No online commodities were returned for this location. Try a different district or state."
+                : source === "online"
+                  ? "Choose a state and district to load online prices."
+                  : "Select a state to load available commodities from the bundled snapshot."}
         </small>
       </div>
 
-      <button className="btn" type="submit">{source === "online" ? "Search online prices" : "Search offline prices"}</button>
+      <button className="btn" type="submit">
+        {source === "online" ? "Search online prices" : "Search offline prices"}
+      </button>
     </form>
   );
 }

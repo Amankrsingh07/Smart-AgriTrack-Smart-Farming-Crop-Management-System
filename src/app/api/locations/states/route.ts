@@ -10,6 +10,9 @@ export async function GET() {
     });
     return NextResponse.json({ success: true, data: states });
   } catch {
-    return NextResponse.json({ success: false, error: "Locations are temporarily unavailable." }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Locations are temporarily unavailable." },
+      { status: 500 },
+    );
   }
 }

@@ -12,5 +12,11 @@ export const languages = [
   { code: "or", label: "Odia", native: "ଓଡ଼ିଆ" },
 ] as const;
 export type LanguageCode = (typeof languages)[number]["code"];
-export function isLanguageCode(value: string): value is LanguageCode { return languages.some(language => language.code === value); }
-export function languageName(code: LanguageCode) { return languages.find(language => language.code === code)?.label ?? "English"; }
+export function isLanguageCode(value: string): value is LanguageCode {
+  return languages.some((language) => language.code === value);
+}
+export function languageName(code: LanguageCode) {
+  return (
+    languages.find((language) => language.code === code)?.label ?? "English"
+  );
+}

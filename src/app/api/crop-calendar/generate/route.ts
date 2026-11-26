@@ -11,15 +11,38 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   const user = await getUser();
-  if (!user) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
+  if (!user)
+    return NextResponse.json(
+      { error: "Authentication required." },
+      { status: 401 },
+    );
   let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Send valid JSON form data." }, { status: 400 }); }
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Send valid JSON form data." },
+      { status: 400 },
+    );
+  }
   const parsed = schema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Check the crop cycle, sowing date and field details." }, { status: 400 });
+  if (!parsed.success)
+    return NextResponse.json(
+      { error: "Check the crop cycle, sowing date and field details." },
+      { status: 400 },
+    );
   try {
     const result = await generateCalendarForCycle(user.id, parsed.data);
     return NextResponse.json({ success: true, ...result }, { status: 201 });
   } catch (cause) {
-    return NextResponse.json({ error: cause instanceof Error ? cause.message : "Could not generate the crop calendar." }, { status: 400 });
+    return NextResponse.json(
+      {
+        error:
+          cause instanceof Error
+            ? cause.message
+            : "Could not generate the crop calendar.",
+      },
+      { status: 400 },
+    );
   }
 }

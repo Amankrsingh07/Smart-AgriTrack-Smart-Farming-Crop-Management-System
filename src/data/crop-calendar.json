@@ -4,109 +4,68 @@
   "crops": [
     {
       "crop": "Millet",
-      "aliases": [
-        "millet",
-        "millets"
-      ],
-      "seasons": [
-        "KHARIF"
-      ],
+      "aliases": ["millet", "millets"],
+      "seasons": ["KHARIF"],
       "typicalDays": 90,
-      "durationRange": [
-        65,
-        117
-      ],
+      "durationRange": [65, 117],
       "requiresVariety": true,
       "varieties": [
         {
           "name": "Pearl millet (Bajra)",
           "days": 80,
-          "durationRange": [
-            74,
-            85
-          ],
+          "durationRange": [74, 85],
           "source": "ICAR-IARI reports pearl millet cultivar maturity from 74–80 days for Pusa 605, 75–78 for Pusa 415, and 80–85 for Pusa Composite 612; 80 days is a representative planning value.",
           "sourceUrl": "https://ztmbpd.iari.res.in/technologies/varietieshybrids/cereals/pearl-millet/"
         },
         {
           "name": "Finger millet (Ragi)",
           "days": 103,
-          "durationRange": [
-            100,
-            117
-          ]
+          "durationRange": [100, 117]
         },
         {
           "name": "Little millet",
           "days": 100,
-          "durationRange": [
-            98,
-            102
-          ]
+          "durationRange": [98, 102]
         },
         {
           "name": "Kodo millet",
           "days": 104,
-          "durationRange": [
-            104,
-            104
-          ]
+          "durationRange": [104, 104]
         },
         {
           "name": "Barnyard millet",
           "days": 93,
-          "durationRange": [
-            90,
-            95
-          ]
+          "durationRange": [90, 95]
         },
         {
           "name": "Proso millet (Hagari Barugu 1)",
           "days": 68,
-          "durationRange": [
-            65,
-            70
-          ]
+          "durationRange": [65, 70]
         },
         {
           "name": "Proso millet (GPUP 28)",
           "days": 83,
-          "durationRange": [
-            80,
-            85
-          ]
+          "durationRange": [80, 85]
         },
         {
           "name": "Proso millet (ATL 2)",
           "days": 69,
-          "durationRange": [
-            65,
-            73
-          ]
+          "durationRange": [65, 73]
         },
         {
           "name": "Foxtail millet (Mahanandi)",
           "days": 83,
-          "durationRange": [
-            80,
-            85
-          ]
+          "durationRange": [80, 85]
         },
         {
           "name": "Foxtail millet (GPUF 3)",
           "days": 88,
-          "durationRange": [
-            85,
-            90
-          ]
+          "durationRange": [85, 90]
         },
         {
           "name": "Brown top millet (Hagari Browntop-2)",
           "days": 98,
-          "durationRange": [
-            95,
-            100
-          ]
+          "durationRange": [95, 100]
         }
       ],
       "source": "ICAR Annual Report 2023–24 lists source-reported millet variety maturity values for finger, little, kodo, barnyard, proso, foxtail and brown-top millets. A type-specific selection is required because millet species have different durations.",
@@ -115,18 +74,10 @@
     },
     {
       "crop": "Wheat",
-      "aliases": [
-        "wheat",
-        "gehu"
-      ],
-      "seasons": [
-        "RABI"
-      ],
+      "aliases": ["wheat", "gehu"],
+      "seasons": ["RABI"],
       "typicalDays": 120,
-      "durationRange": [
-        111,
-        155
-      ],
+      "durationRange": [111, 155],
       "varieties": [
         {
           "name": "Karan Vandana (DBW 187)",
@@ -139,18 +90,10 @@
     },
     {
       "crop": "Barley",
-      "aliases": [
-        "barley",
-        "jau"
-      ],
-      "seasons": [
-        "RABI"
-      ],
+      "aliases": ["barley", "jau"],
+      "seasons": ["RABI"],
       "typicalDays": 135,
-      "durationRange": [
-        120,
-        150
-      ],
+      "durationRange": [120, 150],
       "varieties": [],
       "source": "FAO Irrigation Water Management training manual Table 6 gives 120–150 days for Barley/Oats/Wheat; 135 days is the midpoint planning estimate.",
       "sourceUrl": "https://www.fao.org/4/S2022E/s2022e07.htm",
@@ -158,20 +101,10 @@
     },
     {
       "crop": "Rice (Paddy)",
-      "aliases": [
-        "rice",
-        "paddy",
-        "dhan"
-      ],
-      "seasons": [
-        "KHARIF",
-        "ZAID"
-      ],
+      "aliases": ["rice", "paddy", "dhan"],
+      "seasons": ["KHARIF", "ZAID"],
       "typicalDays": 125,
-      "durationRange": [
-        115,
-        145
-      ],
+      "durationRange": [115, 145],
       "varieties": [
         {
           "name": "Pusa Basmati 1509",
@@ -192,21 +125,10 @@
     },
     {
       "crop": "Maize",
-      "aliases": [
-        "maize",
-        "corn",
-        "makka"
-      ],
-      "seasons": [
-        "KHARIF",
-        "RABI",
-        "ZAID"
-      ],
+      "aliases": ["maize", "corn", "makka"],
+      "seasons": ["KHARIF", "RABI", "ZAID"],
       "typicalDays": 98,
-      "durationRange": [
-        85,
-        110
-      ],
+      "durationRange": [85, 110],
       "varieties": [],
       "source": "ICAR Kharif Agro-Advisory 2025 gives 85–110 days for named short-to-medium duration maize varieties.",
       "sourceUrl": "https://www.icar.gov.in/sites/default/files/Circulars/ICAR%20En-Kharif%20Agro-Advisories%20for%20Farmers%202025.pdf",
@@ -214,19 +136,10 @@
     },
     {
       "crop": "Mustard",
-      "aliases": [
-        "mustard",
-        "sarson",
-        "rapeseed"
-      ],
-      "seasons": [
-        "RABI"
-      ],
+      "aliases": ["mustard", "sarson", "rapeseed"],
+      "seasons": ["RABI"],
       "typicalDays": 142,
-      "durationRange": [
-        105,
-        142
-      ],
+      "durationRange": [105, 142],
       "varieties": [
         {
           "name": "Pusa Double Zero Mustard 31",
@@ -243,18 +156,10 @@
     },
     {
       "crop": "Potato",
-      "aliases": [
-        "potato",
-        "aloo"
-      ],
-      "seasons": [
-        "RABI"
-      ],
+      "aliases": ["potato", "aloo"],
+      "seasons": ["RABI"],
       "typicalDays": 90,
-      "durationRange": [
-        70,
-        100
-      ],
+      "durationRange": [70, 100],
       "varieties": [
         {
           "name": "Kufri Pukhraj",
@@ -275,20 +180,10 @@
     },
     {
       "crop": "Sugarcane",
-      "aliases": [
-        "sugarcane",
-        "cane"
-      ],
-      "seasons": [
-        "KHARIF",
-        "RABI",
-        "ZAID"
-      ],
+      "aliases": ["sugarcane", "cane"],
+      "seasons": ["KHARIF", "RABI", "ZAID"],
       "typicalDays": 410,
-      "durationRange": [
-        365,
-        456
-      ],
+      "durationRange": [365, 456],
       "varieties": [],
       "source": "ICAR Kharif Agro-Advisory 2025 describes a 12–15 month crop duration.",
       "sourceUrl": "https://www.icar.gov.in/sites/default/files/Circulars/ICAR%20En-Kharif%20Agro-Advisories%20for%20Farmers%202025.pdf",
@@ -296,18 +191,10 @@
     },
     {
       "crop": "Cotton",
-      "aliases": [
-        "cotton",
-        "kapas"
-      ],
-      "seasons": [
-        "KHARIF"
-      ],
+      "aliases": ["cotton", "kapas"],
+      "seasons": ["KHARIF"],
       "typicalDays": 150,
-      "durationRange": [
-        135,
-        165
-      ],
+      "durationRange": [135, 165],
       "varieties": [],
       "source": "ICAR-CICR variety table reports named cotton varieties maturing in 150–165 days; ICAR also reports short-duration Surabhi at 135 days.",
       "sourceUrl": "https://icar.gov.in/en/crop-science/fodder-production",
@@ -315,19 +202,10 @@
     },
     {
       "crop": "Tomato",
-      "aliases": [
-        "tomato"
-      ],
-      "seasons": [
-        "KHARIF",
-        "RABI",
-        "ZAID"
-      ],
+      "aliases": ["tomato"],
+      "seasons": ["KHARIF", "RABI", "ZAID"],
       "typicalDays": 175,
-      "durationRange": [
-        145,
-        190
-      ],
+      "durationRange": [145, 190],
       "varieties": [
         {
           "name": "Arka Abhed",
@@ -340,19 +218,10 @@
     },
     {
       "crop": "Chickpea (Gram)",
-      "aliases": [
-        "chickpea",
-        "gram",
-        "chana"
-      ],
-      "seasons": [
-        "RABI"
-      ],
+      "aliases": ["chickpea", "gram", "chana"],
+      "seasons": ["RABI"],
       "typicalDays": 108,
-      "durationRange": [
-        106,
-        110
-      ],
+      "durationRange": [106, 110],
       "varieties": [
         {
           "name": "Pusa Chickpea 10216",
@@ -369,18 +238,10 @@
     },
     {
       "crop": "Soybean",
-      "aliases": [
-        "soybean",
-        "soya"
-      ],
-      "seasons": [
-        "KHARIF"
-      ],
+      "aliases": ["soybean", "soya"],
+      "seasons": ["KHARIF"],
       "typicalDays": 100,
-      "durationRange": [
-        96,
-        104
-      ],
+      "durationRange": [96, 104],
       "varieties": [
         {
           "name": "NRC 127",

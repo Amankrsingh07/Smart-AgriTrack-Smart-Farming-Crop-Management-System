@@ -1,39 +1,215 @@
-import {scientificDoses} from "./scientific-dose-registry";
-import {fertilizerCropKey} from "./fertilizer-crop-registry";
+import { scientificDoses } from "./scientific-dose-registry";
+import { fertilizerCropKey } from "./fertilizer-crop-registry";
 import { barleyProductionReview } from "./barley-production";
 import { calculateIcarFertilizer, getIcarRecipes } from "./icar-fertilizer";
 import type { SoilHealthInput } from "./soil-health";
 import { isDemoSoilSample } from "./soil-sample-mode";
 import { indiaDateKey } from "./crop-cycle-status";
 
-export type StandardPlanContext = { crop?: string; state?: string; district?: string; season?: string | null; growthStage?: string; sowingDate?: string | null; status?: string | null; finished?: boolean; fieldAreaHa?: number; contextMismatch?: boolean; publicationConditionsConfirmed?: boolean; includeConfirmationOptions?: boolean };
+export type StandardPlanContext = {
+  crop?: string;
+  state?: string;
+  district?: string;
+  season?: string | null;
+  growthStage?: string;
+  sowingDate?: string | null;
+  status?: string | null;
+  finished?: boolean;
+  fieldAreaHa?: number;
+  contextMismatch?: boolean;
+  publicationConditionsConfirmed?: boolean;
+  includeConfirmationOptions?: boolean;
+};
 // Reviewed event semantics, not inferred day offsets from a free-text label.
-export const standardCalendarTiming: Record<string, Array<"SOWING" | "FIRST_IRRIGATION">> = { "icar-rabi-irrigated-mustard-haryana": ["SOWING", "FIRST_IRRIGATION"], "icar-rabi-irrigated-mustard-delhi": ["SOWING", "FIRST_IRRIGATION"], "icar-rabi-irrigated-wheat-haryana": ["SOWING", "FIRST_IRRIGATION"], "icar-rabi-irrigated-wheat-delhi": ["SOWING", "FIRST_IRRIGATION"], "wheat-bihar-rabi": ["SOWING", "FIRST_IRRIGATION"],"aau-assam-lentil-inoculated-basal":["SOWING"],"aau-assam-potato-rainfed":["SOWING"],"aau-assam-potato-irrigated":["SOWING"] };
-export function buildStandardCropPlan(input: SoilHealthInput, recipeId?: string, context: StandardPlanContext = {}) {
- const barleyReview=barleyProductionReview(input);
- const recipes=getIcarRecipes(input.crop,input.state,input.district,{season:context.season??input.season,irrigationCondition:input.waterRegime,sowingCondition:input.sowingCondition, confirmedRecipeId:context.publicationConditionsConfirmed ? recipeId : undefined, includeConfirmationOptions:context.includeConfirmationOptions});
- const seasonal=scientificDoses.filter(r=>r.cropKey===fertilizerCropKey(input.crop)&&r.state===input.state&&r.season);
- const legacy=recipes.filter(r=>!r.scientificRecord);
- const choices=recipes.map(r=>({id:r.id,label:r.variant,conditions:r.conditions}));
- const selected=recipeId ? recipes.find(r=>r.id===recipeId) : legacy.length===1 ? legacy[0] : recipes.length===1 && ["GENERAL_DISTRICT","GENERAL_REGIONAL"].includes(recipes[0].scientificRecord?.productionType??"") ? recipes[0] : undefined;
- const mismatch=context.contextMismatch || !!input.season && !!context.season && input.season!==context.season || !!context.season && input.crop.toLowerCase()==="wheat" && context.season!=="RABI" || context.crop!==undefined&&context.crop!==input.crop || context.state!==undefined&&context.state!==input.state;
- const reason=isDemoSoilSample(input)?"Demonstration reports cannot authorize a standard field plan.":mismatch?"The saved report and current crop/region differ. Create a revised report for the intended context.":!input.fieldAreaHa||!Number.isFinite(input.fieldAreaHa)||input.fieldAreaHa<=0?"A positive cultivated area in hectares is required.":context.fieldAreaHa!==undefined&&input.fieldAreaHa>context.fieldAreaHa+.00001?"Cultivated area exceeds the current saved field area.":selected&&!selected.scientificRecord&&selected.id!=="wheat-bihar-rabi"?"This legacy offline record requires independent source/basis verification before a dashboard standard prescription is validated. Use the advanced manual advisory calculator with explicit provenance.":!selected?recipeId?"This recommendation does not match the report crop and region.":recipes.length?"Select the applicable published recommendation; production conditions are not inferred.":barleyReview?`Barley standard quantities remain unverified. ${barleyReview.missingInputs.length?`Missing farmer inputs: ${barleyReview.missingInputs.join("; ")}. `:""}Missing scientific data: ${barleyReview.missingScientificRequirements.join(" ")}`:seasonal.length&&!(context.season??input.season)?`Select the applicable source season (${[...new Set(seasonal.map(r=>r.season))].join(", ")}); no season is inferred.`:"No supported standard recommendation exists for this crop and region.":null;
- const basalOnly=!!selected?.scientificRecord&&"doseScope" in selected.scientificRecord&&selected.scientificRecord.doseScope==="DOCUMENTED_BASAL_MINERAL_COMPONENT";
- const calculation=reason||!selected?null:calculateIcarFertilizer(selected,input.fieldAreaHa!);
- return { recommendationType:"STANDARD" as const,doseScope:basalOnly?"DOCUMENTED_BASAL_MINERAL_COMPONENT":"STANDARD_NPK_TARGETS", publicationDate:selected?.publicationDate??null, scientificRecord:selected?.scientificRecord??null, timingVerified:!!selected && (selected.scientificRecord ? selected.scientificRecord.applicationTiming.length>0 : selected.schedule.length>0), datasetVersion:selected?.datasetVersion??"legacy-reviewed-existing-calculator", barleyReview, label:barleyReview?"Standard Barley fertilizer plan — not soil-test-adjusted":"Standard crop fertilizer plan — not soil-test-adjusted", status:calculation?"STANDARD_NOT_SOIL_ADJUSTED":"UNAVAILABLE", reason, choices, recipeId:selected?.id??null, recommendation:selected?.variant??null, conditions:selected?.conditions??null, source:selected?.source??null, nutrientTargets:selected?.nutrientsKgHa??null, units:"kg/ha N:P2O5:K2O", areaHa:input.fieldAreaHa??null, calculation,
- explanation:(basalOnly?"Source specifies a basal mineral component; supplementary foliar quantities remain unavailable without their required evidence. ":"")+"Uses calculateIcarFertilizer, the same service as the Offline ICAR Calculator. DAP phosphorus determines DAP quantity; its nitrogen is deducted before Urea. Field total = per-hectare product quantity × cultivated hectares. Per acre = per hectare × 0.40468564224. No soil-test value or deficiency class adjusts this standard dose. This is the documented source target/component, not a remaining-dose instruction.",
- calendar:{supported:!!selected&&!!standardCalendarTiming[selected.id]&&!reason, sowingDate:context.sowingDate??null, growthStage:context.growthStage??input.growthStage, status:context.status??null, finished:context.finished??false,
- detail:"Scheduling requires a linked unfinished crop cycle, its sowing date, confirmation that the selected production conditions apply and review of previous applications. Choose only future applicable source events. First-irrigation dates must be supplied and confirmed by the farmer; no day offset is invented. Past basal doses are not catch-up instructions."} };
+export const standardCalendarTiming: Record<
+  string,
+  Array<"SOWING" | "FIRST_IRRIGATION">
+> = {
+  "icar-rabi-irrigated-mustard-haryana": ["SOWING", "FIRST_IRRIGATION"],
+  "icar-rabi-irrigated-mustard-delhi": ["SOWING", "FIRST_IRRIGATION"],
+  "icar-rabi-irrigated-wheat-haryana": ["SOWING", "FIRST_IRRIGATION"],
+  "icar-rabi-irrigated-wheat-delhi": ["SOWING", "FIRST_IRRIGATION"],
+  "wheat-bihar-rabi": ["SOWING", "FIRST_IRRIGATION"],
+  "aau-assam-lentil-inoculated-basal": ["SOWING"],
+  "aau-assam-potato-rainfed": ["SOWING"],
+  "aau-assam-potato-irrigated": ["SOWING"],
+};
+export function buildStandardCropPlan(
+  input: SoilHealthInput,
+  recipeId?: string,
+  context: StandardPlanContext = {},
+) {
+  const barleyReview = barleyProductionReview(input);
+  const recipes = getIcarRecipes(input.crop, input.state, input.district, {
+    season: context.season ?? input.season,
+    irrigationCondition: input.waterRegime,
+    sowingCondition: input.sowingCondition,
+    confirmedRecipeId: context.publicationConditionsConfirmed
+      ? recipeId
+      : undefined,
+    includeConfirmationOptions: context.includeConfirmationOptions,
+  });
+  const seasonal = scientificDoses.filter(
+    (r) =>
+      r.cropKey === fertilizerCropKey(input.crop) &&
+      r.state === input.state &&
+      r.season,
+  );
+  const legacy = recipes.filter((r) => !r.scientificRecord);
+  const choices = recipes.map((r) => ({
+    id: r.id,
+    label: r.variant,
+    conditions: r.conditions,
+  }));
+  const selected = recipeId
+    ? recipes.find((r) => r.id === recipeId)
+    : legacy.length === 1
+      ? legacy[0]
+      : recipes.length === 1 &&
+          ["GENERAL_DISTRICT", "GENERAL_REGIONAL"].includes(
+            recipes[0].scientificRecord?.productionType ?? "",
+          )
+        ? recipes[0]
+        : undefined;
+  const mismatch =
+    context.contextMismatch ||
+    (!!input.season && !!context.season && input.season !== context.season) ||
+    (!!context.season &&
+      input.crop.toLowerCase() === "wheat" &&
+      context.season !== "RABI") ||
+    (context.crop !== undefined && context.crop !== input.crop) ||
+    (context.state !== undefined && context.state !== input.state);
+  const reason = isDemoSoilSample(input)
+    ? "Demonstration reports cannot authorize a standard field plan."
+    : mismatch
+      ? "The saved report and current crop/region differ. Create a revised report for the intended context."
+      : !input.fieldAreaHa ||
+          !Number.isFinite(input.fieldAreaHa) ||
+          input.fieldAreaHa <= 0
+        ? "A positive cultivated area in hectares is required."
+        : context.fieldAreaHa !== undefined &&
+            input.fieldAreaHa > context.fieldAreaHa + 0.00001
+          ? "Cultivated area exceeds the current saved field area."
+          : selected &&
+              !selected.scientificRecord &&
+              selected.id !== "wheat-bihar-rabi"
+            ? "This legacy offline record requires independent source/basis verification before a dashboard standard prescription is validated. Use the advanced manual advisory calculator with explicit provenance."
+            : !selected
+              ? recipeId
+                ? "This recommendation does not match the report crop and region."
+                : recipes.length
+                  ? "Select the applicable published recommendation; production conditions are not inferred."
+                  : barleyReview
+                    ? `Barley standard quantities remain unverified. ${barleyReview.missingInputs.length ? `Missing farmer inputs: ${barleyReview.missingInputs.join("; ")}. ` : ""}Missing scientific data: ${barleyReview.missingScientificRequirements.join(" ")}`
+                    : seasonal.length && !(context.season ?? input.season)
+                      ? `Select the applicable source season (${[...new Set(seasonal.map((r) => r.season))].join(", ")}); no season is inferred.`
+                      : "No supported standard recommendation exists for this crop and region."
+              : null;
+  const basalOnly =
+    !!selected?.scientificRecord &&
+    "doseScope" in selected.scientificRecord &&
+    selected.scientificRecord.doseScope ===
+      "DOCUMENTED_BASAL_MINERAL_COMPONENT";
+  const calculation =
+    reason || !selected
+      ? null
+      : calculateIcarFertilizer(selected, input.fieldAreaHa!);
+  return {
+    recommendationType: "STANDARD" as const,
+    doseScope: basalOnly
+      ? "DOCUMENTED_BASAL_MINERAL_COMPONENT"
+      : "STANDARD_NPK_TARGETS",
+    publicationDate: selected?.publicationDate ?? null,
+    scientificRecord: selected?.scientificRecord ?? null,
+    timingVerified:
+      !!selected &&
+      (selected.scientificRecord
+        ? selected.scientificRecord.applicationTiming.length > 0
+        : selected.schedule.length > 0),
+    datasetVersion:
+      selected?.datasetVersion ?? "legacy-reviewed-existing-calculator",
+    barleyReview,
+    label: barleyReview
+      ? "Standard Barley fertilizer plan — not soil-test-adjusted"
+      : "Standard crop fertilizer plan — not soil-test-adjusted",
+    status: calculation ? "STANDARD_NOT_SOIL_ADJUSTED" : "UNAVAILABLE",
+    reason,
+    choices,
+    recipeId: selected?.id ?? null,
+    recommendation: selected?.variant ?? null,
+    conditions: selected?.conditions ?? null,
+    source: selected?.source ?? null,
+    nutrientTargets: selected?.nutrientsKgHa ?? null,
+    units: "kg/ha N:P2O5:K2O",
+    areaHa: input.fieldAreaHa ?? null,
+    calculation,
+    explanation:
+      (basalOnly
+        ? "Source specifies a basal mineral component; supplementary foliar quantities remain unavailable without their required evidence. "
+        : "") +
+      "Uses calculateIcarFertilizer, the same service as the Offline ICAR Calculator. DAP phosphorus determines DAP quantity; its nitrogen is deducted before Urea. Field total = per-hectare product quantity × cultivated hectares. Per acre = per hectare × 0.40468564224. No soil-test value or deficiency class adjusts this standard dose. This is the documented source target/component, not a remaining-dose instruction.",
+    calendar: {
+      supported: !!selected && !!standardCalendarTiming[selected.id] && !reason,
+      sowingDate: context.sowingDate ?? null,
+      growthStage: context.growthStage ?? input.growthStage,
+      status: context.status ?? null,
+      finished: context.finished ?? false,
+      detail:
+        "Scheduling requires a linked unfinished crop cycle, its sowing date, confirmation that the selected production conditions apply and review of previous applications. Choose only future applicable source events. First-irrigation dates must be supplied and confirmed by the farmer; no day offset is invented. Past basal doses are not catch-up instructions.",
+    },
+  };
 }
-export type StandardCropPlan=ReturnType<typeof buildStandardCropPlan>;
-export function standardScheduleRows(plan:StandardCropPlan, selections:Array<{index:number;date:string}>, now=new Date()) {
- if(!plan.calculation||!plan.recipeId||!plan.calendar.supported||!plan.calendar.sowingDate||plan.calendar.finished||!["PLANNED","ACTIVE"].includes(plan.calendar.status??""))throw new Error("An applicable standard plan and unfinished linked cycle with a sowing date are required.");
- if(!selections.length||new Set(selections.map(s=>s.index)).size!==selections.length)throw new Error("Select distinct source-supported application events.");
- return selections.map(s=>{
- const event=standardCalendarTiming[plan.recipeId!]?.[s.index],split=plan.calculation!.schedule[s.index];const date=new Date(`${s.date}T00:00:00Z`);
- if(!split||!event||!Number.isFinite(date.getTime())||date.toISOString().slice(0,10)!==s.date||s.date<indiaDateKey(now)||s.date<plan.calendar.sowingDate!)throw new Error("A valid future source-event date inside the crop cycle is required; past applications are never scheduled automatically.");
- if(event==="SOWING"&&(s.date!==plan.calendar.sowingDate||!["Establishment","Sowing","Germination","Nursery"].includes(plan.calendar.growthStage)))throw new Error("Basal timing is at sowing; a Vegetative or later crop cannot receive an automatic catch-up basal application.");
- if(event==="FIRST_IRRIGATION"&&s.date<=plan.calendar.sowingDate!)throw new Error("Confirm the actual planned first-irrigation date after sowing.");
- return {index:s.index,date:s.date,event,...split};
- });
+export type StandardCropPlan = ReturnType<typeof buildStandardCropPlan>;
+export function standardScheduleRows(
+  plan: StandardCropPlan,
+  selections: Array<{ index: number; date: string }>,
+  now = new Date(),
+) {
+  if (
+    !plan.calculation ||
+    !plan.recipeId ||
+    !plan.calendar.supported ||
+    !plan.calendar.sowingDate ||
+    plan.calendar.finished ||
+    !["PLANNED", "ACTIVE"].includes(plan.calendar.status ?? "")
+  )
+    throw new Error(
+      "An applicable standard plan and unfinished linked cycle with a sowing date are required.",
+    );
+  if (
+    !selections.length ||
+    new Set(selections.map((s) => s.index)).size !== selections.length
+  )
+    throw new Error("Select distinct source-supported application events.");
+  return selections.map((s) => {
+    const event = standardCalendarTiming[plan.recipeId!]?.[s.index],
+      split = plan.calculation!.schedule[s.index];
+    const date = new Date(`${s.date}T00:00:00Z`);
+    if (
+      !split ||
+      !event ||
+      !Number.isFinite(date.getTime()) ||
+      date.toISOString().slice(0, 10) !== s.date ||
+      s.date < indiaDateKey(now) ||
+      s.date < plan.calendar.sowingDate!
+    )
+      throw new Error(
+        "A valid future source-event date inside the crop cycle is required; past applications are never scheduled automatically.",
+      );
+    if (
+      event === "SOWING" &&
+      (s.date !== plan.calendar.sowingDate ||
+        !["Establishment", "Sowing", "Germination", "Nursery"].includes(
+          plan.calendar.growthStage,
+        ))
+    )
+      throw new Error(
+        "Basal timing is at sowing; a Vegetative or later crop cannot receive an automatic catch-up basal application.",
+      );
+    if (event === "FIRST_IRRIGATION" && s.date <= plan.calendar.sowingDate!)
+      throw new Error(
+        "Confirm the actual planned first-irrigation date after sowing.",
+      );
+    return { index: s.index, date: s.date, event, ...split };
+  });
 }

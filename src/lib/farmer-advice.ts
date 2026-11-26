@@ -2,23 +2,41 @@ import { z } from "zod";
 import { farmerAdviceLabels } from "@/i18n/farmer-advice-labels";
 import { isLanguageCode, languageName } from "@/i18n/languages";
 
-const brief = z.string().trim().min(1).max(220).refine(value => !/[\r\n]/.test(value));
-export const farmerAdviceSchema = z.object({
-  situation: brief,
-  possibleCauses: brief,
-  nextSteps: z.array(brief).min(2).max(5),
-  expertHelp: brief,
-  details: z.string().trim().max(700).optional(),
-  followUpQuestions: z.array(brief).max(2).optional(),
-}).strict();
+const brief = z
+  .string()
+  .trim()
+  .min(1)
+  .max(220)
+  .refine((value) => !/[\r\n]/.test(value));
+export const farmerAdviceSchema = z
+  .object({
+    situation: brief,
+    possibleCauses: brief,
+    nextSteps: z.array(brief).min(2).max(5),
+    expertHelp: brief,
+    details: z.string().trim().max(700).optional(),
+    followUpQuestions: z.array(brief).max(2).optional(),
+  })
+  .strict();
 
 export const farmerAdviceResponseSchema = {
   type: "OBJECT",
   properties: {
-    situation: { type: "STRING" }, possibleCauses: { type: "STRING" },
-    nextSteps: { type: "ARRAY", items: { type: "STRING" }, minItems: 2, maxItems: 5 },
-    expertHelp: { type: "STRING" }, details: { type: "STRING" },
-    followUpQuestions: { type: "ARRAY", items: { type: "STRING" }, maxItems: 2 },
+    situation: { type: "STRING" },
+    possibleCauses: { type: "STRING" },
+    nextSteps: {
+      type: "ARRAY",
+      items: { type: "STRING" },
+      minItems: 2,
+      maxItems: 5,
+    },
+    expertHelp: { type: "STRING" },
+    details: { type: "STRING" },
+    followUpQuestions: {
+      type: "ARRAY",
+      items: { type: "STRING" },
+      maxItems: 2,
+    },
   },
   required: ["situation", "possibleCauses", "nextSteps", "expertHelp"],
 };
@@ -33,7 +51,13 @@ export function parseFarmerAdvice(text: string, locale: string) {
   const sections = [
     { title: problem, text: data.situation },
     { title: reason, text: data.possibleCauses },
-    { title: actions, text: [...data.nextSteps.map(step => `• ${step}`), data.expertHelp].join("\n") },
+    {
+      title: actions,
+      text: [
+        ...data.nextSteps.map((step) => `• ${step}`),
+        data.expertHelp,
+      ].join("\n"),
+    },
   ];
   return { ...data, sections };
 }

@@ -6,8 +6,14 @@ import { fieldRain } from "../src/lib/field-advice";
 import { getOfflineCropAdvice } from "../src/lib/crop-advice-catalog";
 
 const input = {
-  crop: "Wheat", state: "Andaman And Nicobar Islands", district: "North And Middle Andaman",
-  area: 1, areaUnit: "hectare", growthStage: "Flowering", soil: "Loamy Soil", method: "Drip Irrigation",
+  crop: "Wheat",
+  state: "Andaman And Nicobar Islands",
+  district: "North And Middle Andaman",
+  area: 1,
+  areaUnit: "hectare",
+  growthStage: "Flowering",
+  soil: "Loamy Soil",
+  method: "Drip Irrigation",
 };
 const today = "2026-01-05";
 
@@ -24,12 +30,28 @@ test("saved crop demand uses model ETo for the matching day and falls back to th
   const offline = savedCropWaterDemand(input, sample, today);
   assert.equal(offline?.mode, "offline");
   assert.ok(Math.abs((offline?.min ?? 0) - 4.485) < 1e-10);
-  assert.equal(savedCropWaterDemand({ ...input, district: "Unknown" }, null, today), null);
-  assert.equal(savedCropWaterDemand({ ...input, growthStage: "Vegetative" }, forecast, today), null);
+  assert.equal(
+    savedCropWaterDemand({ ...input, district: "Unknown" }, null, today),
+    null,
+  );
+  assert.equal(
+    savedCropWaterDemand(
+      { ...input, growthStage: "Vegetative" },
+      forecast,
+      today,
+    ),
+    null,
+  );
 });
 
 test("legacy illustrative crop examples omit numerical scores and water needs", () => {
   const result = getOfflineCropAdvice("Bihar", "Saran", "Alluvial");
   assert.ok(result.seasons.length > 0);
-  assert.ok(result.seasons.every(season => season.crops.every(crop => crop.score === null && crop.waterNeedMm === null)));
+  assert.ok(
+    result.seasons.every((season) =>
+      season.crops.every(
+        (crop) => crop.score === null && crop.waterNeedMm === null,
+      ),
+    ),
+  );
 });

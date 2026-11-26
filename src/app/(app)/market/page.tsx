@@ -1,4 +1,3 @@
-
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/session";
 import mandiSnapshot from "@/data/mandi-prices.json";
@@ -22,10 +21,32 @@ type SearchParams = {
 };
 
 const PAGE_SIZE = 500;
-type LocalMandiRow = { State?: string; District?: string; Market?: string; Commodity?: string; Arrival_Date?: string; Variety?: string; Grade?: string; Min_Price?: string | number; Max_Price?: string | number; Modal_Price?: string | number };
-const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
-const stateAliases: Record<string, string> = { andamanandnicobar: "andamanandnicobarislands", chattisgarh: "chhattisgarh", keralam: "kerala", nctofdelhi: "delhi", pondicherry: "puducherry" };
-const normalizeState = (value: string) => stateAliases[normalize(value)] ?? normalize(value);
+type LocalMandiRow = {
+  State?: string;
+  District?: string;
+  Market?: string;
+  Commodity?: string;
+  Arrival_Date?: string;
+  Variety?: string;
+  Grade?: string;
+  Min_Price?: string | number;
+  Max_Price?: string | number;
+  Modal_Price?: string | number;
+};
+const normalize = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+const stateAliases: Record<string, string> = {
+  andamanandnicobar: "andamanandnicobarislands",
+  chattisgarh: "chhattisgarh",
+  keralam: "kerala",
+  nctofdelhi: "delhi",
+  pondicherry: "puducherry",
+};
+const normalizeState = (value: string) =>
+  stateAliases[normalize(value)] ?? normalize(value);
 
 function formatPrice(value: string | number | undefined) {
   if (value === undefined || value === null || value === "") {
@@ -48,7 +69,7 @@ function buildPageUrl(
     state: string;
     district: string;
     source: string;
-  }
+  },
 ) {
   const params = new URLSearchParams();
 
@@ -87,19 +108,26 @@ export default async function MarketPage({
   const source = query.source === "online" ? "online" : "offline";
   const pageSize = PAGE_SIZE;
 
-  const currentPage = Math.max(
-    1,
-    Math.min(10000, Number(query.page) || 1)
-  );
+  const currentPage = Math.max(1, Math.min(10000, Number(query.page) || 1));
 
   const snapshotRows = mandiSnapshot.records as LocalMandiRow[];
-  const filteredRows = query.search === "1" ? snapshotRows.filter(row =>
-    (!state || normalizeState(row.State ?? "") === normalizeState(state)) &&
-    (!district || normalize(row.District ?? "") === normalize(district)) &&
-    (!commodity || normalize(row.Commodity ?? "") === normalize(commodity))
-  ) : [];
+  const filteredRows =
+    query.search === "1"
+      ? snapshotRows.filter(
+          (row) =>
+            (!state ||
+              normalizeState(row.State ?? "") === normalizeState(state)) &&
+            (!district ||
+              normalize(row.District ?? "") === normalize(district)) &&
+            (!commodity ||
+              normalize(row.Commodity ?? "") === normalize(commodity)),
+        )
+      : [];
   let liveTotal = filteredRows.length;
-  let liveRows: LocalMandiRow[] = filteredRows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  let liveRows: LocalMandiRow[] = filteredRows.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
   let liveError = "";
   let dataSourceNotice = `Offline snapshot · ${mandiSnapshot.meta.recordCount.toLocaleString("en-IN")} records dated ${mandiSnapshot.meta.dataDate}.`;
   let dataSourceHref = mandiSnapshot.meta.sourceUrl;
@@ -108,11 +136,16 @@ export default async function MarketPage({
   if (source === "online" && query.search === "1") {
     const rate = checkRateLimit(`market-live:${user.id}`, 20, 60_000);
     if (!rate.allowed) {
-      liveError = "Too many live mandi requests. Please wait a minute and try again. Showing matching records from the offline snapshot instead.";
+      liveError =
+        "Too many live mandi requests. Please wait a minute and try again. Showing matching records from the offline snapshot instead.";
     } else {
       try {
-        const live = await fetchLiveMandi({ state: state || undefined, district: district || undefined, commodity: commodity || undefined });
-        liveRows = live.records.map(row => ({
+        const live = await fetchLiveMandi({
+          state: state || undefined,
+          district: district || undefined,
+          commodity: commodity || undefined,
+        });
+        liveRows = live.records.map((row) => ({
           State: row.state,
           District: row.district,
           Market: row.market,
@@ -126,11 +159,12 @@ export default async function MarketPage({
         }));
         liveTotal = live.total;
         dataSourceNotice = `Online mandi prices · ${live.total.toLocaleString("en-IN")} records${live.asOf ? ` · source dated ${live.asOf}` : ""}.`;
-        dataSourceHref = live.provider === "Finnid"
-          ? "https://finnid.in/MarketLinkage/LivePrices"
-          : live.provider === "data.gov.in"
-            ? "https://data.gov.in/resource/current-daily-price-various-commodities-various-markets-mandi"
-            : "https://www.voiceofvillage.com/developers";
+        dataSourceHref =
+          live.provider === "Finnid"
+            ? "https://finnid.in/MarketLinkage/LivePrices"
+            : live.provider === "data.gov.in"
+              ? "https://data.gov.in/resource/current-daily-price-various-commodities-various-markets-mandi"
+              : "https://www.voiceofvillage.com/developers";
         dataSourceLabel = live.provider;
         upstreamSourceUrl = live.sourceUrl || "";
       } catch (error) {
@@ -138,15 +172,20 @@ export default async function MarketPage({
       }
     }
   }
-  const stateCoverage = indiaLocations.states.map(item => {
-    const rows = snapshotRows.filter(row => normalizeState(row.State ?? "") === normalizeState(item.name));
-    return { name: item.name, records: rows.length, markets: new Set(rows.map(row => row.Market).filter(Boolean)).size, commodities: new Set(rows.map(row => row.Commodity).filter(Boolean)).size };
+  const stateCoverage = indiaLocations.states.map((item) => {
+    const rows = snapshotRows.filter(
+      (row) => normalizeState(row.State ?? "") === normalizeState(item.name),
+    );
+    return {
+      name: item.name,
+      records: rows.length,
+      markets: new Set(rows.map((row) => row.Market).filter(Boolean)).size,
+      commodities: new Set(rows.map((row) => row.Commodity).filter(Boolean))
+        .size,
+    };
   });
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(liveTotal / pageSize)
-  );
+  const totalPages = Math.max(1, Math.ceil(liveTotal / pageSize));
 
   const previousUrl = buildPageUrl(currentPage - 1, {
     commodity,
@@ -199,7 +238,22 @@ export default async function MarketPage({
           sourceValue={source}
         />
 
-        <p role="status" className="muted">{dataSourceNotice} Source: <a href={dataSourceHref} target="_blank" rel="noreferrer">{dataSourceLabel}</a>{upstreamSourceUrl && <> · Underlying data: <a href={upstreamSourceUrl} target="_blank" rel="noreferrer">AGMARKNET / data.gov.in</a></>} · Government Open Data License - India.</p>
+        <p role="status" className="muted">
+          {dataSourceNotice} Source:{" "}
+          <a href={dataSourceHref} target="_blank" rel="noreferrer">
+            {dataSourceLabel}
+          </a>
+          {upstreamSourceUrl && (
+            <>
+              {" "}
+              · Underlying data:{" "}
+              <a href={upstreamSourceUrl} target="_blank" rel="noreferrer">
+                AGMARKNET / data.gov.in
+              </a>
+            </>
+          )}{" "}
+          · Government Open Data License - India.
+        </p>
 
         {liveError && (
           <p role="status" className="muted">
@@ -216,9 +270,15 @@ export default async function MarketPage({
         {liveRows.length > 0 && (
           <>
             <p className="muted" style={{ fontSize: 13 }}>
-              {source === "online"
-                ? `Showing ${liveRows.length} records returned by ${dataSourceLabel}.`
-                : <>Showing {liveRows.length} records out of {liveTotal.toLocaleString("en-IN")} available records. Page {currentPage} of {totalPages}. Page size: {pageSize}.</>}
+              {source === "online" ? (
+                `Showing ${liveRows.length} records returned by ${dataSourceLabel}.`
+              ) : (
+                <>
+                  Showing {liveRows.length} records out of{" "}
+                  {liveTotal.toLocaleString("en-IN")} available records. Page{" "}
+                  {currentPage} of {totalPages}. Page size: {pageSize}.
+                </>
+              )}
             </p>
 
             <div className="market-table-wrap">
@@ -249,8 +309,7 @@ export default async function MarketPage({
                       <td>{r.Variety || "—"}</td>
                       <td>{r.Grade || "—"}</td>
                       <td>
-                        {formatPrice(r.Min_Price)} /{" "}
-                        {formatPrice(r.Max_Price)}
+                        {formatPrice(r.Min_Price)} / {formatPrice(r.Max_Price)}
                       </td>
                       <td>{formatPrice(r.Modal_Price)}</td>
                       <td>{r.Arrival_Date || "—"}</td>
@@ -262,59 +321,88 @@ export default async function MarketPage({
 
             {/* Online APIs return district-filtered records; page through the
                 complete bundled snapshot only in offline mode. */}
-            {source === "offline" && <>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 12,
-                marginTop: 20,
-                flexWrap: "wrap",
-              }}
-            >
-              <span className="muted">
-                Page {currentPage} of {totalPages}
-              </span>
+            {source === "offline" && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 12,
+                    marginTop: 20,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <span className="muted">
+                    Page {currentPage} of {totalPages}
+                  </span>
 
-              <div style={{ display: "flex", gap: 10 }}>
-                {currentPage > 1 ? (
-                  <a href={previousUrl} className="btn">
-                    <ChevronLeft size={18} aria-hidden="true" /> Previous
-                  </a>
-                ) : (
-                  <button className="btn" disabled>
-                    <ChevronLeft size={18} aria-hidden="true" /> Previous
-                  </button>
-                )}
+                  <div style={{ display: "flex", gap: 10 }}>
+                    {currentPage > 1 ? (
+                      <a href={previousUrl} className="btn">
+                        <ChevronLeft size={18} aria-hidden="true" /> Previous
+                      </a>
+                    ) : (
+                      <button className="btn" disabled>
+                        <ChevronLeft size={18} aria-hidden="true" /> Previous
+                      </button>
+                    )}
 
-                {currentPage < totalPages &&
-                liveRows.length === pageSize ? (
-                  <a href={nextUrl} className="btn">
-                    Next <ChevronRight size={18} aria-hidden="true" />
-                  </a>
-                ) : (
-                  <button className="btn" disabled>
-                    Next <ChevronRight size={18} aria-hidden="true" />
-                  </button>
-                )}
-              </div>
-            </div>
-            </>}
+                    {currentPage < totalPages &&
+                    liveRows.length === pageSize ? (
+                      <a href={nextUrl} className="btn">
+                        Next <ChevronRight size={18} aria-hidden="true" />
+                      </a>
+                    ) : (
+                      <button className="btn" disabled>
+                        Next <ChevronRight size={18} aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </>
         )}
       </section>
 
       <section className="panel" style={{ marginTop: 18 }}>
-        <h2 style={{ marginTop: 0 }}>Offline mandi coverage · all states and union territories</h2>
-        <p className="muted">Every state/UT is listed below. Counts reflect the bundled data.gov.in snapshot dated {mandiSnapshot.meta.dataDate}; a zero means the source had no price records for that state on that date.</p>
+        <h2 style={{ marginTop: 0 }}>
+          Offline mandi coverage · all states and union territories
+        </h2>
+        <p className="muted">
+          Every state/UT is listed below. Counts reflect the bundled data.gov.in
+          snapshot dated {mandiSnapshot.meta.dataDate}; a zero means the source
+          had no price records for that state on that date.
+        </p>
         <div className="market-table-wrap">
           <table className="table">
-            <thead><tr><th>State / union territory</th><th>Price records</th><th>Markets</th><th>Commodities</th><th>Details</th></tr></thead>
-            <tbody>{stateCoverage.map(item => <tr key={item.name}>
-              <td>{item.name}</td><td>{item.records.toLocaleString("en-IN")}</td><td>{item.markets.toLocaleString("en-IN")}</td><td>{item.commodities.toLocaleString("en-IN")}</td>
-              <td><a href={`/market?search=1&state=${encodeURIComponent(item.name)}`}>{item.records ? "View prices" : "No snapshot prices"}</a></td>
-            </tr>)}</tbody>
+            <thead>
+              <tr>
+                <th>State / union territory</th>
+                <th>Price records</th>
+                <th>Markets</th>
+                <th>Commodities</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stateCoverage.map((item) => (
+                <tr key={item.name}>
+                  <td>{item.name}</td>
+                  <td>{item.records.toLocaleString("en-IN")}</td>
+                  <td>{item.markets.toLocaleString("en-IN")}</td>
+                  <td>{item.commodities.toLocaleString("en-IN")}</td>
+                  <td>
+                    <a
+                      href={`/market?search=1&state=${encodeURIComponent(item.name)}`}
+                    >
+                      {item.records ? "View prices" : "No snapshot prices"}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </section>
@@ -356,7 +444,9 @@ export default async function MarketPage({
               required
             />
           </Field>
-          <button className="btn" type="submit">Save manual quote</button>
+          <button className="btn" type="submit">
+            Save manual quote
+          </button>
         </form>
       </section>
 
@@ -367,9 +457,7 @@ export default async function MarketPage({
         {quotes.length === 0 ? (
           <div className="empty-state">
             <strong>No price quotes yet</strong>
-            <p className="muted">
-              Saved manual quotes will appear here.
-            </p>
+            <p className="muted">Saved manual quotes will appear here.</p>
           </div>
         ) : (
           <div className="market-table-wrap">
@@ -400,7 +488,9 @@ export default async function MarketPage({
                     </td>
 
                     <td>
-                      {new Date(q.quoteDate).toLocaleDateString("en-IN", { timeZone: "UTC" })}
+                      {new Date(q.quoteDate).toLocaleDateString("en-IN", {
+                        timeZone: "UTC",
+                      })}
                     </td>
 
                     <td>
@@ -409,11 +499,7 @@ export default async function MarketPage({
 
                     <td>
                       <form action={deleteMarketQuote}>
-                        <input
-                          type="hidden"
-                          name="id"
-                          value={q.id}
-                        />
+                        <input type="hidden" name="id" value={q.id} />
 
                         <button
                           className="text-button"

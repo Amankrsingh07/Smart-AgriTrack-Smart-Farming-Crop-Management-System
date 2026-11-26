@@ -1,7 +1,42 @@
 [
-  { "cropName": "Wheat", "stateLgdCode": "7", "season": "RABI", "notes": "Recorded as a major Rabi crop in GNCTD's 2023–24 Economic Survey.", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" },
-  { "cropName": "Mustard", "stateLgdCode": "7", "season": "RABI", "notes": "Recorded as a major Rabi crop in GNCTD's 2023–24 Economic Survey.", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" },
-  { "cropName": "Chickpea (Gram)", "stateLgdCode": "7", "season": "RABI", "notes": "ICAR identifies chickpea among the important Rabi crops for Haryana and Delhi.", "source": "ICAR Rabi Agro-Advisory for Haryana and Delhi", "sourceUrl": "https://icar.gov.in/sites/default/files/2022-09/Rabi-Agro-Advisory-2021-22_0.pdf" },
-  { "cropName": "Rice (Paddy)", "stateLgdCode": "7", "season": "KHARIF", "notes": "Paddy is recorded as a major Kharif crop in GNCTD's 2023–24 Economic Survey.", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" },
-  { "cropName": "Maize", "stateLgdCode": "7", "season": "KHARIF", "notes": "Maize is recorded as a major Kharif crop in GNCTD's 2023–24 Economic Survey.", "source": "GNCTD Economic Survey of Delhi 2023–24", "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf" }
+  {
+    "cropName": "Wheat",
+    "stateLgdCode": "7",
+    "season": "RABI",
+    "notes": "Recorded as a major Rabi crop in GNCTD's 2023–24 Economic Survey.",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  },
+  {
+    "cropName": "Mustard",
+    "stateLgdCode": "7",
+    "season": "RABI",
+    "notes": "Recorded as a major Rabi crop in GNCTD's 2023–24 Economic Survey.",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  },
+  {
+    "cropName": "Chickpea (Gram)",
+    "stateLgdCode": "7",
+    "season": "RABI",
+    "notes": "ICAR identifies chickpea among the important Rabi crops for Haryana and Delhi.",
+    "source": "ICAR Rabi Agro-Advisory for Haryana and Delhi",
+    "sourceUrl": "https://icar.gov.in/sites/default/files/2022-09/Rabi-Agro-Advisory-2021-22_0.pdf"
+  },
+  {
+    "cropName": "Rice (Paddy)",
+    "stateLgdCode": "7",
+    "season": "KHARIF",
+    "notes": "Paddy is recorded as a major Kharif crop in GNCTD's 2023–24 Economic Survey.",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  },
+  {
+    "cropName": "Maize",
+    "stateLgdCode": "7",
+    "season": "KHARIF",
+    "notes": "Maize is recorded as a major Kharif crop in GNCTD's 2023–24 Economic Survey.",
+    "source": "GNCTD Economic Survey of Delhi 2023–24",
+    "sourceUrl": "https://delhiplanning.delhi.gov.in/sites/default/files/Planning/chapter_7.pdf"
+  }
 ]

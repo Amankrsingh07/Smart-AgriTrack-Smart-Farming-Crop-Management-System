@@ -1,7 +1,11 @@
 import locations from "@/data/india-locations.json";
 import districtAliasData from "@/data/india-district-aliases.json";
 
-const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+const normalize = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 const stateAliases: Record<string, string> = {
   orissa: "odisha",
   uttaranchal: "uttarakhand",
@@ -17,14 +21,21 @@ const stateKey = (value: string) => {
 
 export function findIndianState(name: string) {
   const key = stateKey(name);
-  return locations.states.find(state => stateKey(state.name) === key);
+  return locations.states.find((state) => stateKey(state.name) === key);
 }
 
 export function findIndianDistrict(stateCode: string, name: string) {
   const rawKey = normalize(name);
-  const alias = districtAliasData.find(item => item.stateCode === stateCode && item.aliases.some(value => normalize(value) === rawKey));
+  const alias = districtAliasData.find(
+    (item) =>
+      item.stateCode === stateCode &&
+      item.aliases.some((value) => normalize(value) === rawKey),
+  );
   const key = normalize(alias?.canonicalDistrict ?? name);
-  return locations.districts.find(district => district.stateCode === stateCode && normalize(district.name) === key);
+  return locations.districts.find(
+    (district) =>
+      district.stateCode === stateCode && normalize(district.name) === key,
+  );
 }
 
 export function indianStateNamesMatch(candidate: string, expected: string) {

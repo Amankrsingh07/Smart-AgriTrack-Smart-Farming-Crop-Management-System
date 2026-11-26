@@ -11,7 +11,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: isolated-test-only
           MYSQL_DATABASE: agritrack_soil_test
-        ports: ['3306:3306']
+        ports: ["3306:3306"]
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -pisolated-test-only"
           --health-interval=10s --health-timeout=5s --health-retries=15
@@ -19,12 +19,12 @@ jobs:
       DATABASE_URL: mysql://root:isolated-test-only@127.0.0.1:3306/agritrack_soil_test
       TEST_DATABASE_URL: mysql://root:isolated-test-only@127.0.0.1:3306/agritrack_soil_test
       SESSION_SECRET: isolated-soil-tests-only-32-characters-minimum
-      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
           cache: npm
       - run: npm ci
       - run: npm run db:deploy

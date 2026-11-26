@@ -1,8 +1,44 @@
 {
- "label":"DEMO DATA — seed-only software fixtures, not measured farm records",
- "synthetic":true,
- "examples":[
-  {"id":"demo-wheat-kg","year":"2025","season":"RABI","crop":"Wheat","field":"DEMO North","unit":"kg","harvested":"1000","marketable":"850","damaged":"100","wasted":"50","quantitiesConfirmed":true,"priceConfirmed":true,"pricePerUnit":"25","damagedRecovery":"500","priceEvidence":"DEMO ONLY receipt fixture","expectedLossPercent":"15.00","expectedMonetaryLoss":"3250.00"},
-  {"id":"demo-rice-unknown-price","year":"2026","season":"KHARIF","crop":"Rice","field":"DEMO South","unit":"quintal","harvested":"10","marketable":"9","damaged":"0.5","wasted":"0.5","quantitiesConfirmed":true,"priceConfirmed":false,"pricePerUnit":null,"damagedRecovery":null,"priceEvidence":null,"expectedLossPercent":"10.00","expectedMonetaryLoss":null}
- ]
+  "label": "DEMO DATA — seed-only software fixtures, not measured farm records",
+  "synthetic": true,
+  "examples": [
+    {
+      "id": "demo-wheat-kg",
+      "year": "2025",
+      "season": "RABI",
+      "crop": "Wheat",
+      "field": "DEMO North",
+      "unit": "kg",
+      "harvested": "1000",
+      "marketable": "850",
+      "damaged": "100",
+      "wasted": "50",
+      "quantitiesConfirmed": true,
+      "priceConfirmed": true,
+      "pricePerUnit": "25",
+      "damagedRecovery": "500",
+      "priceEvidence": "DEMO ONLY receipt fixture",
+      "expectedLossPercent": "15.00",
+      "expectedMonetaryLoss": "3250.00"
+    },
+    {
+      "id": "demo-rice-unknown-price",
+      "year": "2026",
+      "season": "KHARIF",
+      "crop": "Rice",
+      "field": "DEMO South",
+      "unit": "quintal",
+      "harvested": "10",
+      "marketable": "9",
+      "damaged": "0.5",
+      "wasted": "0.5",
+      "quantitiesConfirmed": true,
+      "priceConfirmed": false,
+      "pricePerUnit": null,
+      "damagedRecovery": null,
+      "priceEvidence": null,
+      "expectedLossPercent": "10.00",
+      "expectedMonetaryLoss": null
+    }
+  ]
 }

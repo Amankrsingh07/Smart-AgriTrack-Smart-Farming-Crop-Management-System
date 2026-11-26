@@ -1,24 +1,25 @@
-
 "use client";
 
 import { useState } from "react";
 import locations from "@/data/india-locations.json";
 
 const normalized = (value: string) =>
-  value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
 
 // Original state name -> corrected/API state name
 const STATE_NAME_MAP: Record<string, string> = {
-  "Orissa": "Odisha",
-  "Uttaranchal": "Uttarakhand",
-  "Pondicherry": "Puducherry",
+  Orissa: "Odisha",
+  Uttaranchal: "Uttarakhand",
+  Pondicherry: "Puducherry",
   "NCT of Delhi": "Delhi",
   "Jammu & Kashmir": "Jammu and Kashmir",
 };
 
 // Display corrected name and send corrected name to API
-const getStateName = (name: string) =>
-  STATE_NAME_MAP[name] ?? name;
+const getStateName = (name: string) => STATE_NAME_MAP[name] ?? name;
 
 type Props = {
   idPrefix: string;
@@ -34,7 +35,7 @@ type Props = {
 };
 
 const states = [...locations.states].sort((a, b) =>
-  getStateName(a.name).localeCompare(getStateName(b.name))
+  getStateName(a.name).localeCompare(getStateName(b.name)),
 );
 
 export default function LocationFields({
@@ -49,46 +50,44 @@ export default function LocationFields({
   onLocationChange,
   allStatesOption = false,
 }: Props) {
-  const matchedState = locations.states.find(item =>
-    normalized(getStateName(item.name)) === normalized(stateValue) ||
-    normalized(item.name) === normalized(stateValue)
+  const matchedState = locations.states.find(
+    (item) =>
+      normalized(getStateName(item.name)) === normalized(stateValue) ||
+      normalized(item.name) === normalized(stateValue),
   );
 
   const [state, setState] = useState(
-    matchedState?.code ??
-      (stateValue ? `legacy:${stateValue}` : "")
+    matchedState?.code ?? (stateValue ? `legacy:${stateValue}` : ""),
   );
 
   const [district, setDistrict] = useState(districtValue);
 
-  const selectedState = locations.states.find(
-    item => item.code === state
-  );
+  const selectedState = locations.states.find((item) => item.code === state);
 
   const districts = locations.districts
-    .filter(item => item.stateCode === state)
+    .filter((item) => item.stateCode === state)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const districtExists = districts.some(
-    item => normalized(item.name) === normalized(district)
+    (item) => normalized(item.name) === normalized(district),
   );
 
   return (
     <>
       <div className="field">
-        <label htmlFor={`${idPrefix}-state`}>
-          {stateLabel}
-        </label>
+        <label htmlFor={`${idPrefix}-state`}>{stateLabel}</label>
 
         <select
           id={`${idPrefix}-state`}
           value={state}
           required={stateRequired}
-          onChange={event => {
+          onChange={(event) => {
             const nextState = event.target.value;
             setState(nextState);
             setDistrict("");
-            const next = locations.states.find(item => item.code === nextState);
+            const next = locations.states.find(
+              (item) => item.code === nextState,
+            );
             onLocationChange?.(next ? getStateName(next.name) : "", "");
           }}
         >
@@ -102,7 +101,7 @@ export default function LocationFields({
             </option>
           )}
 
-          {states.map(item => (
+          {states.map((item) => (
             <option key={item.code} value={item.code}>
               {getStateName(item.name)}
             </option>
@@ -122,9 +121,7 @@ export default function LocationFields({
 
       {includeDistrict && (
         <div className="field">
-          <label htmlFor={`${idPrefix}-district`}>
-            {districtLabel}
-          </label>
+          <label htmlFor={`${idPrefix}-district`}>{districtLabel}</label>
 
           <select
             id={`${idPrefix}-district`}
@@ -132,29 +129,25 @@ export default function LocationFields({
             value={district}
             required={districtRequired}
             disabled={!selectedState}
-            onChange={event => {
+            onChange={(event) => {
               setDistrict(event.target.value);
               onLocationChange?.(
                 selectedState ? getStateName(selectedState.name) : "",
-                event.target.value
+                event.target.value,
               );
             }}
           >
             <option value="">
-              {selectedState
-                ? "Select district"
-                : "Choose state first"}
+              {selectedState ? "Select district" : "Choose state first"}
             </option>
 
-            {districtValue &&
-              district === districtValue &&
-              !districtExists && (
-                <option value={districtValue}>
-                  {districtValue} (saved value)
-                </option>
-              )}
+            {districtValue && district === districtValue && !districtExists && (
+              <option value={districtValue}>
+                {districtValue} (saved value)
+              </option>
+            )}
 
-            {districts.map(item => (
+            {districts.map((item) => (
               <option key={item.code} value={item.name}>
                 {item.name}
               </option>

@@ -1,15 +1,28 @@
 import { Prisma } from "@prisma/client";
 
-export function saleRevenue(quantity: string, pricePerUnit: string): Prisma.Decimal {
+export function saleRevenue(
+  quantity: string,
+  pricePerUnit: string,
+): Prisma.Decimal {
   return new Prisma.Decimal(quantity).mul(new Prisma.Decimal(pricePerUnit));
 }
 
-export function canSellQuantity(produced: Prisma.Decimal, alreadySold: Prisma.Decimal[], requested: Prisma.Decimal): boolean {
-  const sold = alreadySold.reduce((total, value) => total.add(value), new Prisma.Decimal(0));
+export function canSellQuantity(
+  produced: Prisma.Decimal,
+  alreadySold: Prisma.Decimal[],
+  requested: Prisma.Decimal,
+): boolean {
+  const sold = alreadySold.reduce(
+    (total, value) => total.add(value),
+    new Prisma.Decimal(0),
+  );
   return requested.gt(0) && requested.lte(produced.sub(sold));
 }
 
-export function estimatedProfitLoss(revenue: Prisma.Decimal, expenses: Prisma.Decimal): Prisma.Decimal {
+export function estimatedProfitLoss(
+  revenue: Prisma.Decimal,
+  expenses: Prisma.Decimal,
+): Prisma.Decimal {
   return revenue.sub(expenses);
 }
 

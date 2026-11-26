@@ -1,4 +1,3 @@
-
 # AgriTrack – Smart Farming & Crop Management System
 
 AgriTrack is a Next.js application for organizing a farmer's locations, fields, crop cycles, and farm expenses. It uses per-account authorization and a MySQL database through Prisma. It includes offline reference data and optional online services: the assistant uses Gemini, live mandi prices use data.gov.in, and current weather uses Open-Meteo. Saved Crop Advice uses field records and bundled references. The assistant falls back to local guidance when Gemini is unavailable.

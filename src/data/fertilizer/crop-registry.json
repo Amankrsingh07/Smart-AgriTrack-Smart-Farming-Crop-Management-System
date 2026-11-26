@@ -5,820 +5,517 @@
     {
       "key": "wheat",
       "name": "Wheat",
-      "aliases": [
-        "Wheat",
-        "Gehu",
-        "Gehun"
-      ],
+      "aliases": ["Wheat", "Gehu", "Gehun"],
       "seedConfigured": true
     },
     {
       "key": "rice",
       "name": "Rice (Paddy)",
-      "aliases": [
-        "Rice (Paddy)",
-        "Rice",
-        "Paddy",
-        "Dhan"
-      ],
+      "aliases": ["Rice (Paddy)", "Rice", "Paddy", "Dhan"],
       "seedConfigured": true
     },
     {
       "key": "maize",
       "name": "Maize",
-      "aliases": [
-        "Maize",
-        "Corn",
-        "Makka"
-      ],
+      "aliases": ["Maize", "Corn", "Makka"],
       "seedConfigured": true
     },
     {
       "key": "millet",
       "name": "Millet",
-      "aliases": [
-        "Millet"
-      ]
+      "aliases": ["Millet"]
     },
     {
       "key": "pearl-millet",
       "name": "Pearl millet",
-      "aliases": [
-        "Pearl millet"
-      ]
+      "aliases": ["Pearl millet"]
     },
     {
       "key": "finger-millet",
       "name": "Finger millet",
-      "aliases": [
-        "Finger millet"
-      ]
+      "aliases": ["Finger millet"]
     },
     {
       "key": "sorghum",
       "name": "Sorghum",
-      "aliases": [
-        "Sorghum"
-      ]
+      "aliases": ["Sorghum"]
     },
     {
       "key": "barley",
       "name": "Barley",
-      "aliases": [
-        "Barley",
-        "Jau"
-      ]
+      "aliases": ["Barley", "Jau"]
     },
     {
       "key": "mustard",
       "name": "Mustard",
-      "aliases": [
-        "Mustard",
-        "Sarson",
-        "Rai"
-      ],
+      "aliases": ["Mustard", "Sarson", "Rai"],
       "seedConfigured": true
     },
     {
       "key": "chickpea",
       "name": "Chickpea (Gram)",
-      "aliases": [
-        "Chickpea (Gram)",
-        "Chickpea",
-        "Gram",
-        "Chana"
-      ],
+      "aliases": ["Chickpea (Gram)", "Chickpea", "Gram", "Chana"],
       "seedConfigured": true
     },
     {
       "key": "pigeon-pea",
       "name": "Pigeon pea",
-      "aliases": [
-        "Pigeon pea",
-        "Arhar",
-        "Tur",
-        "Red gram"
-      ]
+      "aliases": ["Pigeon pea", "Arhar", "Tur", "Red gram"]
     },
     {
       "key": "lentil",
       "name": "Lentil",
-      "aliases": [
-        "Lentil"
-      ]
+      "aliases": ["Lentil"]
     },
     {
       "key": "green-gram",
       "name": "Green gram",
-      "aliases": [
-        "Green gram",
-        "Moong",
-        "Mung"
-      ]
+      "aliases": ["Green gram", "Moong", "Mung"]
     },
     {
       "key": "black-gram",
       "name": "Black gram",
-      "aliases": [
-        "Black gram",
-        "Urad"
-      ]
+      "aliases": ["Black gram", "Urad"]
     },
     {
       "key": "soybean",
       "name": "Soybean",
-      "aliases": [
-        "Soybean"
-      ]
+      "aliases": ["Soybean"]
     },
     {
       "key": "groundnut",
       "name": "Groundnut",
-      "aliases": [
-        "Groundnut"
-      ]
+      "aliases": ["Groundnut"]
     },
     {
       "key": "sesame",
       "name": "Sesame",
-      "aliases": [
-        "Sesame"
-      ]
+      "aliases": ["Sesame"]
     },
     {
       "key": "sunflower",
       "name": "Sunflower",
-      "aliases": [
-        "Sunflower"
-      ]
+      "aliases": ["Sunflower"]
     },
     {
       "key": "cotton",
       "name": "Cotton",
-      "aliases": [
-        "Cotton"
-      ]
+      "aliases": ["Cotton"]
     },
     {
       "key": "sugarcane",
       "name": "Sugarcane",
-      "aliases": [
-        "Sugarcane"
-      ]
+      "aliases": ["Sugarcane"]
     },
     {
       "key": "jute",
       "name": "Jute",
-      "aliases": [
-        "Jute"
-      ]
+      "aliases": ["Jute"]
     },
     {
       "key": "potato",
       "name": "Potato",
-      "aliases": [
-        "Potato"
-      ]
+      "aliases": ["Potato"]
     },
     {
       "key": "onion",
       "name": "Onion",
-      "aliases": [
-        "Onion"
-      ]
+      "aliases": ["Onion"]
     },
     {
       "key": "tomato",
       "name": "Tomato",
-      "aliases": [
-        "Tomato"
-      ]
+      "aliases": ["Tomato"]
     },
     {
       "key": "chilli",
       "name": "Chilli",
-      "aliases": [
-        "Chilli"
-      ]
+      "aliases": ["Chilli"]
     },
     {
       "key": "turmeric",
       "name": "Turmeric",
-      "aliases": [
-        "Turmeric"
-      ]
+      "aliases": ["Turmeric"]
     },
     {
       "key": "ginger",
       "name": "Ginger",
-      "aliases": [
-        "Ginger"
-      ]
+      "aliases": ["Ginger"]
     },
     {
       "key": "banana",
       "name": "Banana",
-      "aliases": [
-        "Banana"
-      ]
+      "aliases": ["Banana"]
     },
     {
       "key": "mango",
       "name": "Mango",
-      "aliases": [
-        "Mango"
-      ]
+      "aliases": ["Mango"]
     },
     {
       "key": "oats",
       "name": "Oats",
-      "aliases": [
-        "Oats",
-        "Avena sativa",
-        "Jai"
-      ],
+      "aliases": ["Oats", "Avena sativa", "Jai"],
       "seedConfigured": false
     },
     {
       "key": "foxtail-millet",
       "name": "Foxtail millet",
-      "aliases": [
-        "Foxtail millet",
-        "Setaria italica",
-        "Kangni"
-      ],
+      "aliases": ["Foxtail millet", "Setaria italica", "Kangni"],
       "seedConfigured": false
     },
     {
       "key": "little-millet",
       "name": "Little millet",
-      "aliases": [
-        "Little millet",
-        "Panicum sumatrense",
-        "Kutki"
-      ],
+      "aliases": ["Little millet", "Panicum sumatrense", "Kutki"],
       "seedConfigured": false
     },
     {
       "key": "kodo-millet",
       "name": "Kodo millet",
-      "aliases": [
-        "Kodo millet",
-        "Paspalum scrobiculatum",
-        "Kodo"
-      ],
+      "aliases": ["Kodo millet", "Paspalum scrobiculatum", "Kodo"],
       "seedConfigured": false
     },
     {
       "key": "barnyard-millet",
       "name": "Barnyard millet",
-      "aliases": [
-        "Barnyard millet",
-        "Echinochloa frumentacea",
-        "Sanwa"
-      ],
+      "aliases": ["Barnyard millet", "Echinochloa frumentacea", "Sanwa"],
       "seedConfigured": false
     },
     {
       "key": "proso-millet",
       "name": "Proso millet",
-      "aliases": [
-        "Proso millet",
-        "Panicum miliaceum",
-        "Cheena"
-      ],
+      "aliases": ["Proso millet", "Panicum miliaceum", "Cheena"],
       "seedConfigured": false
     },
     {
       "key": "field-pea",
       "name": "Field pea",
-      "aliases": [
-        "Field pea",
-        "Dry pea"
-      ],
+      "aliases": ["Field pea", "Dry pea"],
       "seedConfigured": false
     },
     {
       "key": "cowpea",
       "name": "Cowpea",
-      "aliases": [
-        "Cowpea",
-        "Vigna unguiculata",
-        "Lobia"
-      ],
+      "aliases": ["Cowpea", "Vigna unguiculata", "Lobia"],
       "seedConfigured": false
     },
     {
       "key": "kidney-bean",
       "name": "Kidney bean",
-      "aliases": [
-        "Kidney bean",
-        "Rajma"
-      ],
+      "aliases": ["Kidney bean", "Rajma"],
       "seedConfigured": false
     },
     {
       "key": "horse-gram",
       "name": "Horse gram",
-      "aliases": [
-        "Horse gram",
-        "Macrotyloma uniflorum",
-        "Kulthi"
-      ],
+      "aliases": ["Horse gram", "Macrotyloma uniflorum", "Kulthi"],
       "seedConfigured": false
     },
     {
       "key": "rapeseed",
       "name": "Rapeseed",
-      "aliases": [
-        "Rapeseed",
-        "Toria"
-      ],
+      "aliases": ["Rapeseed", "Toria"],
       "seedConfigured": false
     },
     {
       "key": "linseed",
       "name": "Linseed",
-      "aliases": [
-        "Linseed",
-        "Linum usitatissimum",
-        "Alsi",
-        "Flax"
-      ],
+      "aliases": ["Linseed", "Linum usitatissimum", "Alsi", "Flax"],
       "seedConfigured": false
     },
     {
       "key": "safflower",
       "name": "Safflower",
-      "aliases": [
-        "Safflower",
-        "Carthamus tinctorius",
-        "Kusum"
-      ],
+      "aliases": ["Safflower", "Carthamus tinctorius", "Kusum"],
       "seedConfigured": false
     },
     {
       "key": "niger",
       "name": "Niger",
-      "aliases": [
-        "Niger",
-        "Guizotia abyssinica",
-        "Ramtil"
-      ],
+      "aliases": ["Niger", "Guizotia abyssinica", "Ramtil"],
       "seedConfigured": false
     },
     {
       "key": "castor",
       "name": "Castor",
-      "aliases": [
-        "Castor",
-        "Ricinus communis",
-        "Arandi"
-      ],
+      "aliases": ["Castor", "Ricinus communis", "Arandi"],
       "seedConfigured": false
     },
     {
       "key": "tea",
       "name": "Tea",
-      "aliases": [
-        "Tea",
-        "Camellia sinensis"
-      ],
+      "aliases": ["Tea", "Camellia sinensis"],
       "seedConfigured": false
     },
     {
       "key": "coffee",
       "name": "Coffee",
-      "aliases": [
-        "Coffee",
-        "Coffea"
-      ],
+      "aliases": ["Coffee", "Coffea"],
       "seedConfigured": false
     },
     {
       "key": "garlic",
       "name": "Garlic",
-      "aliases": [
-        "Garlic",
-        "Allium sativum",
-        "Lahsun"
-      ],
+      "aliases": ["Garlic", "Allium sativum", "Lahsun"],
       "seedConfigured": false
     },
     {
       "key": "brinjal",
       "name": "Brinjal",
-      "aliases": [
-        "Brinjal",
-        "Solanum melongena",
-        "Eggplant",
-        "Baingan"
-      ],
+      "aliases": ["Brinjal", "Solanum melongena", "Eggplant", "Baingan"],
       "seedConfigured": false
     },
     {
       "key": "cabbage",
       "name": "Cabbage",
-      "aliases": [
-        "Cabbage",
-        "Patta gobhi"
-      ],
+      "aliases": ["Cabbage", "Patta gobhi"],
       "seedConfigured": false
     },
     {
       "key": "cauliflower",
       "name": "Cauliflower",
-      "aliases": [
-        "Cauliflower",
-        "Phool gobhi"
-      ],
+      "aliases": ["Cauliflower", "Phool gobhi"],
       "seedConfigured": false
     },
     {
       "key": "broccoli",
       "name": "Broccoli",
-      "aliases": [
-        "Broccoli"
-      ],
+      "aliases": ["Broccoli"],
       "seedConfigured": false
     },
     {
       "key": "okra",
       "name": "Okra",
-      "aliases": [
-        "Okra",
-        "Abelmoschus esculentus",
-        "Bhindi"
-      ],
+      "aliases": ["Okra", "Abelmoschus esculentus", "Bhindi"],
       "seedConfigured": false
     },
     {
       "key": "carrot",
       "name": "Carrot",
-      "aliases": [
-        "Carrot",
-        "Daucus carota",
-        "Gajar"
-      ],
+      "aliases": ["Carrot", "Daucus carota", "Gajar"],
       "seedConfigured": false
     },
     {
       "key": "radish",
       "name": "Radish",
-      "aliases": [
-        "Radish",
-        "Raphanus sativus",
-        "Mooli"
-      ],
+      "aliases": ["Radish", "Raphanus sativus", "Mooli"],
       "seedConfigured": false
     },
     {
       "key": "cucumber",
       "name": "Cucumber",
-      "aliases": [
-        "Cucumber",
-        "Cucumis sativus",
-        "Kheera"
-      ],
+      "aliases": ["Cucumber", "Cucumis sativus", "Kheera"],
       "seedConfigured": false
     },
     {
       "key": "pumpkin",
       "name": "Pumpkin",
-      "aliases": [
-        "Pumpkin",
-        "Kaddu"
-      ],
+      "aliases": ["Pumpkin", "Kaddu"],
       "seedConfigured": false
     },
     {
       "key": "bottle-gourd",
       "name": "Bottle gourd",
-      "aliases": [
-        "Bottle gourd",
-        "Lagenaria siceraria",
-        "Lauki"
-      ],
+      "aliases": ["Bottle gourd", "Lagenaria siceraria", "Lauki"],
       "seedConfigured": false
     },
     {
       "key": "bitter-gourd",
       "name": "Bitter gourd",
-      "aliases": [
-        "Bitter gourd",
-        "Momordica charantia",
-        "Karela"
-      ],
+      "aliases": ["Bitter gourd", "Momordica charantia", "Karela"],
       "seedConfigured": false
     },
     {
       "key": "ridge-gourd",
       "name": "Ridge gourd",
-      "aliases": [
-        "Ridge gourd",
-        "Luffa acutangula",
-        "Turai"
-      ],
+      "aliases": ["Ridge gourd", "Luffa acutangula", "Turai"],
       "seedConfigured": false
     },
     {
       "key": "capsicum",
       "name": "Capsicum",
-      "aliases": [
-        "Capsicum",
-        "Bell pepper",
-        "Shimla mirch"
-      ],
+      "aliases": ["Capsicum", "Bell pepper", "Shimla mirch"],
       "seedConfigured": false
     },
     {
       "key": "spinach",
       "name": "Spinach",
-      "aliases": [
-        "Spinach",
-        "Spinacia oleracea",
-        "Palak"
-      ],
+      "aliases": ["Spinach", "Spinacia oleracea", "Palak"],
       "seedConfigured": false
     },
     {
       "key": "garden-pea",
       "name": "Garden pea",
-      "aliases": [
-        "Garden pea",
-        "Peas",
-        "Matar"
-      ],
+      "aliases": ["Garden pea", "Peas", "Matar"],
       "seedConfigured": false
     },
     {
       "key": "beetroot",
       "name": "Beetroot",
-      "aliases": [
-        "Beetroot",
-        "Chukandar"
-      ],
+      "aliases": ["Beetroot", "Chukandar"],
       "seedConfigured": false
     },
     {
       "key": "guava",
       "name": "Guava",
-      "aliases": [
-        "Guava",
-        "Psidium guajava",
-        "Amrud"
-      ],
+      "aliases": ["Guava", "Psidium guajava", "Amrud"],
       "seedConfigured": false
     },
     {
       "key": "papaya",
       "name": "Papaya",
-      "aliases": [
-        "Papaya",
-        "Carica papaya"
-      ],
+      "aliases": ["Papaya", "Carica papaya"],
       "seedConfigured": false
     },
     {
       "key": "apple",
       "name": "Apple",
-      "aliases": [
-        "Apple",
-        "Malus domestica",
-        "Seb"
-      ],
+      "aliases": ["Apple", "Malus domestica", "Seb"],
       "seedConfigured": false
     },
     {
       "key": "grapes",
       "name": "Grapes",
-      "aliases": [
-        "Grapes",
-        "Vitis vinifera",
-        "Angoor"
-      ],
+      "aliases": ["Grapes", "Vitis vinifera", "Angoor"],
       "seedConfigured": false
     },
     {
       "key": "orange",
       "name": "Orange",
-      "aliases": [
-        "Orange",
-        "Santra"
-      ],
+      "aliases": ["Orange", "Santra"],
       "seedConfigured": false
     },
     {
       "key": "lemon",
       "name": "Lemon",
-      "aliases": [
-        "Lemon",
-        "Citrus limon",
-        "Nimbu"
-      ],
+      "aliases": ["Lemon", "Citrus limon", "Nimbu"],
       "seedConfigured": false
     },
     {
       "key": "pomegranate",
       "name": "Pomegranate",
-      "aliases": [
-        "Pomegranate",
-        "Punica granatum",
-        "Anar"
-      ],
+      "aliases": ["Pomegranate", "Punica granatum", "Anar"],
       "seedConfigured": false
     },
     {
       "key": "litchi",
       "name": "Litchi",
-      "aliases": [
-        "Litchi",
-        "Lychee",
-        "Litchi chinensis"
-      ],
+      "aliases": ["Litchi", "Lychee", "Litchi chinensis"],
       "seedConfigured": false
     },
     {
       "key": "pineapple",
       "name": "Pineapple",
-      "aliases": [
-        "Pineapple",
-        "Ananas comosus",
-        "Ananas"
-      ],
+      "aliases": ["Pineapple", "Ananas comosus", "Ananas"],
       "seedConfigured": false
     },
     {
       "key": "coconut",
       "name": "Coconut",
-      "aliases": [
-        "Coconut",
-        "Cocos nucifera",
-        "Nariyal"
-      ],
+      "aliases": ["Coconut", "Cocos nucifera", "Nariyal"],
       "seedConfigured": false
     },
     {
       "key": "watermelon",
       "name": "Watermelon",
-      "aliases": [
-        "Watermelon",
-        "Citrullus lanatus",
-        "Tarbooz"
-      ],
+      "aliases": ["Watermelon", "Citrullus lanatus", "Tarbooz"],
       "seedConfigured": false
     },
     {
       "key": "muskmelon",
       "name": "Muskmelon",
-      "aliases": [
-        "Muskmelon",
-        "Kharbooja"
-      ],
+      "aliases": ["Muskmelon", "Kharbooja"],
       "seedConfigured": false
     },
     {
       "key": "pear",
       "name": "Pear",
-      "aliases": [
-        "Pear",
-        "Nashpati"
-      ],
+      "aliases": ["Pear", "Nashpati"],
       "seedConfigured": false
     },
     {
       "key": "peach",
       "name": "Peach",
-      "aliases": [
-        "Peach",
-        "Prunus persica",
-        "Aadu"
-      ],
+      "aliases": ["Peach", "Prunus persica", "Aadu"],
       "seedConfigured": false
     },
     {
       "key": "plum",
       "name": "Plum",
-      "aliases": [
-        "Plum",
-        "Aloo bukhara"
-      ],
+      "aliases": ["Plum", "Aloo bukhara"],
       "seedConfigured": false
     },
     {
       "key": "strawberry",
       "name": "Strawberry",
-      "aliases": [
-        "Strawberry"
-      ],
+      "aliases": ["Strawberry"],
       "seedConfigured": false
     },
     {
       "key": "coriander",
       "name": "Coriander",
-      "aliases": [
-        "Coriander",
-        "Coriandrum sativum",
-        "Dhania"
-      ],
+      "aliases": ["Coriander", "Coriandrum sativum", "Dhania"],
       "seedConfigured": false
     },
     {
       "key": "cumin",
       "name": "Cumin",
-      "aliases": [
-        "Cumin",
-        "Cuminum cyminum",
-        "Jeera"
-      ],
+      "aliases": ["Cumin", "Cuminum cyminum", "Jeera"],
       "seedConfigured": false
     },
     {
       "key": "fennel",
       "name": "Fennel",
-      "aliases": [
-        "Fennel",
-        "Foeniculum vulgare",
-        "Saunf"
-      ],
+      "aliases": ["Fennel", "Foeniculum vulgare", "Saunf"],
       "seedConfigured": false
     },
     {
       "key": "fenugreek",
       "name": "Fenugreek",
-      "aliases": [
-        "Fenugreek",
-        "Trigonella foenum-graecum",
-        "Methi"
-      ],
+      "aliases": ["Fenugreek", "Trigonella foenum-graecum", "Methi"],
       "seedConfigured": false
     },
     {
       "key": "cardamom",
       "name": "Cardamom",
-      "aliases": [
-        "Cardamom",
-        "Elettaria cardamomum",
-        "Elaichi"
-      ],
+      "aliases": ["Cardamom", "Elettaria cardamomum", "Elaichi"],
       "seedConfigured": false
     },
     {
       "key": "black-pepper",
       "name": "Black pepper",
-      "aliases": [
-        "Black pepper",
-        "Piper nigrum",
-        "Kali mirch"
-      ],
+      "aliases": ["Black pepper", "Piper nigrum", "Kali mirch"],
       "seedConfigured": false
     },
     {
       "key": "berseem",
       "name": "Berseem",
-      "aliases": [
-        "Berseem",
-        "Trifolium alexandrinum",
-        "Egyptian clover"
-      ],
+      "aliases": ["Berseem", "Trifolium alexandrinum", "Egyptian clover"],
       "seedConfigured": false
     },
     {
       "key": "lucerne",
       "name": "Lucerne",
-      "aliases": [
-        "Lucerne",
-        "Medicago sativa",
-        "Alfalfa"
-      ],
+      "aliases": ["Lucerne", "Medicago sativa", "Alfalfa"],
       "seedConfigured": false
     },
     {
       "key": "fodder-maize",
       "name": "Fodder maize",
-      "aliases": [
-        "Fodder maize",
-        "Forage maize"
-      ],
+      "aliases": ["Fodder maize", "Forage maize"],
       "seedConfigured": false
     },
     {
       "key": "fodder-sorghum",
       "name": "Fodder sorghum",
-      "aliases": [
-        "Fodder sorghum",
-        "Forage sorghum"
-      ],
+      "aliases": ["Fodder sorghum", "Forage sorghum"],
       "seedConfigured": false
     },
     {
       "key": "napier-grass",
       "name": "Napier grass",
-      "aliases": [
-        "Napier grass",
-        "Cenchrus purpureus",
-        "Elephant grass"
-      ],
+      "aliases": ["Napier grass", "Cenchrus purpureus", "Elephant grass"],
       "seedConfigured": false
     }
   ]

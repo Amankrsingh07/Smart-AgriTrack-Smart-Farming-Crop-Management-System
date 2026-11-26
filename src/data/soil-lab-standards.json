@@ -4,9 +4,7 @@
     {
       "id": "PAU_PUNJAB_2025",
       "name": "PAU Punjab laboratory report interpretation · Rabi 2025–26",
-      "states": [
-        "Punjab"
-      ],
+      "states": ["Punjab"],
       "source": "Punjab Agricultural University · Package of Practices for Crops of Punjab, Rabi 2025–26, printed pp. 106–108",
       "url": "https://www.pau.edu/content/ccil/pf/pp_rabi.pdf",
       "methodRequirement": "The publication does not specify extraction methods here. Apply only to a laboratory report whose issuing lab confirms this PAU interpretation applies to its methods; never assume equivalence for Olsen, Bray, Mehlich or total nutrient tests.",
@@ -42,15 +40,14 @@
       "classificationEnabled": true,
       "source": "Government of India · Soil Testing in India, January 2011, Table 1 and analytical methods",
       "url": "https://biharsoilhealth.in/documents/manualgoi.pdf",
+      "verificationUrl": "https://biharsoilhealth.in/documents/manualgoi.pdf#page=34",
       "scope": "Indicative national laboratory screening; not a state-calibrated field diagnosis or fertilizer prescription",
-      "methodRequirement": "Requires issuing laboratory identity, exact supported analytical method, explicit nutrient basis/unit and laboratory confirmation that this GOI baseline applies to this sample. Olsen P requires a recorded alkaline soil:water 1:2.5 pH. Hosting or procedural adoption alone does not prove local calibration.",
-      "note": "The manual warns that these broad classes need local refinement. Ratings describe this confirmed baseline only, not crop response. No dose adjustment or composite health score is inferred.",
+      "methodRequirement": "Screening requires a matching analytical method, reporting basis and unit. Issuing laboratory identity and applicability confirmation can be recorded for traceability. Olsen P requires a recorded alkaline soil:water 1:2.5 pH. Hosting or procedural adoption alone does not prove local calibration.",
+      "note": "The manual warns that these broad classes need local refinement. Ratings describe this indicative baseline only, not crop response. No dose adjustment or composite health score is inferred.",
       "rules": [
         {
           "parameter": "nitrogen",
-          "methods": [
-            "ALKALINE_KMNO4_N"
-          ],
+          "methods": ["ALKALINE_KMNO4_N"],
           "basis": "N",
           "unit": "kg/ha",
           "bands": [
@@ -81,9 +78,7 @@
         },
         {
           "parameter": "phosphorus",
-          "methods": [
-            "OLSEN_P"
-          ],
+          "methods": ["OLSEN_P"],
           "basis": "P",
           "unit": "kg/ha",
           "bands": [
@@ -116,9 +111,7 @@
         },
         {
           "parameter": "potassium",
-          "methods": [
-            "NEUTRAL_1N_NH4OAC_K"
-          ],
+          "methods": ["NEUTRAL_1N_NH4OAC_K"],
           "basis": "K",
           "unit": "kg/ha",
           "bands": [
@@ -150,9 +143,7 @@
         },
         {
           "parameter": "organicCarbon",
-          "methods": [
-            "WALKLEY_BLACK_OC"
-          ],
+          "methods": ["WALKLEY_BLACK_OC"],
           "basis": "OC",
           "unit": "%",
           "bands": [
@@ -184,9 +175,7 @@
       ],
       "id": "BIHAR_CSTL_GOI_2011",
       "name": "Bihar CSTL-hosted GOI 2011 · lab-confirmed indicative baseline",
-      "states": [
-        "Bihar"
-      ],
+      "states": ["Bihar"],
       "regionalSource": "Bihar Central Soil Testing Laboratory, Department of Agriculture",
       "regionalUrl": "https://www.biharsoilhealth.in/index.php"
     },
@@ -195,15 +184,14 @@
       "classificationEnabled": true,
       "source": "Government of India · Soil Testing in India, January 2011, Table 1 and analytical methods",
       "url": "https://biharsoilhealth.in/documents/manualgoi.pdf",
+      "verificationUrl": "https://biharsoilhealth.in/documents/manualgoi.pdf#page=34",
       "scope": "Indicative national laboratory screening; not a state-calibrated field diagnosis or fertilizer prescription",
-      "methodRequirement": "Requires issuing laboratory identity, exact supported analytical method, explicit nutrient basis/unit and laboratory confirmation that this GOI baseline applies to this sample. Olsen P requires a recorded alkaline soil:water 1:2.5 pH. Hosting or procedural adoption alone does not prove local calibration.",
-      "note": "The manual warns that these broad classes need local refinement. Ratings describe this confirmed baseline only, not crop response. No dose adjustment or composite health score is inferred.",
+      "methodRequirement": "Screening requires a matching analytical method, reporting basis and unit. Issuing laboratory identity and applicability confirmation can be recorded for traceability. Olsen P requires a recorded alkaline soil:water 1:2.5 pH. Hosting or procedural adoption alone does not prove local calibration.",
+      "note": "The manual warns that these broad classes need local refinement. Ratings describe this indicative baseline only, not crop response. No dose adjustment or composite health score is inferred.",
       "rules": [
         {
           "parameter": "nitrogen",
-          "methods": [
-            "ALKALINE_KMNO4_N"
-          ],
+          "methods": ["ALKALINE_KMNO4_N"],
           "basis": "N",
           "unit": "kg/ha",
           "bands": [
@@ -234,9 +222,7 @@
         },
         {
           "parameter": "phosphorus",
-          "methods": [
-            "OLSEN_P"
-          ],
+          "methods": ["OLSEN_P"],
           "basis": "P",
           "unit": "kg/ha",
           "bands": [
@@ -269,9 +255,7 @@
         },
         {
           "parameter": "potassium",
-          "methods": [
-            "NEUTRAL_1N_NH4OAC_K"
-          ],
+          "methods": ["NEUTRAL_1N_NH4OAC_K"],
           "basis": "K",
           "unit": "kg/ha",
           "bands": [
@@ -303,9 +287,7 @@
         },
         {
           "parameter": "organicCarbon",
-          "methods": [
-            "WALKLEY_BLACK_OC"
-          ],
+          "methods": ["WALKLEY_BLACK_OC"],
           "basis": "OC",
           "unit": "%",
           "bands": [
@@ -337,18 +319,14 @@
       ],
       "id": "ODISHA_GOI_2024",
       "name": "Odisha GOI-method SOP · lab-confirmed indicative baseline",
-      "states": [
-        "Odisha"
-      ],
+      "states": ["Odisha"],
       "regionalSource": "Odisha Department of Agriculture · Soil Testing SOP 2024–25, p.46",
       "regionalUrl": "https://agri.odisha.gov.in/sites/default/files/2025-03/SOP%20for%20Soil%20Testing%20for%202024-25.pdf"
     },
     {
       "id": "KERALA_SHIS_REVIEW_2026",
       "name": "Kerala Soil Health Information System · reference-only review",
-      "states": [
-        "Kerala"
-      ],
+      "states": ["Kerala"],
       "version": "SHIS-reviewed-2026-11-14",
       "classificationEnabled": false,
       "source": "Government of Kerala · Soil fertility classes",

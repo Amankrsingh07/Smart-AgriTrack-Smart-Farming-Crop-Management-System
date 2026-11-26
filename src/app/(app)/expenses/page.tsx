@@ -1,4 +1,254 @@
-import { db } from "@/lib/db";import { getUser } from "@/lib/session";import { addExpense, updateExpense, deleteExpense } from "../../actions";import ConfirmDeleteExpense from "./confirm-delete";import { getLocale, getTranslations } from "next-intl/server";import { displayLabel } from "@/i18n/display-labels";
-const money=new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2});
-export default async function Expenses({searchParams}:{searchParams:Promise<{error?:string,saved?:string}>}){const user=await getUser();if(!user)return null;const t=await getTranslations("Records");const locale=await getLocale();const [farms,expenses,total,q]=await Promise.all([db.farm.findMany({where:{userId:user.id},select:{id:true,name:true}}),db.expense.findMany({where:{userId:user.id},include:{farm:true},orderBy:{date:"desc"}}),db.expense.aggregate({where:{userId:user.id},_sum:{amount:true}}),searchParams]);return <div className="expenses-page"><p className="muted">{t("expensesSubtitle")}</p><h1 style={{marginTop:0}}>{t("expenses")}</h1><div className="cards expense-summary" style={{gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))"}}><div className="panel stat"><span className="muted">{t("allExpenses")}</span><strong>{money.format(Number(total._sum.amount||0))}</strong></div></div>{q.error&&<p role="alert" style={{color:"#b42318"}}>{q.error.replaceAll("+"," ")}</p>}{q.saved&&<p role="status" style={{color:"var(--green)"}}>{q.saved.replaceAll("+"," ")}</p>}<div className="split expense-layout" style={{marginTop:18}}><form action={addExpense} className="panel"><h2 style={{marginTop:0}}>{t("recordExpense")}</h2>{farms.length?<><Field label={t("farm")}><select name="farmId" required>{farms.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}</select></Field><Field label={t("category")}><select name="category">{[["SEEDS","seeds"],["FERTILIZER","fertilizer"],["PESTICIDES","pesticides"],["LABOR","labor"],["IRRIGATION","irrigation"],["MACHINERY","machinery"],["TRANSPORTATION","transportation"],["OTHER","other"]].map(([v,l])=><option key={v} value={v}>{t(l)}</option>)}</select></Field><Field label={t("amount")}><input type="number" name="amount" min="0.01" step="0.01" required/></Field><Field label={t("date")}><input type="date" name="date" defaultValue={new Date().toISOString().slice(0,10)} required/></Field><Field label={t("description")}><input name="description" maxLength={500}/></Field><button className="btn">{t("saveExpense")}</button></>:<p className="muted">{t("addFarmFirst")}</p>}</form><section className="panel expense-records"><h2 style={{marginTop:0}}>{t("expenseRecords")}</h2>{expenses.length===0?<p className="muted">{t("noExpenses")}</p>:<div className="expense-table-wrap"><table className="table expense-table"><thead><tr><th>{t("date")}</th><th>{t("farm")}</th><th>{t("category")}</th><th>{t("amount")}</th><th>{t("description")}</th><th>{t("actions")}</th></tr></thead><tbody>{expenses.map(e=><tr key={e.id}><td>{e.date.toLocaleDateString("en-IN")}</td><td>{e.farm.name}</td><td>{displayLabel(e.category.toLowerCase().replace(/^./, c=>c.toUpperCase()),locale)}</td><td>{money.format(Number(e.amount))}</td><td>{e.description||"—"}</td><td><details><summary style={{color:"var(--green)",cursor:"pointer",fontWeight:650}}>{t("edit")}</summary><form action={updateExpense} style={{minWidth:220,paddingTop:8}}><input type="hidden" name="id" value={e.id}/><Field label={t("farm")}><select name="farmId" defaultValue={e.farmId}>{farms.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}</select></Field><Field label={t("category")}><select name="category" defaultValue={e.category}>{[["SEEDS","seeds"],["FERTILIZER","fertilizer"],["PESTICIDES","pesticides"],["LABOR","labor"],["IRRIGATION","irrigation"],["MACHINERY","machinery"],["TRANSPORTATION","transportation"],["OTHER","other"]].map(([v,l])=><option key={v} value={v}>{t(l)}</option>)}</select></Field><Field label={t("amount")}><input type="number" name="amount" min="0.01" step="0.01" defaultValue={e.amount.toString()} required/></Field><Field label={t("date")}><input type="date" name="date" defaultValue={e.date.toISOString().slice(0,10)} required/></Field><Field label={t("description")}><input name="description" maxLength={500} defaultValue={e.description??""}/></Field><button className="btn">{t("saveChanges")}</button></form></details><form action={deleteExpense} style={{marginTop:8}}><input type="hidden" name="id" value={e.id}/><ConfirmDeleteExpense description={e.description||e.category.toLowerCase()}/></form></td></tr>)}</tbody></table></div>}</section></div></div>}
-function Field({label,children}:{label:string,children:React.ReactNode}){return <div className="field"><label>{label}</label>{children}</div>}
+import { db } from "@/lib/db";
+import { getUser } from "@/lib/session";
+import { addExpense, updateExpense, deleteExpense } from "../../actions";
+import ConfirmDeleteExpense from "./confirm-delete";
+import { getLocale, getTranslations } from "next-intl/server";
+import { displayLabel } from "@/i18n/display-labels";
+const money = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 2,
+});
+export default async function Expenses({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; saved?: string }>;
+}) {
+  const user = await getUser();
+  if (!user) return null;
+  const t = await getTranslations("Records");
+  const locale = await getLocale();
+  const [farms, expenses, total, q] = await Promise.all([
+    db.farm.findMany({
+      where: { userId: user.id },
+      select: { id: true, name: true },
+    }),
+    db.expense.findMany({
+      where: { userId: user.id },
+      include: { farm: true },
+      orderBy: { date: "desc" },
+    }),
+    db.expense.aggregate({
+      where: { userId: user.id },
+      _sum: { amount: true },
+    }),
+    searchParams,
+  ]);
+  return (
+    <div className="expenses-page">
+      <p className="muted">{t("expensesSubtitle")}</p>
+      <h1 style={{ marginTop: 0 }}>{t("expenses")}</h1>
+      <div
+        className="cards expense-summary"
+        style={{ gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))" }}
+      >
+        <div className="panel stat">
+          <span className="muted">{t("allExpenses")}</span>
+          <strong>{money.format(Number(total._sum.amount || 0))}</strong>
+        </div>
+      </div>
+      {q.error && (
+        <p role="alert" style={{ color: "#b42318" }}>
+          {q.error.replaceAll("+", " ")}
+        </p>
+      )}
+      {q.saved && (
+        <p role="status" style={{ color: "var(--green)" }}>
+          {q.saved.replaceAll("+", " ")}
+        </p>
+      )}
+      <div className="split expense-layout" style={{ marginTop: 18 }}>
+        <form action={addExpense} className="panel">
+          <h2 style={{ marginTop: 0 }}>{t("recordExpense")}</h2>
+          {farms.length ? (
+            <>
+              <Field label={t("farm")}>
+                <select name="farmId" required>
+                  {farms.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label={t("category")}>
+                <select name="category">
+                  {[
+                    ["SEEDS", "seeds"],
+                    ["FERTILIZER", "fertilizer"],
+                    ["PESTICIDES", "pesticides"],
+                    ["LABOR", "labor"],
+                    ["IRRIGATION", "irrigation"],
+                    ["MACHINERY", "machinery"],
+                    ["TRANSPORTATION", "transportation"],
+                    ["OTHER", "other"],
+                  ].map(([v, l]) => (
+                    <option key={v} value={v}>
+                      {t(l)}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label={t("amount")}>
+                <input
+                  type="number"
+                  name="amount"
+                  min="0.01"
+                  step="0.01"
+                  required
+                />
+              </Field>
+              <Field label={t("date")}>
+                <input
+                  type="date"
+                  name="date"
+                  defaultValue={new Date().toISOString().slice(0, 10)}
+                  required
+                />
+              </Field>
+              <Field label={t("description")}>
+                <input name="description" maxLength={500} />
+              </Field>
+              <button className="btn">{t("saveExpense")}</button>
+            </>
+          ) : (
+            <p className="muted">{t("addFarmFirst")}</p>
+          )}
+        </form>
+        <section className="panel expense-records">
+          <h2 style={{ marginTop: 0 }}>{t("expenseRecords")}</h2>
+          {expenses.length === 0 ? (
+            <p className="muted">{t("noExpenses")}</p>
+          ) : (
+            <div className="expense-table-wrap">
+              <table className="table expense-table">
+                <thead>
+                  <tr>
+                    <th>{t("date")}</th>
+                    <th>{t("farm")}</th>
+                    <th>{t("category")}</th>
+                    <th>{t("amount")}</th>
+                    <th>{t("description")}</th>
+                    <th>{t("actions")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expenses.map((e) => (
+                    <tr key={e.id}>
+                      <td>{e.date.toLocaleDateString("en-IN")}</td>
+                      <td>{e.farm.name}</td>
+                      <td>
+                        {displayLabel(
+                          e.category
+                            .toLowerCase()
+                            .replace(/^./, (c) => c.toUpperCase()),
+                          locale,
+                        )}
+                      </td>
+                      <td>{money.format(Number(e.amount))}</td>
+                      <td>{e.description || "—"}</td>
+                      <td>
+                        <details>
+                          <summary
+                            style={{
+                              color: "var(--green)",
+                              cursor: "pointer",
+                              fontWeight: 650,
+                            }}
+                          >
+                            {t("edit")}
+                          </summary>
+                          <form
+                            action={updateExpense}
+                            style={{ minWidth: 220, paddingTop: 8 }}
+                          >
+                            <input type="hidden" name="id" value={e.id} />
+                            <Field label={t("farm")}>
+                              <select name="farmId" defaultValue={e.farmId}>
+                                {farms.map((f) => (
+                                  <option key={f.id} value={f.id}>
+                                    {f.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </Field>
+                            <Field label={t("category")}>
+                              <select name="category" defaultValue={e.category}>
+                                {[
+                                  ["SEEDS", "seeds"],
+                                  ["FERTILIZER", "fertilizer"],
+                                  ["PESTICIDES", "pesticides"],
+                                  ["LABOR", "labor"],
+                                  ["IRRIGATION", "irrigation"],
+                                  ["MACHINERY", "machinery"],
+                                  ["TRANSPORTATION", "transportation"],
+                                  ["OTHER", "other"],
+                                ].map(([v, l]) => (
+                                  <option key={v} value={v}>
+                                    {t(l)}
+                                  </option>
+                                ))}
+                              </select>
+                            </Field>
+                            <Field label={t("amount")}>
+                              <input
+                                type="number"
+                                name="amount"
+                                min="0.01"
+                                step="0.01"
+                                defaultValue={e.amount.toString()}
+                                required
+                              />
+                            </Field>
+                            <Field label={t("date")}>
+                              <input
+                                type="date"
+                                name="date"
+                                defaultValue={e.date.toISOString().slice(0, 10)}
+                                required
+                              />
+                            </Field>
+                            <Field label={t("description")}>
+                              <input
+                                name="description"
+                                maxLength={500}
+                                defaultValue={e.description ?? ""}
+                              />
+                            </Field>
+                            <button className="btn">{t("saveChanges")}</button>
+                          </form>
+                        </details>
+                        <form action={deleteExpense} style={{ marginTop: 8 }}>
+                          <input type="hidden" name="id" value={e.id} />
+                          <ConfirmDeleteExpense
+                            description={
+                              e.description || e.category.toLowerCase()
+                            }
+                          />
+                        </form>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="field">
+      <label>{label}</label>
+      {children}
+    </div>
+  );
+}

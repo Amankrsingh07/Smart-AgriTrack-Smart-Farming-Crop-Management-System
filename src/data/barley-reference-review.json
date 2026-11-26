@@ -1,10 +1,7 @@
 {
   "version": "2026-11-14.2",
   "reviewedOn": "2026-11-14",
-  "cropAliases": [
-    "Barley",
-    "Jau"
-  ],
+  "cropAliases": ["Barley", "Jau"],
   "state": "Bihar",
   "calculationEnabled": false,
   "reviews": [

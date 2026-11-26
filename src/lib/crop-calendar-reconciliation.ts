@@ -2,12 +2,28 @@ type ExistingActivity = { activityKey: string; status: string };
 type GeneratedActivity = { activityKey: string };
 
 /** Unique activity keys make regeneration deterministic and preserve completed history. */
-export function reconcileCropCalendarActivities<T extends GeneratedActivity, E extends ExistingActivity>(existing: E[], generated: T[]) {
-  const existingByKey = new Map(existing.map(item => [item.activityKey, item]));
-  const keys = new Set(generated.map(item => item.activityKey));
+export function reconcileCropCalendarActivities<
+  T extends GeneratedActivity,
+  E extends ExistingActivity,
+>(existing: E[], generated: T[]) {
+  const existingByKey = new Map(
+    existing.map((item) => [item.activityKey, item]),
+  );
+  const keys = new Set(generated.map((item) => item.activityKey));
   return {
-    toUpsert: generated.filter(item => !["COMPLETED", "CANCELLED"].includes(existingByKey.get(item.activityKey)?.status ?? "")),
-    preserveCompleted: existing.filter(item => item.status === "COMPLETED"),
-    removeObsoletePending: existing.filter(item => !["COMPLETED", "CANCELLED"].includes(item.status) && !item.activityKey.startsWith("smart-fertilizer:") && !item.activityKey.startsWith("protection-") && !keys.has(item.activityKey)),
+    toUpsert: generated.filter(
+      (item) =>
+        !["COMPLETED", "CANCELLED"].includes(
+          existingByKey.get(item.activityKey)?.status ?? "",
+        ),
+    ),
+    preserveCompleted: existing.filter((item) => item.status === "COMPLETED"),
+    removeObsoletePending: existing.filter(
+      (item) =>
+        !["COMPLETED", "CANCELLED"].includes(item.status) &&
+        !item.activityKey.startsWith("smart-fertilizer:") &&
+        !item.activityKey.startsWith("protection-") &&
+        !keys.has(item.activityKey),
+    ),
   };
 }
